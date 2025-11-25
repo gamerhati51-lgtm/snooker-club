@@ -192,7 +192,7 @@ include 'layout/sidebar.php'
                 <tr>
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Table Name</th>
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Rate / Hour</th>
-                    <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Rate / Minute</th>
+                    <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Century Rate </th>
                     
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Status</th>
                 
