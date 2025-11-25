@@ -49,13 +49,14 @@ if (isset($_POST['login'])) {
 
 <div class="w-full max-w-md p-8 bg-white rounded-lg shadow">
 
-    <!-- Logo -->
-    <div class="flex justify-center mb-2">
-        <img src="images/Red and Black Illustrative Wolf Gaming Logo.png" alt="Logo" class="w-20 h-20 object-contain mb-0">
+      <!-- Logo -->
+    <div class="flex justify-center mb-0">
+        <img src="images/logo.png" 
+             alt="Logo" 
+             class="w-28 h-28 object-contain mb-0">
     </div>
-
-    <h2 class="text-2xl font-bold mb-1 text-center text-blue-700 m">JOHN SNOOKER</h2>
-<h5 class="text-center mb-2">Please login to continue</h5>
+    <h2 class="text-2xl font-bold mb-1 text-center text-black-700 mt-0">LOGIN</h2>
+<h5 class="text-center mb-2 text-blue-400">Please login to continue</h5>
     <?php if(!empty($error)) { ?>
         <p class="text-red-500 mb-4"><?php echo htmlspecialchars($error); ?></p>
     <?php } ?>

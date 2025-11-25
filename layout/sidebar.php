@@ -76,7 +76,7 @@ if (session_status() === PHP_SESSION_NONE) {
             </nav>
             
             <!-- Admin Info / Logout (Bottom) -->
-            <div class="p-4 border-t border-snooker-light mt-auto">
+            <div class="p-4 border-t border-snooker-light mt-auto sticky-bottom">
                 <p class="text-xs font-semibold text-gray-400">ADMIN:</p>
  <p class="text-white font-extrabold mb-3 text-lg"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></p>
                 <a href="logout.php" class="block w-full text-center bg-red-600 text-white px-4 py-2 text-sm font-bold rounded-lg hover:bg-red-700 transition transform hover:scale-[1.02]">

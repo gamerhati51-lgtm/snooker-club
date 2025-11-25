@@ -1,32 +1,45 @@
 <?php
-include 'db.php'; // $conn
+include 'db.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get POST values
+
     $name     = $_POST['name'];
     $email    = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // hashed
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role     = $_POST['role'];
     $status   = $_POST['status'];
 
-    // Prepare statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO users (name, email, password, role, status) VALUES (?, ?, ?, ?, ?)");
-    if ($stmt === false) {
-        die("Prepare failed: " . $conn->error);
+    // STEP 1 — Check Name OR Email exists
+    $check = $conn->prepare("SELECT id FROM users WHERE name = ? OR email = ?");
+    $check->bind_param("ss", $name, $email);
+    $check->execute();
+    $result = $check->get_result();
+
+    if ($result->num_rows > 0) {
+        echo "<script>
+                alert('User already exists with same Name or Email!');
+                window.history.back();
+              </script>";
+        exit;
     }
 
-    // Bind parameters
+    // STEP 2 — Insert User
+    $stmt = $conn->prepare("INSERT INTO users (name, email, password, role, status) 
+                            VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $name, $email, $password, $role, $status);
 
-    // Execute statement
     if ($stmt->execute()) {
-        header('Location: user.php');
+        echo "<script>
+                alert('User added successfully!');
+                window.location='user.php';
+              </script>";
         exit;
     } else {
-        echo "Error: " . $stmt->error;
+        echo "<script>alert('Error adding user');</script>";
     }
 }
 ?>
+
 <!doctype html>
 <html>
 <head>

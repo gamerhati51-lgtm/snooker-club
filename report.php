@@ -1,7 +1,5 @@
 <?php
 session_start();
-// Ensure 'db.php' uses modern, secure connection methods (e.g., MySQLi or PDO).
-// For this fix, we assume $conn is a valid MySQLi connection object.
 include 'db.php'; 
 
 // Basic session check (using a guest name if not logged in)
@@ -207,7 +205,7 @@ $json_data = json_encode($chart_data);
     
     <div class="relative min-h-screen"> 
 
-        <?php include 'layout/sidebar.php'; // Assuming this file exists  ?>
+        <?php include 'layout/sidebar.php'; ?>
 
         <div class="ml-64 p-8 max-w-full">
             
@@ -301,9 +299,7 @@ $json_data = json_encode($chart_data);
                 <h3 class="text-xl font-bold text-gray-800 mb-5 border-b pb-3">
                     Table Usage Summary
                 </h3>
-                
-
-                <div class="space-y-3">
+  <div class="space-y-3">
                     <?php if (!empty($table_usage)): ?>
                         <?php foreach ($table_usage as $usage): ?>
                             <div class="p-3 rounded-lg bg-gray-50 border-l-4 border-snooker-accent flex justify-between items-center transition hover:bg-gray-100">

@@ -50,42 +50,62 @@ if($result && $result->num_rows > 0){
     <!-- Table -->
 
     <div class="overflow-x-auto">
-      <table class="w-full text-left">
-        <thead class="border-b bg-gray-50">
-          <tr class="text-gray-600 text-sm">
-            <th class="px-6 py-3">Name</th>
-            <th class="px-6 py-3">Role</th>
-            <th class="px-6 py-3">Username</th>
-            <th class="px-6 py-3">Status</th>
+    <table class="w-full text-left">
+    <thead class="border-b bg-gray-50">
+      <tr class="text-gray-600 text-sm">
+        <th class="px-6 py-3">Name</th>
+        <th class="px-6 py-3">Role</th>
+        <th class="px-6 py-3">Username</th>
+        <th class="px-6 py-3">Status</th>
+        <th class="px-6 py-3 text-center">Action</th> <!-- NEW -->
+      </tr>
+    </thead>
+
+    <tbody class="divide-y bg-white">
+      <?php if ($users): ?>
+        <?php foreach ($users as $u): ?>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-3"><?= htmlspecialchars($u['name']) ?></td>
+            <td class="px-6 py-3"><?= htmlspecialchars($u['role']) ?></td>
+            <td class="px-6 py-3"><?= htmlspecialchars($u['username']) ?></td>
+
+            <td class="px-6 py-3">
+              <?= strtolower($u['status']) === 'active' 
+                  ? '<span class="text-green-600 font-medium">Active</span>'
+                  : '<span class="text-red-600 font-medium">Inactive</span>' ?>
+            </td>
+
+            <!-- DELETE BUTTON HERE -->
+            <td class="px-6 py-3 text-center">
+             <!-- EDIT BUTTON -->
+    <a 
+        href="edit_user.php?id=<?= $u['id'] ?>"
+        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition me-2">
+        Edit
+    </a>
+
+    <!-- DELETE BUTTON -->
+    <a 
+        href="delete_user.php?id=<?= $u['id'] ?>" 
+        onclick="return confirm('Are you sure you want to delete this user?')"
+        class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">
+        Delete
+    </a>
+
+</td>
+            </td>
+
           </tr>
-        </thead>
-        <tbody class="divide-y bg-white">
-          <?php if ($users): ?>
-            <?php foreach ($users as $u): ?>
-              <tr class="hover:bg-gray-50">
-                <td class="px-6 py-3"><?= htmlspecialchars($u['name']) ?></td>
-                <td class="px-6 py-3"><?= htmlspecialchars($u['role']) ?></td>
-                <td class="px-6 py-3"><?= htmlspecialchars($u['username']) ?></td>
-                <td class="px-6 py-3">
-                  <?php if (strtolower($u['status']) === 'active'): ?>
-                    <span class="text-green-600 font-medium">Active</span>
-                  <?php else: ?>
-                    <span class="text-red-600 font-medium">Inactive</span>
-                  <?php endif; ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <tr>
-              <td colspan="4" class="px-6 py-4 text-center text-gray-400">
-                No users found.
-              </td>
-            </tr>
-          <?php endif; ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <tr>
+          <td colspan="5" class="px-6 py-4 text-center text-gray-400">
+            No users found.
+          </td>
+        </tr>
+      <?php endif; ?>
+    </tbody>
+</table>
+
 </body>
 </html>

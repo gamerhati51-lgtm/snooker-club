@@ -94,33 +94,31 @@ if ($stmt_upcoming) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-snooker-bg font-sans">
+<body class="bg-white-200 font-sans">
 
     <!-- Dashboard Container -->
     <div class="flex min-h-screen">
 <?php 
 
 include 'layout/sidebar.php'
-?>
-    
-
-        <!-- Main Content Area -->
-        <main class="flex-1 ml-64 p-8 main-content">
+?>     <main class="flex-1 ml-64 p-8 main-content">
             
             <!-- Header/Breadcrumbs -->
-            <header class="mb-8 pb-4 border-b border-gray-200 flex justify-between items-center">
+            <header class="mb-4 pb-4 border-b border-gray-200 flex justify-between items-center">
                 <div>
-                    <h1 id="page-title" class="text-4xl font-extrabold text-snooker-green ">Dashboard Overview</h1>
+                    <h1 id="page-title" class="text-4xl font-extrabold text-snooker-green ">WELCOME ADMIN</h1>
                     <p id="page-subtitle" class="text-gray-500 mt-1">Quick overview of today's snooker club status.</p>
                 </div>
+                
                 <!-- Current Date Time Placeholder -->
                 <div class="text-right hidden sm:block">
+                    
                     <p class="text-sm font-semibold text-snooker-accent" id="current-time">12:00 PM</p>
                     <p class="text-xs text-gray-500" id="current-date">Wednesday, November 19, 2025</p>
                 </div>
             </header>
 
-            <!-- Static Dashboard Content Area (Ready for Dynamic Data) -->
+        
             <div id="content-area" class="space-y-8">
 
                 <!-- 1. Key Metrics Cards -->
@@ -177,7 +175,7 @@ include 'layout/sidebar.php'
               <div class="bg-white rounded-xl p-6 snooker-shadow mt-8">
 
     <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center mb-9">
         <h2 class="text-2xl font-bold text-snooker-green">Tables Management</h2>
 
         <a href="add_table.php" 
@@ -196,8 +194,13 @@ include 'layout/sidebar.php'
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Table Name</th>
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Rate / Hour</th>
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Rate / Minute</th>
+                    
                     <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Status</th>
+                
+                 <th class="px-6 py-3 border-b text-left font-semibold text-gray-600" >Edit</th>
+                 <th class="px-6 py-3 border-b text-left font-semibold text-gray-600">Action</th>
                 </tr>
+
             </thead>
 
             <!-- Table Body -->
@@ -257,11 +260,11 @@ if ($result->num_rows > 0) {
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['century_rate']); ?> PKR</td>
             <td class="px-6 py-4 text-gray-700"><?php echo $status_badge; ?></td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-        <a href="edit_table.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out" title="Edit Table Details">
+        <a href="edit_table.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out" title="Edit">
             ✏️ Edit
         </a>
     </td>
-            <td class="px-6 py-4 text-gray-700">
+            <td class="px-6 py-4 text-gray-700" title="start session">
                 <?php echo $action_button; ?>
             </td>
         </tr>
