@@ -104,12 +104,11 @@ include 'layout/sidebar.php'
 ?>     <main class="flex-1 ml-64 p-8 main-content">
             
             <!-- Header/Breadcrumbs -->
-            <header class="mb-4 pb-4 border-b border-gray-200 flex justify-between items-center">
+            <header class="mb-4 pb-4 border-b border-gray-200 flex justify-between items-center ">
                 <div>
                     <h1 id="page-title" class="text-4xl font-extrabold text-snooker-green ">WELCOME ADMIN</h1>
                     <p id="page-subtitle" class="text-gray-500 mt-1">Quick overview of today's snooker club status.</p>
                 </div>
-                
                 <!-- Current Date Time Placeholder -->
                 <div class="text-right hidden sm:block">
                     
@@ -119,7 +118,7 @@ include 'layout/sidebar.php'
             </header>
 
         
-            <div id="content-area" class="space-y-8">
+            <div id="content-area" class="space-y-8 bg-gray-30">
 
                 <!-- 1. Key Metrics Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

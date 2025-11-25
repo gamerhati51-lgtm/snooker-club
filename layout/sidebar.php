@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
      
             <!-- Logo/Title -->
             <div class="p-6 text-center border-b border-snooker-light mt-0">
-                <h2 class="text-3xl font-extrabold text-snooker-accent tracking-widest">Admingti </h2>
+                <h2 class="text-3xl font-extrabold text-snooker-accent tracking-widest">Admin</h2>
                 <p class="text-xs mt-1 text-gray-400 font-medium uppercase">Admin Control Panel</p>
             </div>
 
