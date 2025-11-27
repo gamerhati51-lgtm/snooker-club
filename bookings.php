@@ -102,12 +102,20 @@ $upcoming_bookings_query->close();
 </head>
 
 <body class="bg-gray-100 min-h-screen flex">
+<style>
+.action-buttons {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+</style>
 
 <!-- Sidebar -->
 <?php include 'layout/sidebar.php'; ?>
 
 <!-- Main Section -->
-<div class="flex-1 p-8 ml-64">
+<div class="flex-1 p-8 pe-9 ml-64">
 
     <h1 class="text-4xl font-bold mb-6 text-gray-700">🗓️ Snooker Table Booking</h1>
 
@@ -179,7 +187,7 @@ $upcoming_bookings_query->close();
                     </form>
                 </div>
                 
-                <div class="bg-white shadow p-6  pe-3 rounded-lg lg:col-span-2">
+                <div class="bg-white shadow p-6  pe-0 rounded-lg lg:col-span-2">
                     <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
                         Upcoming Reservations
                     </h2>
@@ -222,20 +230,20 @@ $upcoming_bookings_query->close();
                                                 <?php echo date('g:i A', strtotime($booking['start_time'])); ?> - 
                                                 <?php echo date('g:i A', strtotime($booking['end_time'])); ?>
                                             </td>
-            <td >
+           <td class="px-6 py-3">
+  <div class="action-buttons">
+    <a href="#"
+       class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition">
+      Edit
+    </a>
 
-    <button
-        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition me-0">
-        Edit
-
-
-
-    <button
-        class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition ms-0">
-        Delete
-                                    </button>
-
+    <a href="#"
+       class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">
+      Delete
+    </a>
+  </div>
 </td>
+
         
                                         </tr>
                                     <?php endwhile; ?>
