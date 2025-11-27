@@ -284,9 +284,9 @@ $tables_with_sessions = $sessions_query ? $sessions_query->fetch_all(MYSQLI_ASSO
                                             <input type="hidden" name="rate_type" value="<?php echo $type; ?>">
                                             
                                             <button type="submit" 
-                                                    class="rate-radio-label w-full text-center py-2 rounded-lg text-sm transition
-                                                           <?php echo $table['rate_type'] === $type ? 'bg-snooker-accent text-snooker-green font-bold shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>">
-                                                <?php echo $type; ?>
+ class="rate-radio-label w-full text-center py-2 rounded-lg text-sm
+  transition<?php echo $table['rate_type'] === $type ? 'bg-geen-200 text-snooker-green font-bold shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>">
+          <?php echo $type; ?>
                                             </button>
                                         </form>
                                     <?php endforeach; ?>

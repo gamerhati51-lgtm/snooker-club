@@ -15,18 +15,16 @@ $total_tables_result = $conn->query($total_tables_query);
 $total_tables_data = $total_tables_result->fetch_assoc();
 $total_tables = (int)($total_tables_data['total'] ?? 0);
 
-// --- 2. Get Number of Active/Occupied Tables ---
 $active_tables_query = "SELECT COUNT(id) AS active_count FROM snooker_tables WHERE status = 'Occupied'";
 $active_tables_result = $conn->query($active_tables_query);
 $active_tables_data = $active_tables_result->fetch_assoc();
 $active_tables = (int)($active_tables_data['active_count'] ?? 0);
 
-// --- 3. Calculate Availability ---
 $free_tables = $total_tables - $active_tables;
 $availability_percent = 0;
 
 if ($total_tables > 0) {
-    // Calculate percentage of FREE tables
+
     $availability_percent = round(($free_tables / $total_tables) * 100);
 }
 
@@ -55,8 +53,6 @@ $revenue_data = $revenue_result->fetch_assoc();
 $stmt_revenue->close();
 
 $total_revenue_today = (float)($revenue_data['total_revenue'] ?? 0.00);
-
-// Define a static target for display purposes (you might fetch this from a config table later)
 $daily_target = 600.00; 
 
 // --- Currency Note ---

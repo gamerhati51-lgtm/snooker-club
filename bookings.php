@@ -179,7 +179,7 @@ $upcoming_bookings_query->close();
                     </form>
                 </div>
                 
-                <div class="bg-white shadow p-6 rounded-lg lg:col-span-2">
+                <div class="bg-white shadow p-6  pe-3 rounded-lg lg:col-span-2">
                     <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-2">
                         Upcoming Reservations
                     </h2>
@@ -200,6 +200,9 @@ $upcoming_bookings_query->close();
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Time Slot
                                     </th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Action
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -219,6 +222,21 @@ $upcoming_bookings_query->close();
                                                 <?php echo date('g:i A', strtotime($booking['start_time'])); ?> - 
                                                 <?php echo date('g:i A', strtotime($booking['end_time'])); ?>
                                             </td>
+            <td >
+
+    <button
+        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition me-0">
+        Edit
+
+
+
+    <button
+        class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition ms-0">
+        Delete
+                                    </button>
+
+</td>
+        
                                         </tr>
                                     <?php endwhile; ?>
                                 <?php else: ?>

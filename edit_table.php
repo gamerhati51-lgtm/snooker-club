@@ -67,7 +67,15 @@ if (!$table_data) {
     <title>Edit Table: <?php echo htmlspecialchars($table_data['table_name']); ?></title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-8">
+<body class="bg-gray-100 min-h-screen flex">
+
+<!-- Sidebar -->
+<?php include 'layout/sidebar.php'; ?>
+
+<!-- Main Section -->
+<div class="flex-1 p-8 ml-64">
+
+   
 
     <div class="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6">
         <h1 class="text-3xl font-bold mb-4 text-gray-700 border-b pb-2">
