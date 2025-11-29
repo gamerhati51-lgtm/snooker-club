@@ -38,16 +38,23 @@ if (isset($_POST['add_table'])) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+<body class="bg-gray-50 font-sans">
 
-<body class="bg-gray-100 min-h-screen flex">
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen">
 
-<!-- Sidebar -->
-<?php include 'layout/sidebar.php'; ?>
+    <!-- Sidebar -->
+    <?php include 'layout/sidebar.php'; ?>
 
-<!-- Main Section -->
-<div class="flex-1 p-8 ml-64">
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
+      
+      <!-- Header -->
+      <?php include "layout/header.php"; ?>
 
-    <h1 class="text-4xl font-bold mb-6 text-gray-700">➕ Add New Snooker Table</h1>
+      <!-- Page Content -->
+      <div id="content-area" class="space-y-8 bg-gray-100 p-20 rounded-lg bg-grey-200">
+    <h1 class="text-4xl font-bold mb-6 text-gray-700 mt-2">➕ Add New Snooker Table</h1>
 
     <!-- Alert Message -->
     <?php if (!empty($message)) { ?>

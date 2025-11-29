@@ -101,7 +101,7 @@ $upcoming_bookings_query->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 min-h-screen flex">
+<body class="bg-gray-50 font-sans">
 <style>
 .action-buttons {
     display: flex !important;
@@ -111,11 +111,19 @@ $upcoming_bookings_query->close();
 }
 </style>
 
-<!-- Sidebar -->
-<?php include 'layout/sidebar.php'; ?>
 
-<!-- Main Section -->
-<div class="flex-1 p-8 pe-9 ml-64">
+
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <?php include 'layout/sidebar.php'; ?>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
+      
+      <!-- Header -->
+      <?php include "layout/header.php"; ?>
 
     <h1 class="text-4xl font-bold mb-6 text-gray-700">🗓️ Snooker Table Booking</h1>
 

@@ -106,15 +106,30 @@ $total_expenses = $total_expenses_result ? $total_expenses_result->fetch_assoc()
         }
     </style>
 </head>
-<body class="bg-snooker-bg min-h-screen font-sans">
-    
-    <div class="relative min-h-screen"> 
+<body class="bg-gray-50 font-sans">
+<style>
+.action-buttons {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+</style>
 
-        <!-- 1. Include the FIXED Sidebar (w-64) -->
-        <?php include 'layout/sidebar.php'; ?>
 
-        <!-- 2. Main Content Area: ml-64 shifts all content away from the sidebar's w-64 space -->
-        <div class="ml-64 p-8 max-w-full">
+
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <?php include 'layout/sidebar.php'; ?>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
+      
+      <!-- Header -->
+      <?php include "layout/header.php"; ?>
+
             
             <h1 class="text-4xl font-extrabold mb-4 text-snooker-green">💸 Expenses Tracker</h1>
 

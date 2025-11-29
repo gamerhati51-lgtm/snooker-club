@@ -90,31 +90,22 @@ if ($stmt_upcoming) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-white-200 font-sans">
+<body class="bg-blue-100 font-sans">
 
-    <!-- Dashboard Container -->
-    <div class="flex min-h-screen">
-<?php 
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen">
 
-include 'layout/sidebar.php'
-?>     <main class="flex-1 ml-64 p-8 main-content">
-            
-            <!-- Header/Breadcrumbs -->
-            <header class="mb-4 pb-4 border-b border-gray-200 flex justify-between items-center ">
-                <div>
-                    <h1 id="page-title" class="text-4xl font-extrabold text-snooker-green ">WELCOME ADMIN</h1>
-                    <p id="page-subtitle" class="text-gray-500 mt-1">Quick overview of today's snooker club status.</p>
-                </div>
-                <!-- Current Date Time Placeholder -->
-                <div class="text-right hidden sm:block">
-                    
-                    <p class="text-sm font-semibold text-snooker-accent" id="current-time">12:00 PM</p>
-                    <p class="text-xs text-gray-500" id="current-date">Wednesday, November 19, 2025</p>
-                </div>
-            </header>
+    <!-- Sidebar -->
+    <?php include 'layout/sidebar.php'; ?>
 
-        
-            <div id="content-area" class="space-y-8 bg-gray-30">
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
+      
+      <!-- Header -->
+      <?php include "layout/header.php"; ?>
+
+      <!-- Page Content -->
+      <div id="content-area" class="space-y-8 bg-blue-200 p-6 rounded-lg">
 
                 <!-- 1. Key Metrics Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -167,14 +158,14 @@ include 'layout/sidebar.php'
                 </div>
 
                 <!-- 2. Detailed Table Status Table -->
-              <div class="bg-white rounded-xl p-6 snooker-shadow mt-8">
+              <div class="bg-white rounded-xl p-6 snooker-shadow mt-8 ">
 
     <!-- Header -->
-    <div class="flex justify-between items-center mb-9">
+    <div class="flex justify-between items-center mb-9 ">
         <h2 class="text-2xl font-bold text-snooker-green">Tables Management</h2>
 
         <a href="add_table.php" 
-           class="px-4 py-2 bg-snooker-accent text-white rounded-lg font-semibold hover:bg-green-700 transition">
+           class="px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
             + Add Table
         </a>
     </div>
@@ -241,7 +232,7 @@ if ($result->num_rows > 0) {
                 <form action="start_session.php" method="POST">
                     <input type="hidden" name="table_id" value="' . $table_id . '">
                     <button type="submit" name="start_session"
-                            class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition">
+                            class="bg-blue-900 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition">
                         Start Session
                     </button>
                 </form>';
@@ -365,12 +356,12 @@ if ($result->num_rows > 0) {
 
 let toaster = createToaster({
     positionX: "right",
-    positionY: "top",
+    positionY: "bottom",
     theme:"dark",
     duration: 3
 });
 
-toaster("Software under development");
+toaster("Software is under saeed development!");
 
 </script>
 </body>

@@ -21,19 +21,18 @@ if (session_status() === PHP_SESSION_NONE) {
                 }
             }
         }
-    </script><aside id="sidebar" class="w-64 bg-snooker-green text-gray-200 flex flex-col fixed h-full snooker-shadow z-10 overflow-y-auto">
+    </script><aside class="fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40">
      
-            <!-- Logo/Title -->
-            <div class="p-6 text-center border-b border-snooker-light mt-0">
-                <h2 class="text-3xl font-extrabold text-snooker-accent tracking-widest">Admin</h2>
-                <p class="text-xs mt-1 text-gray-400 font-medium uppercase">Admin Control Panel</p>
-            </div>
+ <!-- Logo/Title -->
+<div class="pt-3 pb-4 text-center border-b border-snooker-light bg-blue-900">
+    <h2 class="text-xxl font-bold text-orange-500 tracking-wide mt-3">WELCOME ADMIN</h2>
+</div>
 
      <!-- Navigation Links -->
 <nav class="flex-grow p-4 space-y-2">
 
     <!-- Dashboard -->
-    <a href="./admin.php" class="sidebar-link active flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="./admin.php" class="sidebar-link active text-black flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
@@ -43,7 +42,7 @@ if (session_status() === PHP_SESSION_NONE) {
     </a>
 
     <!-- Tables -->
-    <a href="./add_table.php" class="sidebar-link flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="./add_table.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0l-1-4m3 4l1-4m-9 4l-1-4m3 4l1-4">
@@ -79,7 +78,7 @@ stroke="currentColor" viewBox="0 0 24 24">
     <div id="posMenu" class="hidden pl-10 mt-1 space-y-2">
 
         <!-- Add Product -->
-        <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
+        <a href="./add_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 4v16m8-8H4" />
@@ -139,7 +138,7 @@ stroke="currentColor" viewBox="0 0 24 24">
 
 
     <!-- Bookings -->
-    <a href="./bookings.php" class="sidebar-link flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="./bookings.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -149,7 +148,7 @@ stroke="currentColor" viewBox="0 0 24 24">
     </a>
 
     <!-- Expenses -->
-    <a href="./expance.php" class="sidebar-link flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="./expance.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6">
@@ -159,7 +158,7 @@ stroke="currentColor" viewBox="0 0 24 24">
     </a>
 
     <!-- User -->
-    <a href="./user.php" class="sidebar-link flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="./user.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20h-2m2 0h-2M13 20H11m4-10a4 4 0 11-8 0 4 4 0 018 0z">
@@ -169,7 +168,7 @@ stroke="currentColor" viewBox="0 0 24 24">
     </a>
 
     <!-- Reports -->
-    <a href="./report.php" class="sidebar-link flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="./report.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
         </svg>
@@ -177,7 +176,7 @@ stroke="currentColor" viewBox="0 0 24 24">
     </a>
 
     <!-- Settings -->
-    <a href="ratsiting.php" class="sidebar-link flex items-center p-3 text-sm font-semibold border-l-4 border-transparent">
+    <a href="ratsiting.php" class="sidebar-link flex  text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent">
         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z">
@@ -198,10 +197,9 @@ function togglePOS() {
 </script>
             
             <!-- Admin Info / Logout (Bottom) -->
-            <div class="p-4 border-t border-snooker-light mt-auto sticky-bottom">
-                <p class="text-xs font-semibold text-gray-400">ADMIN:</p>
- <p class="text-white font-extrabold mb-3 text-lg"><?php echo htmlspecialchars($_SESSION['admin_name']); ?></p>
-                <a href="logout.php" class="block w-full text-center bg-red-600 text-white px-4 py-2 text-sm font-bold rounded-lg hover:bg-red-700 transition transform hover:scale-[1.02]">
+            <div class="p-4 border-t border-snooker-light mt-4 sticky-bottom">
+                <p class="text-xs font-semibold text-black">ADMIN:</p>
+                <a href="logout.php" class="block w-full text-center bg-orange-600 text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg hover:bg-red-700 transition transform hover:scale-[1.02]">
                     <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     Logout
                 </a>
