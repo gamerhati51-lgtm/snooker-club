@@ -162,15 +162,60 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
 
+<!-- Expanses Toggle Button -->
+<button 
+  id="toggleExpanse"
+  class="w-full sidebar-link flex text-black items-center p-3 text-sm font-semibold 
+  border-l-4 border-transparent hover:bg-blue-200 transition">
+    
+    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6" />
+    </svg>
 
-        <a href="./expance.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
-            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6">
-                </path>
-            </svg>
-            Expanses
-        </a>
+    Expanses
+
+    <!-- Arrow Icon -->
+    <svg id="arrowIcon" class="w-4 h-4 ml-auto transition-transform" fill="none" 
+         stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M19 9l-7 7-7-7" />
+    </svg>
+
+</button>
+
+
+<!-- Dropdown Content -->
+<div id="expanseMenu" class="hidden flex-col ml-10 text-sm">
+
+  <a href="./list_expance.php" 
+     class="py-2 flex items-center text-black hover:text-blue-700 transition">
+     
+     <!-- List icon -->
+     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+             d="M4 6h16M4 12h16M4 18h16"/>
+     </svg>
+
+     List Expanses
+  </a>
+
+  <a href="./add_expance.php" 
+     class="py-2 flex items-center text-black hover:text-blue-700 transition">
+     
+     <!-- Plus icon -->
+     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+             d="M12 4v16m8-8H4"/>
+     </svg>
+
+     Add Expanses
+  </a>
+
+</div>
+
+
+
 
         <a href="./user.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +223,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20h-2m2 0h-2M13 20H11m4-10a4 4 0 11-8 0 4 4 0 018 0z">
                 </path>
             </svg>
-            User
+            Users
         </a>
 
         <a href="./report.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
@@ -194,7 +239,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z">
                 </path>
             </svg>
-            Rates & Settings
+            Settings
         </a>
     </nav>
         
@@ -262,4 +307,16 @@ if (session_status() === PHP_SESSION_NONE) {
             }
         });
     });
+
+document.getElementById("toggleExpanse").addEventListener("click", function () {
+
+    const menu = document.getElementById("expanseMenu");
+    const arrow = document.getElementById("arrowIcon");
+
+    menu.classList.toggle("hidden");
+
+    // Rotate arrow
+    arrow.classList.toggle("rotate-180");
+});
+
 </script>

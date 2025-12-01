@@ -29,9 +29,9 @@
   </button>
 
   <!-- POS -->
-  <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition font-semibold text-white">
+ <a href="./add_product.php"> <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition font-semibold text-white">
     POS
-  </button>
+  </button></a>
 
   <!-- Notification -->
   <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">

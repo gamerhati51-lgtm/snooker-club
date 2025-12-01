@@ -53,7 +53,7 @@ if (isset($_POST['add_table'])) {
       <?php include "layout/header.php"; ?>
 
       <!-- Page Content -->
-      <div id="content-area" class="space-y-8 bg-gray-100 p-20 rounded-lg bg-grey-200">
+      <div id="content-area" class="space-y-8 bg-gray-100 p-20 rounded-lg bg-grey-200 ">
     <h1 class="text-4xl font-bold mb-6 text-gray-700 mt-2">➕ Add New Snooker Table</h1>
 
     <!-- Alert Message -->
@@ -76,32 +76,32 @@ if (isset($_POST['add_table'])) {
             <div>
                 <label class="block text-gray-700 font-medium">Table Name</label>
                 <input type="text" name="table_name" required
-                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-700">
             </div>
 
             <!-- Rate Per Hour -->
             <div>
                 <label class="block text-gray-700 font-medium">Rate (per hour)</label>
                 <input type="number" name="rate_hour" step="0.01" required
-                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-700">
             </div>
 
             <!-- Century Rate -->
             <div>
                 <label class="block text-gray-700 font-medium">Century Rate (per minute)</label>
                 <input type="number" name="century_rate" step="0.01" required
-                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500">
+                       class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-orange-700">
             </div>
 
             <!-- Buttons -->
             <div class="flex justify-between pt-4">
                 <button type="submit" name="add_table"
-                        class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">
+                        class="bg-blue-900 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
                     Save
                 </button>
 
                 <a href="add_table.php"
-                   class="bg-gray-300 px-5 py-2 rounded hover:bg-gray-400 transition">
+                   class="bg-orange-500 px-5 py-2 rounded  text-white hover:bg-red-400 transition">
                     Cancel
                 </a>
             </div>

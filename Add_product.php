@@ -423,66 +423,82 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </main>
     </div>
 
-    <script>
-        // Initialize TinyMCE for the description field
-        document.addEventListener('DOMContentLoaded', () => {
-             tinymce.init({
-                selector: '#description',
-                height: 150,
-                menubar: false,
-                plugins: 'autolink lists link code help wordcount',
-                toolbar: 'undo redo | bold italic | bullist numlist | code',
-                statusbar: false,
-                content_style: 'body { font-family: Inter, sans-serif; font-size:16px }'
-            });
+   <script>
+    document.addEventListener('DOMContentLoaded', () => {
 
-            // JavaScript to toggle initial stock fields based on 'Manage Stock' checkbox
-            const manageStock = document.getElementById('manage_stock');
-            const stockFieldsContainer = document.getElementById('stock-fields');
+        // Initialize TinyMCE
+        tinymce.init({
+            selector: '#description',
+            height: 150,
+            menubar: false,
+            plugins: 'autolink lists link code help wordcount',
+            toolbar: 'undo redo | bold italic | bullist numlist | code',
+            statusbar: false,
+            content_style: 'body { font-family: Inter, sans-serif; font-size:16px }'
+        });
 
-            const toggleStockFields = () => {
-                if (stockFieldsContainer) {
-                    stockFieldsContainer.classList.toggle('hidden', !manageStock.checked);
-                    
-                    const initialStockInput = document.getElementById('initial_stock');
-                    if (initialStockInput) {
-                        initialStockInput.required = manageStock.checked;
-                    }
+        // Toggle Stock Fields
+        const manageStock = document.getElementById('manage_stock');
+        const stockFieldsContainer = document.getElementById('stock-fields');
+
+        const toggleStockFields = () => {
+            if (stockFieldsContainer) {
+                stockFieldsContainer.classList.toggle('hidden', !manageStock.checked);
+
+                const initialStockInput = document.getElementById('initial_stock');
+                if (initialStockInput) {
+                    initialStockInput.required = manageStock.checked;
                 }
-            };
-
-            if (manageStock) {
-                manageStock.addEventListener('change', toggleStockFields);
-                toggleStockFields(); // Initial run
             }
+        };
 
-            // JavaScript for Margin calculation (Client-side estimate)
-            const costInput = document.getElementById('cost_price');
-            const marginInput = document.getElementById('margin');
-            const sellingInput = document.getElementById('selling_price_inc');
+        if (manageStock) {
+            manageStock.addEventListener('change', toggleStockFields);
+            toggleStockFields(); 
+        }
 
-            const calculateSellingPrice = () => {
-                const cost = parseFloat(costInput.value) || 0;
-                const margin = parseFloat(marginInput.value) || 0;
-                
-                // Formula: Selling Price = Cost / (1 - Margin/100)
-                let selling = cost / (1 - margin / 100);
-                
-                if (isFinite(selling) && selling >= cost && cost > 0) {
-                    sellingInput.value = selling.toFixed(2);
-                } else if (cost > 0) {
-                    // Fallback for margin errors (e.g., > 100%)
-                    sellingInput.value = (cost * 1.5).toFixed(2); 
-                } else {
-                     sellingInput.value = (0).toFixed(2);
-                }
-            };
+        // Margin / Selling Price Calculation
+        const costInput = document.getElementById('cost_price');
+        const marginInput = document.getElementById('margin');
+        const sellingInput = document.getElementById('selling_price_inc');
 
-            const calculateMargin = () => {
-                const cost = parseFloat(costInput.value) || 0;
-                const selling = parseFloat(sellingInput.value) || 0;
-                
-                if (selling > cost && cost >= 0) {
-                    // Formula: Margin % = ((Selling - Cost) / Selling) * 100
-                    const newMargin = ((selling - cost) /
-      }  ))
+        // Calculate Selling Price from Cost + Margin
+        const calculateSellingPrice = () => {
+            const cost = parseFloat(costInput.value) || 0;
+            const margin = parseFloat(marginInput.value) || 0;
+
+            let selling = cost / (1 - margin / 100);
+
+            if (isFinite(selling) && selling >= cost && cost > 0) {
+                sellingInput.value = selling.toFixed(2);
+            } else if (cost > 0) {
+                sellingInput.value = (cost * 1.5).toFixed(2);
+            } else {
+                sellingInput.value = "0.00";
+            }
+        };
+
+        // Calculate Margin from Cost + Selling Price
+        const calculateMargin = () => {
+            const cost = parseFloat(costInput.value) || 0;
+            const selling = parseFloat(sellingInput.value) || 0;
+
+            if (selling > cost && selling > 0) {
+                const newMargin = ((selling - cost) / selling) * 100;
+                marginInput.value = newMargin.toFixed(2);
+            } else {
+                marginInput.value = "0.00";
+            }
+        };
+
+        // Attach Events
+        if (costInput && marginInput && sellingInput) {
+            marginInput.addEventListener('input', calculateSellingPrice);
+            costInput.addEventListener('input', () => {
+                calculateSellingPrice();
+                calculateMargin();
+            });
+            sellingInput.addEventListener('input', calculateMargin);
+        }
+    });
+</script>

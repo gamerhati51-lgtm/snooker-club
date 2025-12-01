@@ -209,25 +209,26 @@ $json_data = json_encode($chart_data);
 
         <div class="ml-64 p-8 max-w-full">
             
-            <h1 class="text-3xl font-bold mb-8 text-snooker-green border-b pb-2">
-                Reports
+            <h1 class="text-3xl font-bold mb-8 text-snooker-green border-b pb-2 text-center">
+              Snooker Club  Reports
             </h1>
 
-            <div class="flex space-x-3 mb-8">
-                <button onclick="navigateReport('daily')" 
-                    class="report-button px-5 py-2 rounded-lg font-semibold 
-                    <?php echo $report_type == 'daily' ? 'bg-snooker-accent text-snooker-green' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-200'; ?>">
-                    Daily Report
-                </button>
-                <button onclick="navigateReport('monthly')" 
-                    class="report-button px-5 py-2 rounded-lg font-semibold 
-                    <?php echo $report_type == 'monthly' ? 'bg-snooker-accent text-snooker-green' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-200'; ?>">
-                    Monthly Report
-                </button>
-                <button class="report-button px-5 py-2 rounded-lg font-semibold bg-white text-gray-700 border border-gray-300 hover:bg-gray-200 cursor-default">
-                    Tables Usage
-                </button>
-            </div>
+           <div class="flex justify-center space-x-3 mb-8">
+    <button onclick="navigateReport('daily')" 
+        class="report-button px-5 py-2 rounded-lg font-semibold text-white 
+        <?php echo $report_type == 'daily' ? 'bg-snooker-accent text-white' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-200'; ?>">
+        Daily Report
+    </button>
+    <button onclick="navigateReport('monthly')" 
+        class="report-button px-5 py-2 rounded-lg font-semibold 
+        <?php echo $report_type == 'monthly' ? 'bg-snooker-accent text-snooker-green' : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-200'; ?>">
+        Monthly Report
+    </button>
+    <button class="report-button px-5 py-2 rounded-lg font-semibold bg-white text-gray-700 border border-gray-300 hover:bg-gray-200 cursor-default">
+        Tables Usage
+    </button>
+</div>
+
 
             <form method="GET" class="mb-10 p-4 bg-white rounded-xl shadow-md border-t-4 border-snooker-green flex items-end space-x-4">
                 <input type="hidden" name="type" value="<?php echo $report_type; ?>">
