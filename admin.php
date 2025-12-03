@@ -83,7 +83,7 @@ if ($stmt_upcoming) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Snooker Club Admin Dashboard</title>
+    <title>DASHBOARD</title>
     <script src="https://cdn.tailwindcss.com"></script>
   
     <!-- Using Inter font -->
@@ -232,7 +232,7 @@ if ($result->num_rows > 0) {
                 <form action="start_session.php" method="POST">
                     <input type="hidden" name="table_id" value="' . $table_id . '">
                     <button type="submit" name="start_session"
-                            class="bg-blue-900 text-white px-3 py-1 rounded text-sm hover:bg-green-600 transition">
+                            class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-900 transition">
                         Start Session
                     </button>
                 </form>';
@@ -268,24 +268,18 @@ if ($result->num_rows > 0) {
 }
 ?>
 
-            </tbody>
-            
+            </tbody>    
         </table>
     </div>
 
 </div>
-
-
-                <div class="pt-4">
+<div class="pt-4">
                      <p class="text-sm text-gray-500 italic">Note: The software is under developers so the software now just show the static data</p>
                 </div>
 
             </div>
-
         </main>
     </div>
-
-    <!-- JavaScript for Sidebar Active State and Clock -->
     <script>
        
             // Function to update the clock

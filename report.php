@@ -201,7 +201,7 @@ $json_data = json_encode($chart_data);
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans">
+<body class=" min-h-screen font-sans bg-blue-100">
     
     <div class="relative min-h-screen"> 
 
@@ -209,8 +209,8 @@ $json_data = json_encode($chart_data);
 
         <div class="ml-64 p-8 max-w-full">
             
-            <h1 class="text-3xl font-bold mb-8 text-snooker-green border-b pb-2 text-center">
-              Snooker Club  Reports
+            <h1 class="text-3xl font-bold mb-8 text-gray-600 border-b pb-2 text-center">
+              CLUB ALL REPORT DAILY AND MONTHLY REPOSRTS
             </h1>
 
            <div class="flex justify-center space-x-3 mb-8">

@@ -17,13 +17,8 @@ if (!isset($_SESSION['admin_name'])) {
         .sidebar-nav::-webkit-scrollbar {
             width: 6px;
         }
-        .sidebar-nav::-webkit-scrollbar-thumb {
-            background: #4ade80; /* Tailwind green-400 */
-            border-radius: 3px;
-        }
-        .sidebar-nav::-webkit-scrollbar-track {
-            background: #10b981; /* Tailwind emerald-500 */
-        }
+       
+        
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen font-sans">
@@ -32,10 +27,10 @@ if (!isset($_SESSION['admin_name'])) {
     <div class="flex min-h-screen">
 
         <!-- 1. SIDEBAR (Fixed and Responsive) -->
-        <nav id="sidebar" class="w-64 bg-gray-800 text-white flex flex-col fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 z-30">
+        <nav id="sidebar" class="w-64 bg-blue-100text-white flex flex-col fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 z-30">
             
-            <div class="p-6 bg-gray-900 border-b border-green-500">
-                <h2 class="text-2xl font-extrabold text-green-400 tracking-wider">CLUB  SITTINGS</h2>
+            <div class="p-6 bg-blue-900 border-b border-green-500">
+                <h2 class="text-2xl font-extrabold text-white tracking-wider">CLUB  SITTINGS</h2>
             </div>
             
             <div class="sidebar-nav flex-grow p-4 overflow-y-auto">
@@ -43,7 +38,9 @@ if (!isset($_SESSION['admin_name'])) {
                 <ul class="space-y-2">
                     <!-- Dashboard Link -->
                     <li>
-                    <a href="admin.php" data-view="dashboard" class="nav-link block px-4 py-3 rounded-lg text-lg font-medium hover:bg-green-600 transition duration-150 ease-in-out bg-green-700 text-white shadow-lg">
+                    <a href="admin.php" data-view="dashboard" class="nav-link block px-4 py-3 rounded-lg
+                     text-lg font-medium hover:bg-orange-600 transition duration-150 ease-in-out bg-blue-700 
+                     text-white shadow-lg">
                     <i class="fas fa-home mr-3"></i> Dashboard
                     </a>
                     </li>
@@ -54,7 +51,7 @@ if (!isset($_SESSION['admin_name'])) {
                
                   
                     <li>
-                    <a href="bookings.php" data-view="bookings" class="nav-link block px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-150 ease-in-out">
+                    <a href="bookings.php" data-view="bookings" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
                     <i class="fas fa-calendar-check mr-3"></i> Table Bookings
                     </a>
                     </li>
@@ -65,22 +62,24 @@ if (!isset($_SESSION['admin_name'])) {
                      <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2 px-2">Finance & Settings</p>
                     </li>
                     <li>
-                        <a href="#" data-view="pricing" class="nav-link block px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-150 ease-in-out">
+                        <a href="#" data-view="pricing" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
                     <i class="fas fa-pound-sign mr-3"></i> Pricing & Rates
                         </a>
                     </li>
                     <li>
-                        <a href="report.php" data-view="reports" class="nav-link block px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-150 ease-in-out">
+                        <a href="report.php" data-view="reports" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
                             <i class="fas fa-chart-line mr-3"></i> Reports & Analytics
                         </a>
                     </li>
                     <li>
-                        <a href="password.php" data-view="password" class="nav-link block px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-150 ease-in-out">
+                        <a href="password.php" data-view="password" class="nav-link 
+                        block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
                             <i class="fas fa-key mr-3"></i> Change Password
                         </a>
                     </li>
                     <li>
-                        <a href="#" data-view="settings" class="nav-link block px-4 py-3 rounded-lg hover:bg-gray-700 transition duration-150 ease-in-out">
+  
+                  <a href="#" data-view="settings" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
                             <i class="fas fa-cog mr-3"></i> Club Settings
                         </a>
                     </li>
@@ -89,24 +88,22 @@ if (!isset($_SESSION['admin_name'])) {
             
             <!-- Logout Link in Sidebar Footer -->
             <div class="p-4 border-t border-gray-700">
-                <a href="logout.php" class="block w-full text-center bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition">
+                <a href="logout.php" class="block w-full text-center bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition">
                     <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </a>
             </div>
 
         </nav>
-        
+          <!-- Header -->
+      <?php include "layout/header.php"; ?>
         <!-- Sidebar Toggle for Mobile -->
-        <button id="sidebar-toggle" class="fixed top-4 left-4 p-2 bg-gray-800 text-white rounded-lg shadow-xl md:hidden z-40 transition-all duration-300">
+        <button id="sidebar-toggle" class="fixed top-4 left-4 p-2 mt-6 bg-gray-800 text-white rounded-lg shadow-xl md:hidden z-40 transition-all duration-300">
             <i class="fas fa-bars"></i>
         </button>
-
-
-        <!-- 2. MAIN CONTENT AREA -->
-        <div class="flex-grow p-4 md:p-8 transition-all duration-300">
-
-            <!-- Top Header Bar -->
-            <header class="bg-white p-4 shadow-md rounded-lg mb-8 flex justify-between items-center sticky top-0 z-20">
+  <!-- 2. MAIN CONTENT AREA -->
+        <div class="flex-grow p-4 md:p-8 transition-all duration-300 mt-7">
+ 
+        <header class="bg-white p-4 shadow-md rounded-lg mt-9 mb-5 flex justify-between items-center sticky top-0 z-20">
                 <h1 class="text-3xl font-bold text-gray-800">
                     Admin Panel
                 </h1>
@@ -116,7 +113,7 @@ if (!isset($_SESSION['admin_name'])) {
                         Welcome, <?php echo htmlspecialchars($_SESSION['admin_name']); ?>!
                     </span>
                     <!-- Original Logout Button (for redundancy/visibility) -->
-                    <a href="logout.php" class="bg-red-500 text-white px-3 py-2 text-sm rounded-lg hover:bg-red-600 transition shadow-md md:hidden">
+                    <a href="logout.php" class="bg-orange-500 text-white px-3 py-2 text-sm rounded-lg hover:bg-orange-600 transition shadow-md md:hidden">
                         Logout
                     </a>
                 </div>

@@ -1,18 +1,35 @@
    <!-- Header Navigation -->
       <header class="fixed top-0 left-0 lg:left-64 right-0 bg-blue-900 text-white h-16 flex items-center justify-between px-4 shadow-lg z-50 mb-6">
-  
-  <!-- Left Icons -->
   <div class="flex items-center space-x-3">
-    <!-- Sidebar toggle -->
+
     
   </div>
 <!-- Right Info -->
 <div class="flex items-center space-x-2">
 
-  <!-- Date -->
-  <div class="flex items-center justify-center w-23 h-10 bg-blue-600 text-white rounded text-sm font-medium">
-    11/28/2025
-  </div>
+<!-- Date & Time -->
+<div id="current-time" 
+     class="flex items-center justify-center w-52 h-10 bg-blue-600 text-white rounded text-sm font-medium">
+  <!-- JS will insert date/time here -->
+</div>
+
+<script>
+  function updateTime() {
+      const now = new Date();
+
+      // Format: MM/DD/YYYY HH:MM:SS
+      const formatted = now.toLocaleDateString('en-US') + ' ' + now.toLocaleTimeString('en-US');
+
+      document.getElementById('current-time').textContent = formatted;
+  }
+
+  // Initial call
+  updateTime();
+
+  // Update every second
+  setInterval(updateTime, 1000);
+</script>
+
 
   <!-- Add / Plus -->
   <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
@@ -25,7 +42,7 @@
   <button id="calculatorBtn" class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition" title="Calculator">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M8 12h8M8 18h8M6 6v12h12V6H6z"/>
-    </svg>
+</svg>
   </button>
 
   <!-- POS -->

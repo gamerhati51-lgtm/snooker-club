@@ -40,7 +40,7 @@ $all_categories = $categories_result ? $categories_result->fetch_all(MYSQLI_ASSO
     <title>Add Expense | Snooker Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-blue-100 font-sans">
 
 <div class="flex min-h-screen">
     <?php include 'layout/sidebar.php'; ?>
@@ -48,16 +48,17 @@ $all_categories = $categories_result ? $categories_result->fetch_all(MYSQLI_ASSO
     <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8">
         <?php include "layout/header.php"; ?>
 
-        <h1 class="text-4xl font-extrabold mb-6 text-snooker-green">💸 Add New Expense</h1>
+        <h1 class="text-4xl font-extrabold mb-6 text-snooker-green text-center">💸 Add New Expense</h1>
 
         <?php if(!empty($message)): ?>
             <div class="mb-6 p-4 <?php echo (strpos($message, '❌')!==false) ? 'bg-red-100 text-red-700' : 'bg-snooker-light/10 text-snooker-green'; ?> rounded-lg shadow-md">
                 <?php echo $message; ?>
             </div>
         <?php endif; ?>
+<div class="flex justify-center w-full">
+    <div class="bg-white p-8 rounded-xl shadow-xl border border-gray-100 max-w-xl w-full">
 
-        <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-100 max-w-lg">
-            <form method="POST" class="space-y-4">
+        <form method="POST" class="space-y-4">
                 <input type="hidden" name="action" value="add_expense">
 
                 <div>
@@ -86,11 +87,11 @@ $all_categories = $categories_result ? $categories_result->fetch_all(MYSQLI_ASSO
                 </div>
 
  <button type="submit" 
- class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-red-700 transition shadow-lg">Save Expense</button>
+ class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-orange-600 transition shadow-lg">Save Expense</button>
 
             </form>
         </div>
-
+</div>
     </main>
 </div>
 

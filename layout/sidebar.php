@@ -31,12 +31,12 @@ if (session_status() === PHP_SESSION_NONE) {
                        flex flex-col transform -translate-x-full transition-transform duration-300 lg:translate-x-0">
     
     <div class="pt-3 pb-4 text-center border-b border-snooker-light bg-blue-900 flex-shrink-0">
-        <h2 class="text-xxl font-bold text-orange-500 tracking-wide mt-3">WELCOME ADMIN</h2>
+        <h2 class="text-xxl font-bold text-white tracking-wide mt-3">WELCOME ADMIN</h2>
     </div>
 
     <nav class="flex-grow overflow-y-auto p-4 space-y-2">
 
-        <a href="./admin.php" class="sidebar-link active text-black flex items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
+        <a href="./admin.php" class="sidebar-link  active text-black flex items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 ">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
@@ -45,7 +45,7 @@ if (session_status() === PHP_SESSION_NONE) {
             Dashboard
         </a>
 
-        <a href="./add_table.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
+        <a href="./add_table.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 ">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0l-1-4m3 4l1-4m-9 4l-1-4m3 4l1-4">
@@ -56,7 +56,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <div class="w-full">
             <button onclick="togglePOS()" 
-                class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200 transition">
+                class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500  transition">
                 
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -83,13 +83,16 @@ if (session_status() === PHP_SESSION_NONE) {
                     Add Product
                 </a>
 
-                <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 3h18M9 7v14m6-14v14" />
-                    </svg>
-                    Purchases
+                <a href="./add_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+                    <!-- List icon -->
+     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+             d="M4 6h16M4 12h16M4 18h16"/>
+     </svg>
+                    List Product
                 </a>
+
+            
 
                 <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +130,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
 <div class="w-full">
         <button onclick="toggleBookings()" 
-            class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200 transition">
+            class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 transition">
             
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -166,7 +169,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <button 
   id="toggleExpanse"
   class="w-full sidebar-link flex text-black items-center p-3 text-sm font-semibold 
-  border-l-4 border-transparent hover:bg-blue-200 transition">
+  border-l-4 border-transparent hover:bg-orange-500 transition">
     
     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -189,7 +192,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <div id="expanseMenu" class="hidden flex-col ml-10 text-sm">
 
   <a href="./list_expance.php" 
-     class="py-2 flex items-center text-black hover:text-blue-700 transition">
+     class="py-2 flex items-center text-black hover:text-blue-700 transition hover:">
      
      <!-- List icon -->
      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,7 +220,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 
 
-        <a href="./user.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
+        <a href="./user.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 ">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20h-2m2 0h-2M13 20H11m4-10a4 4 0 11-8 0 4 4 0 018 0z">
@@ -226,14 +229,14 @@ if (session_status() === PHP_SESSION_NONE) {
             Users
         </a>
 
-        <a href="./report.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
+        <a href="./report.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 ">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
             Reports
         </a>
 
-        <a href="ratsiting.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200">
+        <a href="ratsiting.php" class="sidebar-link flex text-black items-center p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500">
             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                     d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z">
@@ -245,8 +248,15 @@ if (session_status() === PHP_SESSION_NONE) {
         
     <div class="p-4 border-t border-snooker-light flex-shrink-0">
         <p class="text-xs font-semibold text-black">ADMIN:</p>
-        <a href="logout.php" class="block w-full text-center bg-orange-600 text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg hover:bg-red-700 transition transform hover:scale-[1.02]">
-            <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        <a href="logout.php" title="are you want to logout" class="block w-full text-center bg-orange-600 text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg  hover:bg-red-700 transition transform hover:scale-[1.02]">
+            <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none"
+             stroke="currentColor" viewBox="0 0 24 24" 
+             xmlns="http://www.w3.org/2000/svg">
+             <path stroke-linecap="round" stroke-linejoin="round" 
+
+            stroke-width="2" 
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+        </path></svg>
             Logout
         </a>
     </div>
