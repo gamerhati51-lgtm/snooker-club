@@ -52,6 +52,7 @@ if (isset($_POST['update_settings'])) {
 
 <!-- Sidebar -->
 <?php include __DIR__ . '/layout/sidebar.php'; ?>
+<?php include __DIR__ . '/layout/header.php'; ?>
 
 <!-- Main content -->
 <div class="flex-1 ml-64 p-6 flex flex-col items-center justify-center">

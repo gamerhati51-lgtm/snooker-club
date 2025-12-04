@@ -30,9 +30,9 @@ if($result && $result->num_rows > 0){
 
 <!-- Sidebar -->
 <?php include 'layout/sidebar.php'; ?>
-
+<?php include 'layout/header.php'; ?>
 <!-- Main Section -->
-<div class="flex-1 p-8 ml-64">
+<div class="flex-1 p-8 ml-64 mt-9">
 
   
 

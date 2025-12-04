@@ -206,10 +206,16 @@ $json_data = json_encode($chart_data);
     <div class="relative min-h-screen"> 
 
         <?php include 'layout/sidebar.php'; ?>
+        
+        <?php include 'layout/header.php'; ?>
 
         <div class="ml-64 p-8 max-w-full">
             
-            <h1 class="text-3xl font-bold mb-8 text-gray-600 border-b pb-2 text-center">
+            <h1 class="text-3xl font-bold mb-0 text-gray-600 border-b pb-2 text-center ">
+              CLUB ALL REPORT DAILY AND MONTHLY REPOSRTS
+            </h1>
+              
+            <h1 class="text-3xl font-bold mb-0 text-gray-600 border-b pb-2 text-center ">
               CLUB ALL REPORT DAILY AND MONTHLY REPOSRTS
             </h1>
 

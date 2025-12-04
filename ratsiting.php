@@ -25,75 +25,97 @@ if (!isset($_SESSION['admin_name'])) {
 
     <!-- Main Flex Container for Sidebar and Content -->
     <div class="flex min-h-screen">
+<!-- SIDEBAR -->
+<nav id="sidebar" 
+     class="w-64 bg-blue-100 text-gray-700 flex flex-col fixed inset-y-0 left-0 
+            transform -translate-x-full md:relative md:translate-x-0 
+            transition-transform duration-300 z-30">
 
-        <!-- 1. SIDEBAR (Fixed and Responsive) -->
-        <nav id="sidebar" class="w-64 bg-blue-100text-white flex flex-col fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 transition-transform duration-300 z-30">
-            
-            <div class="p-6 bg-blue-900 border-b border-green-500">
-                <h2 class="text-2xl font-extrabold text-white tracking-wider">CLUB  SITTINGS</h2>
-            </div>
-            
-            <div class="sidebar-nav flex-grow p-4 overflow-y-auto">
-                
-                <ul class="space-y-2">
-                    <!-- Dashboard Link -->
-                    <li>
-                    <a href="admin.php" data-view="dashboard" class="nav-link block px-4 py-3 rounded-lg
-                     text-lg font-medium hover:bg-orange-600 transition duration-150 ease-in-out bg-blue-700 
-                     text-white shadow-lg">
-                    <i class="fas fa-home mr-3"></i> Dashboard
-                    </a>
-                    </li>
-                    <li class="pt-4 border-t border-gray-700">
-                    <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2 px-2">Management</p>
-                    </li>
-                    <!-- Management Links -->
-               
-                  
-                    <li>
-                    <a href="bookings.php" data-view="bookings" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
+    <!-- Dashboard -->
+    <div class="p-6 bg-blue-900">
+        <a href="admin.php" 
+           class="nav-link block px-4 py-3 rounded-lg text-lg font-medium 
+                  bg-orange-700 text-white shadow-lg hover:bg-orange-600">
+            <i class="fas fa-home mr-3"></i> Dashboard
+        </a>
+    </div>
+
+    <!-- NAV LINKS -->
+    <div class="sidebar-nav flex-grow p-4 overflow-y-auto">
+
+        <ul class="space-y-2">
+
+            <li class="pt-4 border-t border-gray-300">
+                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2">
+                    Management
+                </p>
+            </li>
+
+            <!-- Table Bookings -->
+            <li>
+                <a href="bookings.php" 
+                   class="nav-link block px-4 py-3 rounded-lg 
+                          text-gray-700 hover:text-white hover:bg-orange-500 transition">
                     <i class="fas fa-calendar-check mr-3"></i> Table Bookings
-                    </a>
-                    </li>
-                
-                   
-                    <!-- NEW ADMIN CONTROLS SECTION -->
-                    <li class="pt-4 border-t border-gray-700">
-                     <p class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2 px-2">Finance & Settings</p>
-                    </li>
-                    <li>
-                        <a href="#" data-view="pricing" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
-                    <i class="fas fa-pound-sign mr-3"></i> Pricing & Rates
-                        </a>
-                    </li>
-                    <li>
-                        <a href="report.php" data-view="reports" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
-                            <i class="fas fa-chart-line mr-3"></i> Reports & Analytics
-                        </a>
-                    </li>
-                    <li>
-                        <a href="password.php" data-view="password" class="nav-link 
-                        block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
-                            <i class="fas fa-key mr-3"></i> Change Password
-                        </a>
-                    </li>
-                    <li>
-  
-                  <a href="#" data-view="settings" class="nav-link block px-4 py-3 rounded-lg hover:bg-orange-500 transition duration-150 ease-in-out">
-                            <i class="fas fa-cog mr-3"></i> Club Settings
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <!-- Logout Link in Sidebar Footer -->
-            <div class="p-4 border-t border-gray-700">
-                <a href="logout.php" class="block w-full text-center bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition">
-                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
                 </a>
-            </div>
+            </li>
 
-        </nav>
+            <li class="pt-4 border-t border-gray-300">
+                <p class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2">
+                    Finance & Settings
+                </p>
+            </li>
+
+            <!-- Pricing -->
+            <li>
+                <a href="#" 
+                   class="nav-link block px-4 py-3 rounded-lg 
+                          text-gray-700 hover:text-white hover:bg-orange-500 transition">
+                    <i class="fas fa-pound-sign mr-3"></i> Pricing & Rates
+                </a>
+            </li>
+
+            <!-- Reports -->
+            <li>
+                <a href="report.php" 
+                   class="nav-link block px-4 py-3 rounded-lg 
+                          text-gray-700 hover:text-white hover:bg-orange-500 transition">
+                    <i class="fas fa-chart-line mr-3"></i> Reports & Analytics
+                </a>
+            </li>
+
+            <!-- Change Password -->
+            <li>
+                <a href="password.php" 
+                   class="nav-link block px-4 py-3 rounded-lg 
+                          text-gray-700 hover:text-white hover:bg-orange-500 transition">
+                    <i class="fas fa-key mr-3"></i> Change Password
+                </a>
+            </li>
+
+            <!-- Club Settings -->
+            <li>
+                <a href="#" 
+                   class="nav-link block px-4 py-3 rounded-lg 
+                          text-gray-700 hover:text-white hover:bg-orange-500 transition">
+                    <i class="fas fa-cog mr-3"></i> Club Settings
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+    <!-- Logout -->
+    <div class="p-4 border-t border-gray-300">
+        <a href="logout.php" 
+           class="block w-full text-center bg-orange-500 text-white px-4 py-2 rounded-lg font-semibold 
+                  hover:bg-red-700 transition">
+            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+        </a>
+    </div>
+
+</nav>
+
           <!-- Header -->
       <?php include "layout/header.php"; ?>
         <!-- Sidebar Toggle for Mobile -->

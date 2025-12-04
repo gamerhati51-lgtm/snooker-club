@@ -80,6 +80,24 @@ if ($stmt_upcoming) {
 }
 // $upcoming_bookings_count now holds the dynamic data (e.g., 7)
 ?>
+<?php
+
+
+// Protect page
+if(!isset($_SESSION['admin_name'])){
+    header("Location: index.php");
+    exit;
+}
+
+// Fetch total users
+$result = $conn->query("SELECT COUNT(*) AS total_users FROM users");
+$total_users = 0;
+if($result){
+    $row = $result->fetch_assoc();
+    $total_users = $row['total_users'];
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,7 +124,10 @@ if ($stmt_upcoming) {
 
       <!-- Page Content -->
       <div id="content-area" class="space-y-8 bg-blue-200 p-6 rounded-lg">
-
+   <h1 class="text-3xl font-bold mb-0 mt-0 text-gray-800 border-b pb-2 text-center ">
+    Dashboard  Quick Overiew
+            </h1>
+     
                 <!-- 1. Key Metrics Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            <div class="bg-white p-6 rounded-xl snooker-shadow card-glow border-t-4 border-snooker-accent">
@@ -149,13 +170,16 @@ if ($stmt_upcoming) {
     <p class="text-4xl font-extrabold text-blue-700 mt-2"><?php echo $upcoming_bookings_count; ?></p>
     <p class="text-xs text-gray-400 mt-2">For the next 24 hours</p>
 </div>
-                     <!-- Card 4: New Members -->
-                    <div class="bg-white p-6 rounded-xl snooker-shadow card-glow border-t-4 border-purple-500">
-                        <p class="text-sm text-gray-500 font-medium">New Members (Month)</p>
-                        <p class="text-4xl font-extrabold text-purple-700 mt-2">12</p>
-                        <p class="text-xs text-gray-400 mt-2">Active sign-ups</p>
-                    </div>
-                </div>
+<!-- Card 4: All Users -->
+<div class="bg-white p-6 rounded-xl snooker-shadow card-glow border-t-4 border-purple-500">
+    <p class="text-sm text-gray-500 font-medium">All Users</p>
+    <p class="text-4xl font-extrabold text-purple-700 mt-2">
+        <?php echo $total_users; ?>
+    </p>
+    <p class="text-xs text-gray-400 mt-2">Active sign-ups</p>
+</div>
+</div>
+
 
                 <!-- 2. Detailed Table Status Table -->
               <div class="bg-white rounded-xl p-6 snooker-shadow mt-8 ">
@@ -246,7 +270,7 @@ if ($result->num_rows > 0) {
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['century_rate']); ?> PKR</td>
             <td class="px-6 py-4 text-gray-700"><?php echo $status_badge; ?></td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-        <a href="edit_table.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out" title="Edit">
+        <a href="view_tables.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out" title="Edit">
             ✏️ Edit
         </a>
     </td>
@@ -274,7 +298,7 @@ if ($result->num_rows > 0) {
 
 </div>
 <div class="pt-4">
-                     <p class="text-sm text-gray-500 italic">Note: The software is under developers so the software now just show the static data</p>
+                     <p class="text-sm text-gray-500 italic">Note: The software is under developers so some pages under the process</p>
                 </div>
 
             </div>
@@ -356,6 +380,7 @@ let toaster = createToaster({
 });
 
 toaster("Software is under saeed development!");
+
 
 </script>
 </body>

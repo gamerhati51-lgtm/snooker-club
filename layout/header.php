@@ -1,3 +1,183 @@
+   
+   
+   <style>
+    .dark-mode input[type="file"] {
+    background-color: #222 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+/* Placeholder text for file input (file name) */
+.dark-mode input[type="file"]::file-selector-button {
+    background-color: #333 !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dark-mode input[type="file"]::file-selector-button:hover {
+    background-color: #444 !important;
+}
+
+    /* ============================================
+   🔥 GLOBAL DARK MODE (FULL UI)
+   ============================================ */
+.dark-mode {
+    background-color: #0e0e0e !important;
+    color: #ffffff !important;
+}
+
+/* Text everywhere */
+.dark-mode *,
+.dark-mode p,
+.dark-mode span,
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   🔥 HEADER / NAVBAR
+   =============================== */
+.dark-mode header,
+.dark-mode nav,
+.dark-mode .navbar,
+.dark-mode .top-header {
+    background-color: #1a1a1a !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+/* ===============================
+   🔥 SIDEBAR
+   =============================== */
+.dark-mode .sidebar,
+.dark-mode #sidebar,
+.dark-mode .side-menu {
+    background-color: #1a1a1a !important;
+    border-right: 1px solid #333 !important;
+}
+
+/* Sidebar Links */
+.dark-mode .sidebar a,
+.dark-mode .side-menu a {
+    color: #fff !important;
+}
+
+.dark-mode .sidebar a:hover,
+.dark-mode .side-menu a:hover {
+    background-color: #222 !important;
+}
+
+/* ===============================
+   🔥 CARDS / BOXES
+   =============================== */
+.dark-mode .card,
+.dark-mode .bg-white,
+.dark-mode .bg-gray-50,
+.dark-mode .bg-gray-100,
+.dark-mode .rounded-lg,
+.dark-mode .shadow-md,
+.dark-mode .shadow-lg,
+.dark-mode .p-4,
+.dark-mode .p-6 {
+    background-color: #1c1c1c !important;
+    border-color: #333 !important;
+    color: white !important;
+}
+
+/* ===============================
+   🔥 BUTTONS (ALL COLORS)
+   =============================== */
+.dark-mode button,
+.dark-mode .btn {
+  
+    color: white !important;
+    border-color: #444 !important;
+}
+
+/* Make blue, red, green buttons dark too */
+.dark-mode .bg-blue-600,
+.dark-mode .bg-red-600,
+.dark-mode .bg-green-600,
+.dark-mode .bg-yellow-600,
+.dark-mode .bg-orange-600,
+.dark-mode .bg-purple-600 {
+    background-color: #333 !important;
+}
+
+/* Hover */
+.dark-mode button:hover {
+    background-color: #444 !important;
+}
+
+/* ===============================
+   🔥 TABLES
+   =============================== */
+.dark-mode table {
+    background-color: #1c1c1c !important;
+}
+
+.dark-mode table tr {
+    background-color: #1c1c1c !important;
+}
+
+.dark-mode table td,
+.dark-mode table th {
+    color: white !important;
+    border-color: #333 !important;
+}
+
+/* ===============================
+   🔥 FORMS
+   =============================== */
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background-color: #222 !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+}
+
+.dark-mode ::placeholder {
+    color: #bbb !important;
+}
+.dark-mode [class*="bg-red-100"],
+.dark-mode [class*="bg-green-100"],
+.dark-mode [class*="bg-yellow-100"],
+.dark-mode [class*="bg-blue-100"] {
+    background-color: #333 !important;
+    color: white !important;
+}
+
+.dark button:not(.dark-mode-ignore),
+.dark a:not(.dark-mode-ignore),
+.dark .sidebar-link:not(.dark-mode-ignore) {
+    background-color: inherit !important;
+    color: inherit !important;
+}
+
+/* Default dark mode background & text */
+.dark body {
+    background-color: #0d1117 !important;
+    color: #e6e6e6 !important;
+}
+
+
+
+
+   </style>
+   
+   
+   
+   
    <!-- Header Navigation -->
       <header class="fixed top-0 left-0 lg:left-64 right-0 bg-blue-900 text-white h-16 flex items-center justify-between px-4 shadow-lg z-50 mb-6">
   <div class="flex items-center space-x-3">
@@ -7,11 +187,59 @@
 <!-- Right Info -->
 <div class="flex items-center space-x-2">
 
-<!-- Date & Time -->
+
+  <!-- Add / Plus -->
+  <a href="./add_product.php"><button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+    </svg>
+  </button></a>
+
+  <!-- Calculator -->
+  <button id="calculatorBtn" class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition" title="Calculator">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M8 12h8M8 18h8M6 6v12h12V6H6z"/>
+</svg>
+  </button>
+
+  <!-- POS -->
+ <a href="./list_product.php"> <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition font-semibold text-white">
+    POS
+  </button></a>
+
+  <!-- Notification -->
+  <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 00-12 0v3c0 .538-.214 1.055-.595 1.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+    </svg>
+  </button>
+
+  <!-- User -->
+  <a href="./report.php"><button class="flex items-center justify-center w-auto px-3 h-10 bg-blue-600 hover:bg-blue-700 rounded transition text-white space-x-2">
+    <span>Club Reports</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.878 6.196 9 9 0 015.12 17.804z"/>
+    </svg>
+  </button></a>
+  <!-- Date & Time -->
 <div id="current-time" 
-     class="flex items-center justify-center w-52 h-10 bg-blue-600 text-white rounded text-sm font-medium">
+     class="flex items-center justify-center w-48 h-10 bg-blue-600 text-white rounded text-sm font-medium">
   <!-- JS will insert date/time here -->
 </div>
+
+
+<button id="darkModeToggle" 
+    class="flex items-center justify-center w-auto px-3 h-10 bg-gray-800 hover:bg-gray-900 rounded transition text-white space-x-2">
+    
+    <span id="dmText">Dark Mode</span>
+
+    <svg id="dmIcon" xmlns="http://www.w3.org/2000/svg" 
+         class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path id="dmPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m8.66-9h-1M4.34 12h-1m15.02 6.36l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+    </svg>
+</button>
+
 
 <script>
   function updateTime() {
@@ -29,41 +257,6 @@
   // Update every second
   setInterval(updateTime, 1000);
 </script>
-
-
-  <!-- Add / Plus -->
-  <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-    </svg>
-  </button>
-
-  <!-- Calculator -->
-  <button id="calculatorBtn" class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition" title="Calculator">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M8 12h8M8 18h8M6 6v12h12V6H6z"/>
-</svg>
-  </button>
-
-  <!-- POS -->
- <a href="./add_product.php"> <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition font-semibold text-white">
-    POS
-  </button></a>
-
-  <!-- Notification -->
-  <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 00-12 0v3c0 .538-.214 1.055-.595 1.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-    </svg>
-  </button>
-
-  <!-- User -->
-  <button class="flex items-center justify-center w-auto px-3 h-10 bg-blue-600 hover:bg-blue-700 rounded transition text-white space-x-2">
-    <span>Snooker club</span>
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A9 9 0 1118.878 6.196 9 9 0 015.12 17.804z"/>
-    </svg>
-  </button>
 
 </div>
       </header>
@@ -304,4 +497,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize
     updateDisplay();
 });
+const toggleBtn = document.getElementById("darkModeToggle");
+const dmText = document.getElementById("dmText");
+const dmIcon = document.getElementById("dmIcon");
+const dmPath = document.getElementById("dmPath");
+
+// Load saved mode
+if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark-mode");
+    dmText.textContent = "Light Mode";
+
+    dmPath.setAttribute("d",
+        "M21 12.79A9 9 0 1111.21 3a7 7 0 1010.58 9.79z"
+    );
+}
+
+toggleBtn.addEventListener("click", function () {
+    document.body.classList.toggle("dark-mode");
+
+    if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "enabled");
+        dmText.textContent = "Light Mode";
+        dmPath.setAttribute("d",
+            "M21 12.79A9 9 0 1111.21 3a7 7 0 1010.58 9.79z"
+        );
+    } else {
+        localStorage.setItem("darkMode", "disabled");
+        dmText.textContent = "Dark Mode";
+        dmPath.setAttribute("d",
+            "M12 3v1m0 16v1m8.66-9h-1M4.34 12h-1m15.02 6.36l-.7-.7M6.34 6.34l-.7-.7m12.02 0l-.7.7M6.34 17.66l-.7.7M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+        );
+    }
+});
+
 </script>

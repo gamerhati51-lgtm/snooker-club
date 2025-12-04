@@ -27,11 +27,14 @@ if (session_status() === PHP_SESSION_NONE) {
     </svg>
 </button>
 
-<aside id="sidebar" class="fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
+<aside id="sidebar" class=" sidebar-fixed-theme fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
                        flex flex-col transform -translate-x-full transition-transform duration-300 lg:translate-x-0">
     
-    <div class="pt-3 pb-4 text-center border-b border-snooker-light bg-blue-900 flex-shrink-0">
-        <h2 class="text-xxl font-bold text-white tracking-wide mt-3">WELCOME ADMIN</h2>
+   <div class="p-4 bg-blue-900">
+     <h1  class="nav-link block px-4 py-3 rounded-lg text-lg font-medium 
+                   text-white  bg-none ">
+            <i class="fas fa-home mr-3"></i> Weclome Admin👋 </h1>
+      
     </div>
 
     <nav class="flex-grow overflow-y-auto p-4 space-y-2">
@@ -45,14 +48,39 @@ if (session_status() === PHP_SESSION_NONE) {
             Dashboard
         </a>
 
-        <a href="./add_table.php" class="sidebar-link flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 ">
-            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+     
+        <div class="w-full">
+        <button onclick="toggleBookings()" 
+            class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-orange-500 transition">
+            
+             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                     d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0l-1-4m3 4l1-4m-9 4l-1-4m3 4l1-4">
                 </path>
             </svg>
-            Tables Management
-        </a>
+
+            Game Tables 
+            <svg id="bookingsArrow" class="w-4 h-4 ml-auto transform transition-transform" fill="none" 
+            stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M19 9l-7 7-7-7" />
+            </svg>
+        </button>
+
+        <div id="bookingsMenu" class="hidden pl-10 mt-1 space-y-2 text-black"> 
+
+            <a href="./add_table.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                Add Table
+            </a>
+
+            <a href="./view_tables.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                View Tables
+            </a>
+        </div>
+    </div>
+    
 
         <div class="w-full">
             <button onclick="togglePOS()" 
@@ -83,7 +111,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     Add Product
                 </a>
 
-                <a href="./add_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+                <a href="./list_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
                     <!-- List icon -->
      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -110,23 +138,6 @@ if (session_status() === PHP_SESSION_NONE) {
                     Update Price
                 </a>
 
-                <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 12h16m-4-4l4 4-4 4" />
-                    </svg>
-                    Stock Transfers
-                </a>
-
-                <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6l4 2" />
-                    </svg>
-                    Stock Adjustment
-                </a>
-
-            </div>
         </div>
 <div class="w-full">
         <button onclick="toggleBookings()" 
