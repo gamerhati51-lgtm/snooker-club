@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- Sidebar -->
 <?php include 'layout/sidebar.php'; ?>
+<?php include 'layout/header.php'; ?>
 
 <!-- Main Section -->
 <div class="flex-1 p-8 ml-64">

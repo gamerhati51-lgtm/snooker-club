@@ -45,53 +45,82 @@ if (isset($_POST['login'])) {
 <title>Club Snoker Login</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-blue-100 flex items-center justify-center min-h-screen">
+<body class="relative min-h-screen flex items-center justify-center">
 
-<div class="w-full max-w-md p-8 bg-blue-50 rounded-lg shadow">
+    <!-- Background Image -->
+    <div class="absolute inset-0 bg-[url('images/background.jpg')] bg-cover bg-center"></div>
 
-      <!-- Logo -->
-    <div class="flex justify-center mb-0">
+    <!-- Dark Overlay -->
+    <div class="absolute inset-0 bg-black/50"></div>
+
+ <div class="relative w-full max-w-md p-8 
+            bg-white/10 backdrop-blur-2xl 
+            rounded-2xl shadow-2xl 
+            border border-white/20 
+           ">
+
+    <div class="flex justify-center mb-4">
+    <div class="p-3 rounded-full bg-white shadow-lg">
         <img src="images/logo.png" 
              alt="Logo" 
-             class="w-28 h-28 object-contain mb-0">
+             class="w-24 h-24 object-contain">
     </div>
-    <h2 class="text-2xl font-bold mb-1 text-center text-black-700 mt-0">LOGIN</h2>
-<h5 class="text-center mb-2 text-blue-400">Please login to continue</h5>
+</div>
+
+
+    <!-- Heading -->
+    <h2 class="text-3xl font-bold text-center text-white tracking-wide drop-shadow">
+        LOGIN
+    </h2>
+    <h5 class="text-center mb-4 text-blue-200 drop-shadow">
+        Please login to continue
+    </h5>
+
+    <!-- Error -->
     <?php if(!empty($error)) { ?>
-        <p class="text-red-500 mb-4"><?php echo htmlspecialchars($error); ?></p>
+        <p class="text-red-400 mb-4 text-center font-semibold">
+            <?php echo htmlspecialchars($error); ?>
+        </p>
     <?php } ?>
 
-    <form method="post" class="space-y-4" autocomplete="off">
+    <!-- Form -->
+    <form method="post" class="space-y-5" autocomplete="off">
 
+        <!-- Email -->
         <div>
-            <label class="block text-gray-700">Email</label>
+            <label class="block text-blue-100 font-medium">Email</label>
             <input type="email" name="email" required
-                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400">
+                class="w-full px-3 py-2 rounded-lg bg-white/20 text-white 
+                       placeholder-gray-300 border border-white/20
+                       focus:outline-none focus:ring-2 focus:ring-blue-400">
         </div>
 
+        <!-- Password -->
         <div class="relative">
-            <label class="block text-gray-700 mb-1">Password</label>
+            <label class="block text-blue-100 font-medium">Password</label>
             <input type="password" id="password" name="password" required autocomplete="off"
-                class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-400">
+                class="w-full px-3 py-2 rounded-lg bg-white/20 text-white 
+                       placeholder-gray-300 border border-white/20
+                       focus:outline-none focus:ring-2 focus:ring-blue-400">
 
-            <!-- Eye Button -->
             <button type="button" id="togglePassword"
-                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 mt-3">
+                class="absolute right-3 top-1/2 transform -translate-y-1/2
+                       text-blue-200 hover:text-white mt-3">
                 👁️
             </button>
         </div>
 
+        <!-- Login Button -->
         <button type="submit" name="login"
-            class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+            class="w-full bg-blue-600/80 backdrop-blur-md 
+                   text-white py-2 rounded-lg shadow-md
+                   hover:bg-blue-700 transition">
             Login
         </button>
 
     </form>
 
 </div>
-
-</body>
-
 <script src="script.js"></script>
+
 </body>
-</html>

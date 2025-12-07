@@ -29,14 +29,23 @@ $upcoming_bookings_query->close();
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 min-h-screen">
-    
-    <!-- Layout -->
-    <div class="flex">
-        <?php include 'layout/sidebar.php'; ?>
 
-        <main class="flex-1 ml-0 lg:ml-64 pt-20 p-6 sm:p-8">
-            <?php include 'layout/header.php'; ?>
+<body class="bg-blue-100 font-sans">
+
+  <!-- Dashboard Container -->
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <?php include 'layout/sidebar.php'; ?>
+
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
+      
+      <!-- Header -->
+      <?php include "layout/header.php"; ?>
+
+      <!-- Page Content -->
+      <div id="content-area" class="space-y-8 bg-blue-200 p-6 rounded-lg">
 
             <h1 class="text-3xl font-extrabold mb-6 border-b pb-2 mt-9 text-center">📅 Upcoming Reservations</h1>
 

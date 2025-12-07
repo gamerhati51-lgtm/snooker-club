@@ -21,6 +21,21 @@ if(!isset($_SESSION['admin_name'])) header("Location:index.php");
 <h1 class="text-3xl font-bold mb-6 text-gray-700 text-center">🎱 Snooker Tables</h1>
 
 <div class="overflow-x-auto bg-white rounded shadow">
+    <div class="flex justify-end mb-4">
+   <a href="admin.php"><button onclick="openAddTableModal()" 
+        class="flex items-center space-x-2  me-9 mt-6 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg shadow transition">
+             <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none"
+             stroke="currentColor" viewBox="0 0 24 24" 
+             xmlns="http://www.w3.org/2000/svg">
+             <path stroke-linecap="round" stroke-linejoin="round" 
+
+            stroke-width="2" 
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+        </path></svg>
+      
+        <span>DASHBOARD</span>
+    </button></a>
+</div>
 <table class="min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
         <tr>

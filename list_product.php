@@ -50,15 +50,21 @@ $stmt->close();
     <title>Manage All Products</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-blue-100 font-sans">
 
+  <!-- Dashboard Container -->
   <div class="flex min-h-screen">
 
+    <!-- Sidebar -->
     <?php include 'layout/sidebar.php'; ?>
 
-    <main class="flex-1 ml-0 lg:ml-64 pt-7 p-8 main-content"> 
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
       
+      <!-- Header -->
       <?php include "layout/header.php"; ?>
+
+
 
       <div id="content-area" class="space-y-8 bg-white p-6 rounded-lg shadow-xl mt-5">
 

@@ -128,70 +128,74 @@ if($result){
     Dashboard  Quick Overiew
             </h1>
      
-                <!-- 1. Key Metrics Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-           <div class="bg-white p-6 rounded-xl snooker-shadow card-glow border-t-4 border-snooker-accent">
-    <p class="text-sm text-gray-500 font-medium">Active Tables</p>
-    
-    <p class="text-4xl font-extrabold text-snooker-green mt-2">
-        <span id="active-count-display"><?php echo $active_tables; ?></span> 
-        / 
-        <span id="total-count-display"><?php echo $total_tables; ?></span>
-    </p>
-    
-    <p class="text-xs text-gray-400 mt-2">
-        <span id="availability-percent-display"><?php echo $availability_percent; ?></span>% availability 
-        (<span id="free-count-display"><?php echo $free_tables; ?></span> free)
-    </p>
+    <!-- 1. Key Metrics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Card 1: Active Tables -->
+    <div class="bg-white p-4 rounded-lg snooker-shadow card-glow border-t-4 border-snooker-accent">
+        <p class="text-xs text-gray-500 font-medium">Active Tables</p>
+        
+        <p class="text-3xl font-extrabold text-snooker-green mt-1">
+            <span id="active-count-display"><?php echo $active_tables; ?></span> 
+            / 
+            <span id="total-count-display"><?php echo $total_tables; ?></span>
+        </p>
+        
+        <p class="text-[10px] text-gray-400 mt-1">
+            <span id="availability-percent-display"><?php echo $availability_percent; ?></span>% availability 
+            (<span id="free-count-display"><?php echo $free_tables; ?></span> free)
+        </p>
+    </div>
+
+    <!-- Card 2: Total Revenue Today -->
+    <div class="bg-white p-4 rounded-lg snooker-shadow card-glow border-t-4 border-green-500">
+        <p class="text-xs text-gray-500 font-medium">Revenue Today</p>
+        
+        <p class="text-3xl font-extrabold text-green-700 mt-1">
+            <?php 
+                $formatted_revenue = number_format($total_revenue_today, 2);
+                $parts = explode('.', $formatted_revenue);
+                echo $currency_symbol . $parts[0];
+            ?>
+            <span class="text-xl">.<?php echo $parts[1]; ?></span>
+        </p>
+        
+        <p class="text-[10px] text-gray-400 mt-1">
+            Target: <?php echo $currency_symbol . number_format($daily_target, 2); ?>
+        </p>
+    </div>
+
+    <!-- Card 3: Upcoming Bookings -->
+    <div class="bg-white p-4 rounded-lg shadow-lg card-glow border-t-4 border-blue-500">
+        <p class="text-xs text-gray-500 font-medium">Upcoming Bookings</p>
+        
+        <p class="text-3xl font-extrabold text-blue-700 mt-1"><?php echo $upcoming_bookings_count; ?></p>
+        
+        <p class="text-[10px] text-gray-400 mt-1">For the next 24 hours</p>
+    </div>
+
+    <!-- Card 4: All Users -->
+    <div class="bg-white p-3 rounded-lg snooker-shadow card-glow border-t-4 border-purple-500">
+        <p class="text-xs text-gray-500 font-medium">All Users</p>
+        
+        <p class="text-3xl font-extrabold text-purple-700 mt-1"><?php echo $total_users; ?></p>
+        
+        <p class="text-[10px] text-gray-400 mt-1">Active sign-ups</p>
+    </div>
 </div>
-                    <!-- Card 2: Total Revenue Today -->
-                    <div class="bg-white p-6 rounded-xl snooker-shadow card-glow border-t-4 border-green-500">
-    <p class="text-sm text-gray-500 font-medium">Revenue Today</p>
-    
-    <p class="text-4xl font-extrabold text-green-700 mt-2">
-        <?php 
-            // Format the number with 2 decimal places
-            $formatted_revenue = number_format($total_revenue_today, 2);
-            // Split into main part and decimal part for styling
-            $parts = explode('.', $formatted_revenue);
-            
-            echo $currency_symbol . $parts[0];
-        ?>
-        <span class="text-2xl">.<?php echo $parts[1]; ?></span>
-    </p>
-    
-    <p class="text-xs text-gray-400 mt-2">
-        Target: <?php echo $currency_symbol . number_format($daily_target, 2); ?>
-    </p>
-</div>
-                  <div class="bg-white p-6 rounded-xl shadow-lg card-glow border-t-4 border-blue-500">
-    <p class="text-sm text-gray-500 font-medium">Upcoming Bookings</p>
-    <!-- Dynamic Data Injection -->
-    <p class="text-4xl font-extrabold text-blue-700 mt-2"><?php echo $upcoming_bookings_count; ?></p>
-    <p class="text-xs text-gray-400 mt-2">For the next 24 hours</p>
-</div>
-<!-- Card 4: All Users -->
-<div class="bg-white p-6 rounded-xl snooker-shadow card-glow border-t-4 border-purple-500">
-    <p class="text-sm text-gray-500 font-medium">All Users</p>
-    <p class="text-4xl font-extrabold text-purple-700 mt-2">
-        <?php echo $total_users; ?>
-    </p>
-    <p class="text-xs text-gray-400 mt-2">Active sign-ups</p>
-</div>
-</div>
+
 
 
                 <!-- 2. Detailed Table Status Table -->
-              <div class="bg-white rounded-xl p-6 snooker-shadow mt-8 ">
+              <div class="bg-white rounded-xl p-6 snooker-shadow mt-2 ">
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-9 ">
         <h2 class="text-2xl font-bold text-snooker-green">Tables Management</h2>
-
-        <a href="add_table.php" 
-           class="px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
-            + Add Table
-        </a>
+<!-- Replace this button -->
+<button onclick="openAddTableModal()" 
+   class="px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
+    + Add Table
+</button>
     </div>
 
     <!-- Table -->
@@ -268,7 +272,7 @@ if ($result->num_rows > 0) {
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['table_name']); ?></td>
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['rate_per_hour']); ?> PKR</td>
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['century_rate']); ?> PKR</td>
-            <td class="px-6 py-4 text-gray-700"><?php echo $status_badge; ?></td>
+            <td class="px-6 py-4 text-gray-700 "><?php echo $status_badge; ?></td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <a href="view_tables.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out" title="Edit">
             ✏️ Edit
@@ -297,14 +301,61 @@ if ($result->num_rows > 0) {
     </div>
 
 </div>
-<div class="pt-4">
-                     <p class="text-sm text-gray-500 italic">Note: The software is under developers so some pages under the process</p>
-                </div>
+
 
             </div>
         </main>
     </div>
-    <script>
+ 
+<!-- Add Table Modal -->
+<div id="addTableModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-center mb-2">
+                <h3 class="text-2xl font-bold text-gray-800">➕ Add New Snooker Table</h3>
+                <button onclick="closeAddTableModal()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Message Display -->
+            <div id="addTableMessageContainer" class="mb-4 hidden"></div>
+            
+            <!-- Form -->
+            <form id="addTableForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Table Name</label>
+                    <input type="text" name="table_name" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-600">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Rate (per hour)</label>
+                    <input type="number" name="rate_hour" step="0.01" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-600">
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-medium mb-1">Century Rate (per minute)</label>
+                    <input type="number" name="century_rate" step="0.01" required
+                           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-600">
+                </div>
+                
+                <div class="flex justify-between pt-4 border-t">
+                    <button type="button" onclick="closeAddTableModal()"
+                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="px-4 py-2 bg-blue-900 text-white rounded hover:bg-blue-700 transition">
+                        Save Table
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+   <script>
        
             // Function to update the clock
             const updateClock = () => {
@@ -382,6 +433,113 @@ let toaster = createToaster({
 toaster("Software is under saeed development!");
 
 
+</script>
+<script>
+// Add Table Modal Functions
+function openAddTableModal() {
+    document.getElementById('addTableModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+function closeAddTableModal() {
+    document.getElementById('addTableModal').classList.add('hidden');
+    document.body.style.overflow = 'auto'; // Restore scrolling
+    resetAddTableForm();
+}
+
+function resetAddTableForm() {
+    document.getElementById('addTableForm').reset();
+    const messageContainer = document.getElementById('addTableMessageContainer');
+    messageContainer.classList.add('hidden');
+    messageContainer.innerHTML = '';
+}
+
+// Handle form submission with AJAX
+document.addEventListener('DOMContentLoaded', function() {
+    const addTableForm = document.getElementById('addTableForm');
+    if (addTableForm) {
+        addTableForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = document.querySelector('#addTableForm button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = `
+                <span class="flex items-center">
+                    <svg class="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Saving...
+                </span>
+            `;
+            submitBtn.disabled = true;
+            
+            // Get form data
+            const formData = new FormData(this);
+            formData.append('add_table', 'true');
+            
+            // Send AJAX request
+            fetch('add_table.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Restore button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Show message
+                const messageContainer = document.getElementById('addTableMessageContainer');
+                messageContainer.classList.remove('hidden');
+                
+                if (data.includes('🎉') || data.includes('successfully')) {
+                    messageContainer.innerHTML = `<div class="p-3 bg-green-100 text-green-700 border border-green-300 rounded">${data}</div>`;
+                    
+                    // Reset form and close modal after 2 seconds
+                    setTimeout(() => {
+                        resetAddTableForm();
+                        closeAddTableModal();
+                        
+                        // Refresh the page to show new table
+                        setTimeout(() => {
+                            location.reload();
+                        }, 500);
+                    }, 2000);
+                } else {
+                    messageContainer.innerHTML = `<div class="p-3 bg-red-100 text-red-700 border border-red-300 rounded">${data}</div>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                const messageContainer = document.getElementById('addTableMessageContainer');
+                messageContainer.classList.remove('hidden');
+                messageContainer.innerHTML = `<div class="p-3 bg-red-100 text-red-700 border border-red-300 rounded">Network error. Please try again.</div>`;
+            });
+        });
+    }
+    
+    // Close modal when clicking outside
+    const modal = document.getElementById('addTableModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target.id === 'addTableModal') {
+                closeAddTableModal();
+            }
+        });
+    }
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAddTableModal();
+        }
+    });
+});
 </script>
 </body>
 </html>

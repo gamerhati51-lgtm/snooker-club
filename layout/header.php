@@ -1,51 +1,244 @@
-   
-   
-   <style>
-    .dark-mode input[type="file"] {
-    background-color: #222 !important;
-    color: #fff !important;
-    border: 1px solid #444 !important;
-    padding: 6px 10px;
-    border-radius: 4px;
-}
-
-/* Placeholder text for file input (file name) */
-.dark-mode input[type="file"]::file-selector-button {
-    background-color: #333 !important;
-    color: #fff !important;
-    border: 1px solid #444 !important;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.dark-mode input[type="file"]::file-selector-button:hover {
-    background-color: #444 !important;
-}
-
-    /* ============================================
-   🔥 GLOBAL DARK MODE (FULL UI)
+<style>
+/* ============================================
+   GLOBAL DARK MODE FIX - NUCLEAR OPTION
    ============================================ */
 .dark-mode {
-    background-color: #0e0e0e !important;
+    background-color: #121212 !important;
     color: #ffffff !important;
 }
 
-/* Text everywhere */
-.dark-mode *,
-.dark-mode p,
+/* FORCE ALL TEXT TO BE WHITE - NO EXCEPTIONS */
+.dark-mode,
+.dark-mode *:not(svg):not(path):not(g) {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   SPECIFIC TABLE CELL FIX
+   =============================== */
+/* Target your exact table cell */
+.dark-mode td.px-6.py-4,
+.dark-mode td.px-6.py-4.text-gray-700,
+.dark-mode td.text-gray-700,
+.dark-mode .px-6.py-4.text-gray-700 {
+    color: #ffffff !important;
+    background-color: transparent !important;
+}
+
+/* Force all text inside table cells */
+.dark-mode td *,
+.dark-mode td span,
+.dark-mode td div,
+.dark-mode td p {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   KILL ALL GRAY TEXT CLASSES
+   =============================== */
+.dark-mode .text-gray-100,
+.dark-mode .text-gray-200,
+.dark-mode .text-gray-300,
+.dark-mode .text-gray-400,
+.dark-mode .text-gray-500,
+.dark-mode .text-gray-600,
+.dark-mode .text-gray-700,
+.dark-mode .text-gray-800,
+.dark-mode .text-gray-900,
+.dark-mode .text-slate-400,
+.dark-mode .text-slate-500,
+.dark-mode .text-slate-600,
+.dark-mode .text-slate-700,
+.dark-mode .text-zinc-400,
+.dark-mode .text-zinc-500,
+.dark-mode .text-zinc-600,
+.dark-mode .text-zinc-700,
+.dark-mode .text-neutral-400,
+.dark-mode .text-neutral-500,
+.dark-mode .text-neutral-600,
+.dark-mode .text-neutral-700 {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   INLINE STYLE OVERRIDE
+   =============================== */
+/* If text color is set inline, override it */
+.dark-mode [style*="color: gray"],
+.dark-mode [style*="color: #"],
+.dark-mode [style*="color: rgb"],
+.dark-mode [style*="color: rgba"] {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   DEBUG MODE - TEMPORARY
+   =============================== */
+/* Uncomment this to see what's being targeted */
+/*
+.dark-mode td.px-6.py-4.text-gray-700 {
+    background-color: #ff0000 !important;
+    border: 2px solid yellow !important;
+}
+*/
+
+/* ===============================
+   STATUS BADGE SPECIFIC FIX
+   =============================== */
+/* If your badge has classes like text-green-800, fix them */
+.dark-mode .text-green-800,
+.dark-mode .text-red-800,
+.dark-mode .text-yellow-800,
+.dark-mode .text-blue-800,
+.dark-mode .text-purple-800,
+.dark-mode .text-pink-800 {
+    color: #ffffff !important;
+}
+
+/* Badge backgrounds in dark mode */
+.dark-mode .bg-green-100 {
+    background-color: #1a3a1a !important;
+}
+.dark-mode .bg-red-100 {
+    background-color: #3a1a1a !important;
+}
+.dark-mode .bg-yellow-100 {
+    background-color: #3a3a1a !important;
+}
+.dark-mode .bg-blue-100 {
+    background-color: #1a1a3a !important;
+}
+
+/* ===============================
+   TABLE SPECIFIC
+   =============================== */
+.dark-mode table {
+    background-color: #1a1a1a !important;
+}
+
+.dark-mode table tr {
+    background-color: #1a1a1a !important;
+}
+
+.dark-mode table tr:nth-child(even) {
+    background-color: #222222 !important;
+}
+
+.dark-mode td,
+.dark-mode th {
+    border-color: #333 !important;
+    color: #ffffff !important;
+}
+
+/* ===============================
+   ATOMIC FIX - ULTIMATE SOLUTION
+   =============================== */
+/* Add this at the END of your dark mode CSS */
+.dark-mode * {
+    color: #ffffff !important;
+}
+
+/* Allow only specific exceptions */
+.dark-mode input:not([type="file"]),
+.dark-mode select,
+.dark-mode textarea {
+    color: #ffffff !important;
+}
+
+.dark-mode ::placeholder {
+    color: #888 !important;
+}
+.dark-mode .border-snooker-light a[href="logout.php"] {
+    background-color: #041403ff !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .border-snooker-light a[href="logout.php"]:hover {
+    background-color: #032203ff !important;
+}
+</style>
+<style>
+/* ============================================
+   GLOBAL DARK MODE - FIX TEXT VISIBILITY
+   ============================================ */
+.dark-mode {
+    background-color: #0f0f0f !important;
+    color: #ffffff !important;
+}
+
+/* Ensure ALL text is visible - OVERRIDE light text colors */
+.dark-mode * {
+    color: #ffffff !important;
+}
+
+/* Force text colors to be visible */
 .dark-mode span,
+.dark-mode div,
+.dark-mode p,
+.dark-mode li,
+.dark-mode td,
+.dark-mode th,
+.dark-mode label,
+.dark-mode small,
+.dark-mode strong,
+.dark-mode em,
+.dark-mode b,
+.dark-mode i {
+    color: #ffffff !important;
+}
+
+/* Headings - slightly brighter */
 .dark-mode h1,
 .dark-mode h2,
 .dark-mode h3,
 .dark-mode h4,
 .dark-mode h5,
 .dark-mode h6 {
+    color: #f0f0f0 !important;
+}
+
+/* Fix for gray text classes */
+.dark-mode .text-gray-100,
+.dark-mode .text-gray-200,
+.dark-mode .text-gray-300,
+.dark-mode .text-gray-400,
+.dark-mode .text-gray-500,
+.dark-mode .text-gray-600,
+.dark-mode .text-gray-700,
+.dark-mode .text-gray-800,
+.dark-mode .text-gray-900,
+.dark-mode .text-slate-100,
+.dark-mode .text-slate-200,
+.dark-mode .text-slate-300,
+.dark-mode .text-slate-400,
+.dark-mode .text-slate-500,
+.dark-mode .text-slate-600,
+.dark-mode .text-slate-700,
+.dark-mode .text-slate-800,
+.dark-mode .text-slate-900,
+.dark-mode .text-zinc-100,
+.dark-mode .text-zinc-200,
+.dark-mode .text-zinc-300,
+.dark-mode .text-zinc-400,
+.dark-mode .text-zinc-500,
+.dark-mode .text-zinc-600,
+.dark-mode .text-zinc-700,
+.dark-mode .text-zinc-800,
+.dark-mode .text-zinc-900,
+.dark-mode .text-neutral-100,
+.dark-mode .text-neutral-200,
+.dark-mode .text-neutral-300,
+.dark-mode .text-neutral-400,
+.dark-mode .text-neutral-500,
+.dark-mode .text-neutral-600,
+.dark-mode .text-neutral-700,
+.dark-mode .text-neutral-800,
+.dark-mode .text-neutral-900 {
     color: #ffffff !important;
 }
 
 /* ===============================
-   🔥 HEADER / NAVBAR
+   HEADER / NAVBAR
    =============================== */
 .dark-mode header,
 .dark-mode nav,
@@ -55,127 +248,319 @@
     border-bottom: 1px solid #333 !important;
 }
 
+/* Fix navbar text */
+.dark-mode header *,
+.dark-mode nav *,
+.dark-mode .navbar * {
+    color: #ffffff !important;
+}
+
 /* ===============================
-   🔥 SIDEBAR
+   SIDEBAR BUTTONS FIX (For both Expanses and Bookings)
    =============================== */
-.dark-mode .sidebar,
-.dark-mode #sidebar,
-.dark-mode .side-menu {
-    background-color: #1a1a1a !important;
-    border-right: 1px solid #333 !important;
+
+/* Remove background from ALL sidebar buttons/toggle buttons */
+.dark-mode .sidebar-link,
+.dark-mode #toggleExpanse,
+.dark-mode button[onclick*="toggleBookings"],
+.dark-mode button[onclick*="toggle"] {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+    border-color: transparent !important;
 }
 
-/* Sidebar Links */
-.dark-mode .sidebar a,
-.dark-mode .side-menu a {
-    color: #fff !important;
+/* Hover state for all sidebar buttons */
+.dark-mode .sidebar-link:hover,
+.dark-mode #toggleExpanse:hover,
+.dark-mode button[onclick*="toggleBookings"]:hover,
+.dark-mode button[onclick*="toggle"]:hover {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
 }
 
-.dark-mode .sidebar a:hover,
-.dark-mode .side-menu a:hover {
-    background-color: #222 !important;
+/* Fix text-black class in dark mode (applies to both buttons) */
+.dark-mode .text-black {
+    color: #ffffff !important;
 }
 
+/* Fix SVG icons in sidebar buttons */
+.dark-mode .sidebar-link svg,
+.dark-mode #toggleExpanse svg,
+.dark-mode button[onclick*="toggleBookings"] svg {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .sidebar-link:hover svg,
+.dark-mode #toggleExpanse:hover svg,
+.dark-mode button[onclick*="toggleBookings"]:hover svg {
+    color: #ffffff !important;
+}
+
+/* More specific selector for your Bookings button if needed */
+.dark-mode button[onclick="toggleBookings()"] {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode button[onclick="toggleBookings()"]:hover {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+}
 /* ===============================
-   🔥 CARDS / BOXES
+   CARDS / BOXES - FIX TEXT IN CARDS
    =============================== */
 .dark-mode .card,
 .dark-mode .bg-white,
 .dark-mode .bg-gray-50,
 .dark-mode .bg-gray-100,
+.dark-mode .bg-gray-200,
+.dark-mode .bg-gray-300,
+.dark-mode .bg-gray-400,
 .dark-mode .rounded-lg,
 .dark-mode .shadow-md,
 .dark-mode .shadow-lg,
 .dark-mode .p-4,
-.dark-mode .p-6 {
-    background-color: #1c1c1c !important;
+.dark-mode .p-6,
+.dark-mode .box,
+.dark-mode .panel {
+    background-color: #1a1a1a !important;
     border-color: #333 !important;
-    color: white !important;
+    color: #ffffff !important;
+}
+
+/* Force text inside cards to be white */
+.dark-mode .card *,
+.dark-mode .bg-white *,
+.dark-mode .bg-gray-50 *,
+.dark-mode .bg-gray-100 *,
+.dark-mode .bg-gray-200 * {
+    color: #ffffff !important;
 }
 
 /* ===============================
-   🔥 BUTTONS (ALL COLORS)
+   BUTTONS - ALL DARK
    =============================== */
 .dark-mode button,
-.dark-mode .btn {
-  
-    color: white !important;
+.dark-mode .btn,
+.dark-mode input[type="submit"],
+.dark-mode input[type="button"],
+.dark-mode .button {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
+
+.dark-mode button:hover,
+.dark-mode .btn:hover {
+    background-color: #3a3a3a !important;
+}
+
+/* Button text must be visible */
+.dark-mode button *,
+.dark-mode .btn * {
+    color: #ffffff !important;
+}
+
+/* Colored buttons - text stays white */
+.dark-mode .bg-blue-600,
+.dark-mode .bg-blue-500,
+.dark-mode .bg-blue-400,
+.dark-mode .btn-primary,
+.dark-mode .bg-red-600,
+.dark-mode .bg-red-500,
+.dark-mode .bg-red-400,
+.dark-mode .bg-green-600,
+.dark-mode .bg-green-500,
+.dark-mode .bg-green-400,
+.dark-mode .bg-yellow-600,
+.dark-mode .bg-yellow-500,
+.dark-mode .bg-yellow-400,
+.dark-mode .bg-purple-600,
+.dark-mode .bg-purple-500,
+.dark-mode .bg-purple-400 {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
     border-color: #444 !important;
 }
 
-/* Make blue, red, green buttons dark too */
-.dark-mode .bg-blue-600,
-.dark-mode .bg-red-600,
-.dark-mode .bg-green-600,
-.dark-mode .bg-yellow-600,
-.dark-mode .bg-orange-600,
-.dark-mode .bg-purple-600 {
-    background-color: #333 !important;
-}
-
-/* Hover */
-.dark-mode button:hover {
-    background-color: #444 !important;
-}
-
 /* ===============================
-   🔥 TABLES
+   TABLES - FIX TABLE TEXT
    =============================== */
 .dark-mode table {
-    background-color: #1c1c1c !important;
+    background-color: #1a1a1a !important;
 }
 
 .dark-mode table tr {
-    background-color: #1c1c1c !important;
+    background-color: #1a1a1a !important;
+}
+
+.dark-mode table tr:nth-child(even) {
+    background-color: #1f1f1f !important;
+}
+
+/* Table text must be visible */
+.dark-mode table *,
+.dark-mode tr *,
+.dark-mode td *,
+.dark-mode th * {
+    color: #ffffff !important;
 }
 
 .dark-mode table td,
 .dark-mode table th {
-    color: white !important;
+    color: #ffffff !important;
     border-color: #333 !important;
 }
 
 /* ===============================
-   🔥 FORMS
+   FORMS - FIX FORM TEXT
    =============================== */
-.dark-mode input,
+.dark-mode input:not([type="file"]),
 .dark-mode select,
 .dark-mode textarea {
-    background-color: #222 !important;
-    color: white !important;
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
     border: 1px solid #444 !important;
 }
 
+/* Fix placeholder text */
 .dark-mode ::placeholder {
-    color: #bbb !important;
-}
-.dark-mode [class*="bg-red-100"],
-.dark-mode [class*="bg-green-100"],
-.dark-mode [class*="bg-yellow-100"],
-.dark-mode [class*="bg-blue-100"] {
-    background-color: #333 !important;
-    color: white !important;
+    color: #999 !important;
 }
 
-.dark button:not(.dark-mode-ignore),
-.dark a:not(.dark-mode-ignore),
-.dark .sidebar-link:not(.dark-mode-ignore) {
-    background-color: inherit !important;
-    color: inherit !important;
+/* Form labels */
+.dark-mode label {
+    color: #e0e0e0 !important;
 }
 
-/* Default dark mode background & text */
-.dark body {
-    background-color: #0d1117 !important;
-    color: #e6e6e6 !important;
+/* ===============================
+   FILE INPUTS
+   =============================== */
+.dark-mode input[type="file"] {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
 }
 
+.dark-mode input[type="file"]::file-selector-button {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border: 1px solid #444 !important;
+}
 
+/* ===============================
+   FIX SPECIFIC TEXT COLOR ISSUES
+   =============================== */
+/* Any element with light text color that disappears */
+.dark-mode [class*="text-"] {
+    color: #ffffff !important;
+}
 
+/* Override any inline text colors */
+.dark-mode [style*="color:"] {
+    color: #ffffff !important;
+}
 
-   </style>
-   
-   
+/* Fix for elements with opacity or light colors */
+.dark-mode .text-light,
+.dark-mode .text-muted,
+.dark-mode .text-secondary {
+    color: #cccccc !important;
+}
+
+/* Fix for badge text */
+.dark-mode .badge,
+.dark-mode .tag {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+/* ===============================
+   FIX DROPDOWNS & MODALS
+   =============================== */
+.dark-mode .dropdown-content,
+.dark-mode .modal-content,
+.dark-mode .dialog-content {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .dropdown-content *,
+.dark-mode .modal-content * {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   FIX FOOTER TEXT
+   =============================== */
+.dark-mode footer,
+.dark-mode .footer {
+    background-color: #1a1a1a !important;
+    color: #ffffff !important;
+}
+
+.dark-mode footer *,
+.dark-mode .footer * {
+    color: #cccccc !important;
+}
+
+/* ===============================
+   FIX LIST ITEMS
+   =============================== */
+.dark-mode ul,
+.dark-mode ol,
+.dark-mode li {
+    color: #ffffff !important;
+}
+
+.dark-mode ul *,
+.dark-mode ol *,
+.dark-mode li * {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   SPECIAL CASES - ICONS, SVGs
+   =============================== */
+/* Keep icons visible but not pure white */
+.dark-mode svg:not([fill="none"]) {
+    fill: #cccccc !important;
+}
+
+.dark-mode .icon {
+    color: #cccccc !important;
+}
+
+/* ===============================
+   SCROLLBAR
+   =============================== */
+.dark-mode ::-webkit-scrollbar {
+    width: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: #333;
+}
+
+/* ===============================
+   UTILITY OVERRIDES - LAST RESORT
+   =============================== */
+/* Nuclear option for any remaining invisible text */
+.dark-mode *:not(svg):not(path):not(g):not(rect):not(circle):not(line):not(polygon):not(polyline) {
+    color: #ffffff !important;
+}
+
+/* Fix for specific frameworks */
+.dark-mode .text-body,
+.dark-mode .text-default,
+.dark-mode .text-normal {
+    color: #ffffff !important;
+}
+</style>
    
    
    <!-- Header Navigation -->
