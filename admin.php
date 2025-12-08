@@ -430,7 +430,7 @@ let toaster = createToaster({
     duration: 3
 });
 
-toaster("Software is under saeed development!");
+toaster("Software is under Amir development!");
 
 
 </script>

@@ -562,7 +562,492 @@
 }
 </style>
    
-   
+   <style>
+/* ============================================
+   GLOBAL DARK MODE - COMPLETE COVERAGE
+   ============================================ */
+.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Force all elements to respect dark mode */
+.dark-mode *:not(svg):not(path):not(g):not(rect):not(circle) {
+    color: #e0e0e0 !important;
+}
+
+/* ===============================
+   BACKGROUND OVERRIDES
+   =============================== */
+.dark-mode .bg-white,
+.dark-mode .bg-gray-50,
+.dark-mode .bg-gray-100,
+.dark-mode .bg-gray-200,
+.dark-mode .bg-gray-300,
+.dark-mode .bg-gray-400,
+.dark-mode .bg-gray-500,
+.dark-mode .bg-gray-600,
+.dark-mode .bg-gray-700,
+.dark-mode .bg-gray-800,
+.dark-mode .bg-gray-900,
+.dark-mode .bg-slate-50,
+.dark-mode .bg-slate-100,
+.dark-mode .bg-slate-200,
+.dark-mode .bg-slate-300,
+.dark-mode .bg-slate-400,
+.dark-mode .bg-slate-500,
+.dark-mode .bg-slate-600,
+.dark-mode .bg-slate-700,
+.dark-mode .bg-slate-800,
+.dark-mode .bg-slate-900,
+.dark-mode .bg-zinc-50,
+.dark-mode .bg-zinc-100,
+.dark-mode .bg-zinc-200,
+.dark-mode .bg-zinc-300,
+.dark-mode .bg-zinc-400,
+.dark-mode .bg-zinc-500,
+.dark-mode .bg-zinc-600,
+.dark-mode .bg-zinc-700,
+.dark-mode .bg-zinc-800,
+.dark-mode .bg-zinc-900,
+.dark-mode .bg-neutral-50,
+.dark-mode .bg-neutral-100,
+.dark-mode .bg-neutral-200,
+.dark-mode .bg-neutral-300,
+.dark-mode .bg-neutral-400,
+.dark-mode .bg-neutral-500,
+.dark-mode .bg-neutral-600,
+.dark-mode .bg-neutral-700,
+.dark-mode .bg-neutral-800,
+.dark-mode .bg-neutral-900 {
+    background-color: #1a1a1a !important;
+}
+
+/* Specific light backgrounds that need to be dark */
+.dark-mode .bg-blue-50,
+.dark-mode .bg-red-50,
+.dark-mode .bg-green-50,
+.dark-mode .bg-yellow-50,
+.dark-mode .bg-purple-50,
+.dark-mode .bg-pink-50,
+.dark-mode .bg-indigo-50,
+.dark-mode .bg-teal-50,
+.dark-mode .bg-orange-50,
+.dark-mode .bg-cyan-50 {
+    background-color: #252525 !important;
+}
+
+/* ===============================
+   TEXT COLOR OVERRIDES - COMPLETE
+   =============================== */
+.dark-mode .text-gray-50,
+.dark-mode .text-gray-100,
+.dark-mode .text-gray-200,
+.dark-mode .text-gray-300,
+.dark-mode .text-gray-400,
+.dark-mode .text-gray-500,
+.dark-mode .text-gray-600,
+.dark-mode .text-gray-700,
+.dark-mode .text-gray-800,
+.dark-mode .text-gray-900,
+.dark-mode .text-slate-50,
+.dark-mode .text-slate-100,
+.dark-mode .text-slate-200,
+.dark-mode .text-slate-300,
+.dark-mode .text-slate-400,
+.dark-mode .text-slate-500,
+.dark-mode .text-slate-600,
+.dark-mode .text-slate-700,
+.dark-mode .text-slate-800,
+.dark-mode .text-slate-900,
+.dark-mode .text-zinc-50,
+.dark-mode .text-zinc-100,
+.dark-mode .text-zinc-200,
+.dark-mode .text-zinc-300,
+.dark-mode .text-zinc-400,
+.dark-mode .text-zinc-500,
+.dark-mode .text-zinc-600,
+.dark-mode .text-zinc-700,
+.dark-mode .text-zinc-800,
+.dark-mode .text-zinc-900,
+.dark-mode .text-neutral-50,
+.dark-mode .text-neutral-100,
+.dark-mode .text-neutral-200,
+.dark-mode .text-neutral-300,
+.dark-mode .text-neutral-400,
+.dark-mode .text-neutral-500,
+.dark-mode .text-neutral-600,
+.dark-mode .text-neutral-700,
+.dark-mode .text-neutral-800,
+.dark-mode .text-neutral-900,
+.dark-mode .text-black {
+    color: #e0e0e0 !important;
+}
+
+/* ===============================
+   HEADINGS AND TITLES
+   =============================== */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+    color: #ffffff !important;
+}
+
+.dark-mode .text-xl,
+.dark-mode .text-2xl,
+.dark-mode .text-3xl,
+.dark-mode .text-4xl,
+.dark-mode .text-5xl,
+.dark-mode .text-6xl {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   REPORT DASHBOARD SPECIFIC
+   =============================== */
+/* Financial summary cards */
+.dark-mode .stat-card {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+.dark-mode .border-income-blue,
+.dark-mode .border-pos-teal,
+.dark-mode .border-expense-red,
+.dark-mode .border-profit-green,
+.dark-mode .border-booking-purple,
+.dark-mode .border-inventory-orange {
+    border-color: #444 !important;
+}
+
+/* Chart containers */
+.dark-mode .chart-container {
+    background-color: #1e1e1e !important;
+}
+
+.dark-mode canvas {
+    background-color: #1e1e1e !important;
+}
+
+/* Progress bars */
+.dark-mode .progress-bar {
+    background-color: #2d2d2d !important;
+}
+
+.dark-mode .progress-fill {
+    background-color: #3b82f6 !important;
+}
+
+/* Tables in dark mode */
+.dark-mode table {
+    background-color: #1a1a1a !important;
+}
+
+.dark-mode thead tr,
+.dark-mode tbody tr {
+    background-color: #1a1a1a !important;
+}
+
+.dark-mode th {
+    background-color: #252525 !important;
+    border-color: #333 !important;
+}
+
+.dark-mode td {
+    border-color: #333 !important;
+    background-color: transparent !important;
+}
+
+.dark-mode tr:nth-child(even) {
+    background-color: #1f1f1f !important;
+}
+
+/* Table row hover */
+.dark-mode .table-row:hover {
+    background-color: #2a2a2a !important;
+}
+
+/* ===============================
+   BUTTONS IN DARK MODE
+   =============================== */
+.dark-mode button,
+.dark-mode .btn {
+    background-color: #2d3748 !important;
+    color: #e0e0e0 !important;
+    border-color: #4a5568 !important;
+}
+
+.dark-mode button:hover,
+.dark-mode .btn:hover {
+    background-color: #374151 !important;
+}
+
+/* Colored buttons - adjust for dark mode */
+.dark-mode .bg-snooker-green {
+    background-color: #0d2c26 !important;
+}
+
+.dark-mode .bg-snooker-light {
+    background-color: #1a3d35 !important;
+}
+
+.dark-mode .bg-snooker-accent {
+    background-color: #ffb703 !important;
+    color: #000000 !important;
+}
+
+.dark-mode .bg-red-100,
+.dark-mode .bg-green-100,
+.dark-mode .bg-blue-100,
+.dark-mode .bg-yellow-100,
+.dark-mode .bg-purple-100,
+.dark-mode .bg-pink-100,
+.dark-mode .bg-indigo-100,
+.dark-mode .bg-teal-100,
+.dark-mode .bg-orange-100,
+.dark-mode .bg-cyan-100 {
+    background-color: #252525 !important;
+}
+
+/* Badge text colors in dark mode */
+.dark-mode .text-red-800,
+.dark-mode .text-green-800,
+.dark-mode .text-blue-800,
+.dark-mode .text-yellow-800,
+.dark-mode .text-purple-800,
+.dark-mode .text-pink-800,
+.dark-mode .text-indigo-800,
+.dark-mode .text-teal-800,
+.dark-mode .text-orange-800,
+.dark-mode .text-cyan-800 {
+    color: #e0e0e0 !important;
+}
+
+/* ===============================
+   FORMS AND INPUTS
+   =============================== */
+.dark-mode input:not([type="file"]),
+.dark-mode select,
+.dark-mode textarea {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.dark-mode ::placeholder {
+    color: #888 !important;
+}
+
+/* File inputs */
+.dark-mode input[type="file"] {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+    border-color: #444 !important;
+}
+
+.dark-mode input[type="file"]::file-selector-button {
+    background-color: #2d3748 !important;
+    color: #e0e0e0 !important;
+    border-color: #4a5568 !important;
+}
+
+/* ===============================
+   SHADOWS AND BORDERS
+   =============================== */
+.dark-mode .shadow-md,
+.dark-mode .shadow-lg,
+.dark-mode .shadow-xl {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark-mode .border-gray-200,
+.dark-mode .border-gray-300,
+.dark-mode .border-gray-400 {
+    border-color: #333 !important;
+}
+
+/* ===============================
+   SIDEBAR AND NAVIGATION
+   =============================== */
+.dark-mode .sidebar,
+.dark-mode .main-content {
+    background-color: #121212 !important;
+}
+
+.dark-mode .bg-gray-50,
+.dark-mode .bg-gray-100 {
+    background-color: #1a1a1a !important;
+}
+
+/* Sidebar links */
+.dark-mode .sidebar-link {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .sidebar-link:hover {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+}
+
+/* Toggle buttons in sidebar */
+.dark-mode #toggleExpanse,
+.dark-mode button[onclick*="toggle"] {
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-mode #toggleExpanse:hover,
+.dark-mode button[onclick*="toggle"]:hover {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+.dark-mode header,
+.dark-mode .top-header {
+    background-color: #1a1a1a !important;
+    border-bottom-color: #333 !important;
+}
+
+/* ===============================
+   LOGOUT BUTTON SPECIFIC
+   =============================== */
+.dark-mode .border-snooker-light a[href="logout.php"] {
+    background-color: #0d2c26 !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .border-snooker-light a[href="logout.php"]:hover {
+    background-color: #1a3d35 !important;
+}
+
+/* ===============================
+   SCROLLBAR
+   =============================== */
+.dark-mode ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.dark-mode ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 5px;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+/* ===============================
+   ICONS AND SVGs
+   =============================== */
+.dark-mode svg:not([fill="none"]):not([fill^="url"]) {
+    fill: #e0e0e0 !important;
+}
+
+.dark-mode .fas,
+.dark-mode .far,
+.dark-mode .fab {
+    color: #e0e0e0 !important;
+}
+
+/* ===============================
+   UTILITY CLASS OVERRIDES
+   =============================== */
+.dark-mode .text-muted {
+    color: #888 !important;
+}
+
+.dark-mode .text-light {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode .text-dark {
+    color: #ffffff !important;
+}
+
+/* ===============================
+   INLINE STYLE OVERRIDES
+   =============================== */
+.dark-mode [style*="color:"]:not([style*="color: transparent"]):not([style*="color: inherit"]) {
+    color: #e0e0e0 !important;
+}
+
+.dark-mode [style*="background-color:"]:not([style*="background-color: transparent"]):not([style*="background-color: inherit"]) {
+    background-color: #1a1a1a !important;
+}
+
+/* ===============================
+   FINANCIAL METRICS SPECIFIC
+   =============================== */
+.dark-mode .text-income-blue {
+    color: #60a5fa !important;
+}
+
+.dark-mode .text-pos-teal {
+    color: #5eead4 !important;
+}
+
+.dark-mode .text-expense-red {
+    color: #f87171 !important;
+}
+
+.dark-mode .text-profit-green {
+    color: #34d399 !important;
+}
+
+.dark-mode .text-inventory-orange {
+    color: #fb923c !important;
+}
+
+.dark-mode .text-booking-purple {
+    color: #c4b5fd !important;
+}
+
+/* ===============================
+   RESPONSIVE OVERRIDES
+   =============================== */
+@media (max-width: 768px) {
+    .dark-mode .stat-card {
+        background-color: #1e1e1e !important;
+    }
+    
+    .dark-mode table {
+        background-color: #1a1a1a !important;
+    }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+@media print {
+    .dark-mode {
+        background-color: white !important;
+        color: black !important;
+    }
+    
+    .dark-mode * {
+        color: black !important;
+        background-color: white !important;
+    }
+}
+</style>
    <!-- Header Navigation -->
       <header class="fixed top-0 left-0 lg:left-64 right-0 bg-blue-900 text-white h-16 flex items-center justify-between px-4 shadow-lg z-50 mb-6">
   <div class="flex items-center space-x-3">

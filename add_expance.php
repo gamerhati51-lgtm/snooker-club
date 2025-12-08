@@ -48,7 +48,7 @@ $all_categories = $categories_result ? $categories_result->fetch_all(MYSQLI_ASSO
     <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8">
         <?php include "layout/header.php"; ?>
 
-        <h1 class="text-4xl font-extrabold mb-6 text-snooker-green text-center">💸 Add New Expense</h1>
+        <h1 class="text-4xl font-extrabold mb-3 text-snooker-green text-center">💸 Add New Expense</h1>
 
         <?php if(!empty($message)): ?>
             <div class="mb-6 p-4 <?php echo (strpos($message, '❌')!==false) ? 'bg-red-100 text-red-700' : 'bg-snooker-light/10 text-snooker-green'; ?> rounded-lg shadow-md">
