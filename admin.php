@@ -3,12 +3,14 @@ session_start();
 if (!isset($_SESSION['admin_name'])) {
     header("Location: index.php");
     exit;
+    
 }
 ?>
 <?php
 // ... existing code ...
 include 'db.php'; 
-
+// Get admin name from session
+$admin_name = $_SESSION['admin_name'] ?? 'Admin';
 // --- 1. Get Total Number of Tables ---
 $total_tables_query = "SELECT COUNT(id) AS total FROM snooker_tables";
 $total_tables_result = $conn->query($total_tables_query);
@@ -123,12 +125,13 @@ if($result){
     <main class="pt-16 p-6">
       
       <!-- Page Content -->
-      <div id="content-area" class="space-y-8 bg-blue-200 p-6 rounded-lg">
-        <h1 class="text-3xl font-bold mb-0 mt-0 text-gray-800 border-b pb-2 text-center">
-          Dashboard Quick Overview
-        </h1>
+      <div id="content-area" class="space-y-2 bg-blue-100 p-6 rounded-lg">
+          <h1 class="text-3xl font-bold mb-1 text-gray-800">
+            Welcome, <?php echo htmlspecialchars($admin_name); ?>! 👋
+          </h1>
+          <p class="text-gray-600">Here's your quick overview dashboard</p>
     <!-- 1. Key Metrics Cards -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
     <!-- Card 1: Active Tables -->
     <div class="bg-white p-4 rounded-lg snooker-shadow card-glow border-t-4 border-snooker-accent">
         <p class="text-xs text-gray-500 font-medium">Active Tables</p>

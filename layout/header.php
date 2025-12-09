@@ -1119,7 +1119,8 @@
   </button></a>
   <!-- Date & Time -->
 <div id="current-time" 
-     class="flex items-center justify-center w-48 h-10 bg-blue-600 text-white rounded text-sm font-medium">
+     class="flex items-center justify-center w-48 h-10 bg-blue-400
+      text-white rounded text-sm font-medium">
   <!-- JS will insert date/time here -->
 </div>
 

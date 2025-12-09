@@ -68,9 +68,7 @@ function format_detail($value, $default = 'N/A') {
                 Details: <?php echo format_detail($product['name']); ?>
             </h2>
             <div class="space-x-3">
-                <a href="edit_product.php?id=<?php echo $product_id; ?>" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-                    ✏️ Edit Product
-                </a>
+               
                 <a href="list_product.php" class="px-4 py-2 text-gray-600 border rounded-lg hover:bg-gray-100 transition">
                     &larr; Back to List
                 </a>

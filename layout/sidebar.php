@@ -25,11 +25,11 @@ if (session_status() === PHP_SESSION_NONE) {
 <aside id="sidebar"
  class="fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
       flex flex-col transform -translate-x-full transition-transform duration-300 lg:translate-x-0">
-    <div class="p-4 bg-blue-900">
+    <a href="./admin.php"><div class="p-4 bg-blue-900">
         <h1 class="nav-link block px-4 py-3 rounded-lg text-lg font-medium 
                         text-white  bg-none ">
-            <i class="fas fa-home mr-3"></i> Welcome Admin👋 </h1>
-    </div>
+            <i class="fas fa-home mr-3"></i> SNOOKER CLUB </h1>
+    </div></a>
 
     <nav class="flex-grow overflow-y-auto p-4 space-y-2">
 
@@ -40,7 +40,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                 </path>
             </svg>
-            Dashboard
+         Home
         </a>
 
         <div class="w-full">
@@ -115,7 +115,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     Sell
                 </a>
 
-                <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
+                <a href="./update_price.php" class="flex items-center text-sm py-1 hover:text-blue-600">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8zm-7 7a4 4 0 118 0m8 0a4 4 0 11-8 0" />
@@ -214,13 +214,18 @@ if (session_status() === PHP_SESSION_NONE) {
   </button>
 
   <div id="expanseMenu2" class="hidden pl-10 mt-1 space-y-2 text-black">
-    <a href="./user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
-      <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-      List Of Users
-    </a>
+ <!-- List of Users -->
+<a href="./user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
+  <!-- User Icon -->
+  <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M5.121 17.804A9 9 0 1118.879 6.196 9 9 0 015.121 17.804z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+  </svg>
+  Role Of Users
+</a>
+
+
+
     <a href="./add_user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
       <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -294,14 +299,14 @@ if (session_status() === PHP_SESSION_NONE) {
             Users
         </a>
 
-        <a href="#" class="flex items-center py-1 hover:text-blue-600">
+        <a href="./pricing.php" class="flex items-center py-1 hover:text-blue-600">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8zm0 0V5m0 10v3m-9-6h3m10 0h3M4.222 19.778l2.121-2.121m12.728 0l2.121 2.121M4.222 4.222l2.121 2.121m12.728 0l2.121-2.121"/>
             </svg>
             Pricing
         </a>
 
-        <a href="#" class="flex items-center py-1 hover:text-blue-600">
+        <a href="./update_price.php" class="flex items-center py-1 hover:text-blue-600">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
