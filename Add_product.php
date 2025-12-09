@@ -241,17 +241,22 @@ if (empty($name) || $selling_price_inc <= 0) {
         }
    </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-blue-100 font-sans">
 
+  <!-- Dashboard Container -->
   <div class="flex min-h-screen">
 
+    <!-- Sidebar -->
     <?php include 'layout/sidebar.php'; ?>
 
-    <main class="flex-1 ml-0 lg:ml-64 pt-7 p-8 main-content"> 
+    <!-- Main Content -->
+    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
       
+      <!-- Header -->
       <?php include "layout/header.php"; ?>
 
-      <div id="content-area" class="space-y-8 bg-white p-6 rounded-lg shadow-xl mt-5">
+      <!-- Page Content -->
+      <div id="content-area" class="space-y-8 bg-blue-100 p-6 rounded-lg">
 
             <div id="content-area" class="space-y-8 bg-gray-100 p-6 rounded-card">
 
@@ -454,7 +459,7 @@ if (empty($name) || $selling_price_inc <= 0) {
 
                                 <div class="mt-6 border-t border-blue-100 pt-6">
                                     <label class="block text-sm font-semibold text-gray-700 mb-4">Product Type</label>
-                                    <div class="flex items-center justify-between p-4 rounded-input border border-blue-200 bg-blue-50">
+                                    <div class="flex items-center justify-between p-4 rounded-input border border-blue-100 bg-blue-50">
                                         <label class="inline-flex items-center text-gray-800 cursor-pointer">
                                             <input type="radio" name="product_type" value="Single" checked 
                                                     class="h-5 w-5 text-primary border-gray-400 focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all duration-200">

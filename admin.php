@@ -110,24 +110,23 @@ if($result){
 </head>
 <body class="bg-blue-100 font-sans">
 
-  <!-- Dashboard Container -->
-  <div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <?php include 'layout/sidebar.php'; ?>
 
-    <!-- Sidebar -->
-    <?php include 'layout/sidebar.php'; ?>
+  <!-- Main Content Area -->
+  <div class="min-h-screen lg:ml-64"> <!-- Only margin on large screens -->
+    
+    <!-- Header -->
+    <?php include "layout/header.php"; ?>
 
     <!-- Main Content -->
-    <main class="flex-1 ml-0 lg:ml-64 pt-20 p-8 main-content"> <!-- pt-20 = header height -->
+    <main class="pt-16 p-6">
       
-      <!-- Header -->
-      <?php include "layout/header.php"; ?>
-
       <!-- Page Content -->
       <div id="content-area" class="space-y-8 bg-blue-200 p-6 rounded-lg">
-   <h1 class="text-3xl font-bold mb-0 mt-0 text-gray-800 border-b pb-2 text-center ">
-    Dashboard  Quick Overiew
-            </h1>
-     
+        <h1 class="text-3xl font-bold mb-0 mt-0 text-gray-800 border-b pb-2 text-center">
+          Dashboard Quick Overview
+        </h1>
     <!-- 1. Key Metrics Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
     <!-- Card 1: Active Tables -->

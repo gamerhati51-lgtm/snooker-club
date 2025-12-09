@@ -558,17 +558,16 @@ if (!$real_data_exists) {
         }
     }
     
-    // Sample expense categories if none exist
-    if (empty($expense_categories)) {
-        $expense_categories = [
-            ['category' => 'Electricity', 'total' => 1500],
-            ['category' => 'Staff', 'total' => 8000],
-            ['category' => 'Maintenance', 'total' => 2000],
-            ['category' => 'Supplies', 'total' => 1200]
-        ];
-        $total_expenses = 1500 + 8000 + 2000 + 1200;
-    }
-    
+// Only create sample expense categories if no real data exists
+if (!$real_data_exists && empty($real_expense_categories)) {
+    $expense_categories = [
+        ['category' => 'Electricity', 'total' => 1500],
+        ['category' => 'Staff', 'total' => 8000],
+        ['category' => 'Maintenance', 'total' => 2000],
+        ['category' => 'Supplies', 'total' => 1200]
+    ];
+    $total_expenses = 1500 + 8000 + 2000 + 1200;
+}
     // Sample income if none exists
     if ($total_income == 0) {
         $total_income = 25000;
@@ -673,7 +672,7 @@ $json_item_data = json_encode($top_item_data);
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-blue-50 font-sans">
     
     <!-- Dashboard Container -->
     <div class="flex min-h-screen">
@@ -1221,76 +1220,149 @@ $json_item_data = json_encode($top_item_data);
                     <?php endif; ?>
                 </div>
                 
-                <!-- Expense Categories -->
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6">
-                        <i class="fas fa-list-alt mr-2 text-snooker-accent"></i>
-                        Expense Categories Breakdown
-                    </h3>
-                    
-                    <?php if (!empty($expense_categories)): ?>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            <?php foreach($expense_categories as $expense): ?>
-                                <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500">
-                                    <div class="flex justify-between items-start mb-2">
-                                        <h4 class="font-semibold text-gray-800"><?php echo htmlspecialchars($expense['category']); ?></h4>
-                                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
-                                            <?php echo number_format($expense['total'], 0); ?> PKR
-                                        </span>
-                                    </div>
-                                    <p class="text-2xl font-bold text-red-600">PKR <?php echo number_format($expense['total'], 2); ?></p>
-                                    <div class="mt-3">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill bg-red-500" 
-                                                 style="width: <?php echo $total_expenses > 0 ? ($expense['total'] / $total_expenses) * 100 : 0; ?>%"></div>
-                                        </div>
-                                        <p class="text-xs text-gray-500 mt-1">
-                                            <?php echo $total_expenses > 0 ? number_format(($expense['total'] / $total_expenses) * 100, 1) : 0; ?>% of total expenses
-                                        </p>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php else: ?>
-                        <div class="text-center py-8 text-gray-500">
-                            <i class="fas fa-receipt text-4xl mb-3 text-gray-300"></i>
-                            <p class="text-lg">No expense data available for this period.</p>
-                        </div>
-                    <?php endif; ?>
+ <!-- Expense Categories - DEBUG VERSION -->
+<div class="bg-white rounded-xl shadow-md p-6">
+    <h3 class="text-xl font-bold text-gray-800 mb-6">
+        <i class="fas fa-list-alt mr-2 text-snooker-accent"></i>
+        Expense Categories Breakdown
+    </h3>
+    
+    <?php 
+    // Debug: Check what date we're searching for
+    echo "<!-- Debug: date_param = $date_param -->";
+    echo "<!-- Debug: report_type = $report_type -->";
+    
+    // Fetch real expense categories from database
+    $real_expense_categories = [];
+    $real_total_expenses = 0.00;
+    
+    // Check if tables exist
+    $check_expanses = $conn->query("SHOW TABLES LIKE 'expanses'");
+    $check_categories = $conn->query("SHOW TABLES LIKE 'expanses_categories'");
+    
+    echo "<!-- Debug: expanses table exists = " . $check_expanses->num_rows . " -->";
+    echo "<!-- Debug: expanses_categories table exists = " . $check_categories->num_rows . " -->";
+    
+    if ($check_expanses->num_rows > 0 && $check_categories->num_rows > 0) {
+        // First, let's see what dates we have in expanses table
+        $check_dates = $conn->query("SELECT expanses_date FROM expanses ORDER BY expanses_date LIMIT 5");
+        echo "<!-- Debug: First 5 dates in expanses table: ";
+        while($row = $check_dates->fetch_assoc()) {
+            echo $row['expanses_date'] . ", ";
+        }
+        echo " -->";
+        
+        // Join expanses with expanses_categories
+        if ($report_type == 'monthly') {
+            // Monthly query
+            $expense_query = "
+                SELECT 
+                    ec.category_name,
+                    SUM(e.amount) as total_amount
+                FROM expanses e
+                INNER JOIN expanses_categories ec ON e.category_id = ec.category_id
+                WHERE DATE_FORMAT(e.expanses_date, '%Y-%m') = ?
+                GROUP BY e.category_id, ec.category_name
+                ORDER BY total_amount DESC
+            ";
+            $expense_bind_param = $date_param;
+            echo "<!-- Debug: Using monthly query for $date_param -->";
+        } else {
+            // Daily query
+            $expense_query = "
+                SELECT 
+                    ec.category_name,
+                    SUM(e.amount) as total_amount
+                FROM expanses e
+                INNER JOIN expanses_categories ec ON e.category_id = ec.category_id
+                WHERE e.expanses_date = ?
+                GROUP BY e.category_id, ec.category_name
+                ORDER BY total_amount DESC
+            ";
+            $expense_bind_param = $date_param;
+            echo "<!-- Debug: Using daily query for $date_param -->";
+        }
+        
+        echo "<!-- Debug: Query = $expense_query -->";
+        echo "<!-- Debug: Bind param = $expense_bind_param -->";
+        
+        $stmt_expenses = $conn->prepare($expense_query);
+        if ($stmt_expenses) {
+            $stmt_expenses->bind_param('s', $expense_bind_param);
+            $stmt_expenses->execute();
+            $expenses_result = $stmt_expenses->get_result();
+            
+            $row_count = $expenses_result->num_rows;
+            echo "<!-- Debug: Found $row_count rows -->";
+            
+            while ($row = $expenses_result->fetch_assoc()) {
+                echo "<!-- Debug: Row = " . print_r($row, true) . " -->";
+                $real_expense_categories[] = [
+                    'category' => $row['category_name'],
+                    'total' => (float)$row['total_amount']
+                ];
+                $real_total_expenses += (float)$row['total_amount'];
+            }
+            $stmt_expenses->close();
+        } else {
+            echo "<!-- Debug: Statement preparation failed -->";
+        }
+    }
+    
+    echo "<!-- Debug: real_expense_categories count = " . count($real_expense_categories) . " -->";
+    echo "<!-- Debug: real_total_expenses = $real_total_expenses -->";
+    echo "<!-- Debug: real_data_exists = " . ($real_data_exists ? 'true' : 'false') . " -->";
+    ?>
+    
+    <?php if (!empty($real_expense_categories)): ?>
+        <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-400"></i>
                 </div>
-                
-                <!-- LOW STOCK ALERTS -->
-                <?php if (!empty($low_stock_items)): ?>
-                <div class="bg-white rounded-xl shadow-md p-6">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6">
-                        <i class="fas fa-exclamation-triangle mr-2 text-inventory-orange"></i>
-                        Low Stock Alerts
-                    </h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                        <?php foreach($low_stock_items as $item): ?>
-                            <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
-                                <h4 class="font-semibold text-gray-800 mb-1"><?php echo htmlspecialchars($item['product_name']); ?></h4>
-                                <div class="flex justify-between items-center mt-2">
-                                    <span class="text-sm text-gray-600">Current Stock:</span>
-                                    <span class="font-bold text-orange-600"><?php echo $item['current_stock']; ?></span>
-                                </div>
-                                <div class="flex justify-between items-center mt-1">
-                                    <span class="text-sm text-gray-600">Reorder Level:</span>
-                                    <span class="font-bold text-red-600"><?php echo $item['reorder_level']; ?></span>
-                                </div>
-                                <div class="mt-3">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill bg-orange-500" 
-                                             style="width: <?php echo $item['reorder_level'] > 0 ? min(100, ($item['current_stock'] / $item['reorder_level']) * 100) : 0; ?>%"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                <div class="ml-3">
+                    <p class="text-sm text-green-700">
+                        <strong>Real Data Found!</strong> Showing actual expense data from database.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <?php foreach($real_expense_categories as $expense): 
+                $percentage = $real_total_expenses > 0 ? ($expense['total'] / $real_total_expenses) * 100 : 0;
+            ?>
+                <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-red-500">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-semibold text-gray-800"><?php echo htmlspecialchars($expense['category']); ?></h4>
+                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
+                            <?php echo number_format($expense['total'], 0); ?> PKR
+                        </span>
+                    </div>
+                    <p class="text-2xl font-bold text-red-600">PKR <?php echo number_format($expense['total'], 2); ?></p>
+                    <div class="mt-3">
+                        <div class="progress-bar">
+                            <div class="progress-fill bg-red-500" 
+                                 style="width: <?php echo $percentage; ?>%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">
+                            <?php echo number_format($percentage, 1); ?>% of total expenses
+                        </p>
                     </div>
                 </div>
-                <?php endif; ?>
-               
+            <?php endforeach; ?>
+        </div>
+        
+    <?php else: ?>
+        <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-receipt text-4xl mb-3 text-gray-300"></i>
+            <p class="text-lg">No expense data found for <?php echo $date_display; ?>.</p>
+        
+            
+            <p class="text-sm mt-4">Try adding expenses for this date or select a different date.</p>
+        </div>
+    <?php endif; ?>
+</div>
                <!-- PRODUCT PERFORMANCE -->
 <?php if (!empty($product_performance)): ?>
 <div class="bg-white rounded-xl shadow-md p-6">

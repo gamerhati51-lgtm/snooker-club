@@ -22,16 +22,9 @@ if (session_status() === PHP_SESSION_NONE) {
         }
     }
 </script>
-
-<button id="mobileMenuButton" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-blue-900 text-white rounded-md shadow-lg">
-    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-    </svg>
-</button>
-
-<aside id="sidebar" class=" sidebar-fixed-theme fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
+<aside id="sidebar"
+ class="fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
       flex flex-col transform -translate-x-full transition-transform duration-300 lg:translate-x-0">
-    
     <div class="p-4 bg-blue-900">
         <h1 class="nav-link block px-4 py-3 rounded-lg text-lg font-medium 
                         text-white  bg-none ">
@@ -114,7 +107,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     List Product
                 </a>
 
-                <a href="#" class="flex items-center text-sm py-1 hover:text-blue-600">
+                <a href="./sales.php" class="flex items-center text-sm py-1 hover:text-blue-600">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 3h18M9 7v14m6-14v14" />
@@ -164,57 +157,99 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
         </div>
         
-        <div class="w-full">
-            <button onclick="toggleDropdown('expanseMenu', 'expanseArrow')" 
-              id="toggleExpanse"
-              class="w-full sidebar-link flex text-black items-center p-3 text-sm font-semibold 
-              border-l-4 border-transparent hover:bg-blue-200"> 
-                
-                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6" />
-                </svg>
+ <!-- Expenses Dropdown -->
+<div class="w-full">
+  <button onclick="toggleDropdown('expanseMenu1', 'expanseArrow1')" 
+          class="w-full sidebar-link flex text-black items-center p-3 text-sm font-semibold 
+                 border-l-4 border-transparent hover:bg-blue-200"> 
+    <!-- Expenses Icon -->
+    <svg class="w-5 h-5 mr-3 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6" />
+    </svg>
+    Expenses
+    <!-- Arrow Icon -->
+    <svg id="expanseArrow1" class="w-4 h-4 ml-auto transform transition-transform text-gray-700" fill="none" 
+         stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
 
-                Expanses
+  <div id="expanseMenu1" class="hidden pl-10 mt-1 space-y-2 text-black">
+    <a href="./list_expanse.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
+      <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      List Expenses
+    </a>
+    <a href="./add_expance.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
+      <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M12 4v16m8-8H4"/>
+      </svg>
+      Add Expenses
+    </a>
+  </div>
+</div>
 
-                <svg id="expanseArrow" class="w-4 h-4 ml-auto transform transition-transform" fill="none" 
-                      stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
+<!-- User Dropdown -->
+<div class="w-full">
+  <button onclick="toggleDropdown('expanseMenu2', 'expanseArrow2')" 
+          class="w-full sidebar-link flex text-black items-center p-3 text-sm font-semibold 
+                 border-l-4 border-transparent hover:bg-blue-200"> 
+    <!-- User Icon -->
+    <svg class="w-5 h-5 mr-3 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196zM12 12a3 3 0 100-6 3 3 0 000 6z" />
+    </svg>
+    User
+    <!-- Arrow Icon -->
+    <svg id="expanseArrow2" class="w-4 h-4 ml-auto transform transition-transform text-gray-700" fill="none" 
+         stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
 
-            <div id="expanseMenu" class="hidden pl-10 mt-1 space-y-2 text-black">
-                <a href="./list_expanse.php" 
-                      class="py-1 flex items-center text-sm hover:text-blue-700 transition">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                    List Expanses
-                </a>
+  <div id="expanseMenu2" class="hidden pl-10 mt-1 space-y-2 text-black">
+    <a href="./user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
+      <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      List Of Users
+    </a>
+    <a href="./add_user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
+      <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M12 4v16m8-8H4"/>
+      </svg>
+      Add New User
+    </a>
+  </div>
+</div>
 
-                <a href="./add_expance.php" 
-                      class="py-1 flex items-center text-sm hover:text-blue-700 transition">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                              d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Add Expanses
-                </a>
-            </div>
-        </div>
+<script>
+  function toggleDropdown(menuId, arrowId) {
+    const menu = document.getElementById(menuId);
+    const arrow = document.getElementById(arrowId);
 
+    // Toggle current dropdown
+    menu.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
 
-        <a href="./user.php" class="sidebar-link flex text-black items-center p-3 text-sm 
-        font-semibold border-l-4 border-transparent hover:bg-blue-200">
-            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20h-2m2 0h-2M13 20H11m4-10a4 4 0 11-8 0 4 4 0 018 0z">
-                </path>
-            </svg>
-            Users
-        </a>
+    // Close other dropdowns
+    document.querySelectorAll('[id^="expanseMenu"]').forEach(el => {
+      if(el.id !== menuId) el.classList.add('hidden');
+    });
+    document.querySelectorAll('[id^="expanseArrow"]').forEach(el => {
+      if(el.id !== arrowId) el.classList.remove('rotate-180');
+    });
+  }
+</script>
+
 
         <a href="./report.php" class="sidebar-link flex items-center text-black p-3 text-sm
           font-semibold border-l-4 border-transparent hover:bg-blue-200">
@@ -301,6 +336,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 </aside>
 
+
 <script>
     // --- Generic Dropdown Toggle Function ---
     // This consolidated function makes the code cleaner and easier to maintain.
@@ -316,35 +352,28 @@ if (session_status() === PHP_SESSION_NONE) {
     // --- Mobile Sidebar Toggle Logic ---
     document.addEventListener('DOMContentLoaded', () => {
         const sidebar = document.getElementById('sidebar');
-        const menuButton = document.getElementById('mobileMenuButton');
         
-        // Ensure both elements exist before running logic
-        if (!sidebar || !menuButton) return; 
-
-        // Function to toggle the sidebar's visibility
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            document.body.classList.toggle('overflow-hidden'); 
-        }
-
-        // Attach event listeners
-        menuButton.addEventListener('click', toggleSidebar);
-
         // Close sidebar if a link is clicked on mobile (good UX)
-        sidebar.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
-                    toggleSidebar();
-                }
+        if (sidebar) {
+            sidebar.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
+                        toggleSidebar();
+                    }
+                });
             });
-        });
+        }
 
         // Close sidebar on outside click on mobile (best practice)
         document.addEventListener('click', (event) => {
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuBtn = document.getElementById('mobileMenuButton');
+            
             if (window.innerWidth < 1024 && 
+                sidebar && 
+                !sidebar.classList.contains('-translate-x-full') &&
                 !sidebar.contains(event.target) && 
-                !menuButton.contains(event.target) && 
-                !sidebar.classList.contains('-translate-x-full')) {
+                (!mobileMenuBtn || !mobileMenuBtn.contains(event.target))) {
                 toggleSidebar();
             }
         });
