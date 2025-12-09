@@ -12,7 +12,7 @@ if(!isset($_SESSION['admin_name'])) header("Location:index.php");
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-blue-100 font-sans">
 
 <?php include 'layout/sidebar.php'; ?>
 <?php include 'layout/header.php'; ?>

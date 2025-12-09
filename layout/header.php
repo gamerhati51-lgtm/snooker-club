@@ -1091,12 +1091,24 @@
     POS
   </button></a>
 
-  <!-- Notification -->
-  <button class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 00-12 0v3c0 .538-.214 1.055-.595 1.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-    </svg>
+ <div class="relative inline-block">
+  <!-- Notification Button -->
+  <button onclick="showNotifications()" 
+          class="flex items-center justify-center w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded transition">
+      <svg id="notificationIcon" xmlns="http://www.w3.org/2000/svg" 
+           class="w-5 h-5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 00-12 0v3c0 .538-.214 1.055-.595 1.595L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+      </svg>
   </button>
+
+  <!-- Notification Dropdown -->
+  <div id="notificationPopup" 
+       class="hidden absolute left-1/2 transform -translate-x-1/2 mt-2 w-64 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded shadow-lg border border-gray-300 dark:border-gray-700 p-3 text-sm">
+      No new notifications
+  </div>
+</div>
+
 
   <!-- User -->
   <a href="./report.php"><button class="flex items-center justify-center w-auto px-3 h-10 bg-blue-600 hover:bg-blue-700 rounded transition text-white space-x-2">
@@ -1434,4 +1446,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+</script>
+<script>
+function showNotifications() {
+    const icon = document.getElementById("notificationIcon");
+    const popup = document.getElementById("notificationPopup");
+
+    // Add spin effect to icon
+    icon.classList.add("animate-spin");
+
+    // Wait 3 seconds to simulate loading
+    setTimeout(() => {
+        icon.classList.remove("animate-spin");
+
+        // Show popup
+        popup.classList.remove("hidden");
+
+        // Hide popup after 2 seconds
+        setTimeout(() => {
+            popup.classList.add("hidden");
+        }, 2000);
+
+    }, 3000);
+}
 </script>
