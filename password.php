@@ -18,7 +18,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $admin = $result->fetch_assoc();
 
-// Get admin statistics
+// Get admin statistics - using proper null coalescing
 $stats_stmt = $conn->prepare("
     SELECT 
         (SELECT COUNT(*) FROM users) as total_users,
@@ -29,18 +29,21 @@ $stats_stmt = $conn->prepare("
 $stats_stmt->execute();
 $stats_result = $stats_stmt->get_result();
 $stats = $stats_result->fetch_assoc();
-
 if (isset($_POST['update_settings'])) {
+    // Debug what's being submitted
+    echo "<!-- DEBUG: Password value: " . htmlspecialchars($_POST['password']) . " -->";
+    echo "<!-- DEBUG: Confirm password: " . htmlspecialchars($_POST['confirm_password']) . " -->";
+    
     $new_email = trim($_POST['email']);
     $new_password = trim($_POST['password']);
-    $confirm_password = trim($_POST['confirm_password']);
+    // ... rest of your code
     
     // Validate email
     if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
         $error_message = "Please enter a valid email address.";
     } elseif ($new_password !== $confirm_password) {
         $error_message = "Passwords do not match!";
-    } elseif (strlen($new_password) < 6) {
+    } elseif (!empty($new_password) && strlen($new_password) < 6) {
         $error_message = "Password must be at least 6 characters long.";
     } else {
         // Check if email already exists for another user
@@ -175,6 +178,23 @@ if (isset($_POST['update_settings'])) {
             animation: successPulse 1.5s ease;
         }
         
+        /* Added missing progress bar styles */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            border-radius: 3px;
+        }
+        
         @keyframes successPulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.8; }
@@ -243,83 +263,73 @@ if (isset($_POST['update_settings'])) {
                 <div class="lg:col-span-1 space-y-6">
                     <!-- Admin Profile Card -->
                     <div class="bg-white rounded-xl shadow-md p-6">
+                        <!-- Profile Info -->
                         <div class="flex items-center gap-4 mb-6">
-                            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-white text-3xl"></i>
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                                <?php echo strtoupper(substr($admin['name'] ?? 'A', 0, 1)); ?>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-gray-800"><?php echo htmlspecialchars($admin['name']); ?></h3>
-                                <p class="text-gray-600 text-sm"><?php echo htmlspecialchars($admin['role']); ?></p>
-                               
+                                <h3 class="text-xl font-bold text-gray-800"><?php echo htmlspecialchars($admin['name'] ?? 'Administrator'); ?></h3>
+                                <p class="text-gray-600"><?php echo htmlspecialchars($admin['email'] ?? ''); ?></p>
+                                <span class="inline-block mt-1 px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                    <?php echo htmlspecialchars($admin['role'] ?? 'Admin'); ?>
+                                </span>
                             </div>
                         </div>
                         
-                        <div class="space-y-4">
-                            <div class="flex items-center gap-3 text-gray-600">
-                                <i class="fas fa-envelope text-blue-500"></i>
-                                <span class="text-sm"><?php echo htmlspecialchars($admin['email']); ?></span>
-                            </div>
-                            <div class="flex items-center gap-3 text-gray-600">        </span>
-                            </div>
-                            <div class="flex items-center gap-3 text-gray-600">
-                                <i class="fas fa-shield-alt text-purple-500"></i>
-                                <span class="text-sm">Account Status: <span class="font-medium text-green-600"><?php echo htmlspecialchars($admin['status']); ?></span></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- System Statistics -->
-                    <div class="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-xl shadow-md p-6">
-                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                            <i class="fas fa-chart-bar text-blue-300"></i>
-                            System Overview
-                        </h3>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-users text-white"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-300">Total Users</p>
-                                        <p class="text-lg font-bold"><?php echo $stats['total_users'] ?? 0; ?></p>
+                        <!-- System Statistics -->
+                        <div class="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-xl shadow-md p-6">
+                            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                                <i class="fas fa-chart-bar text-blue-300"></i>
+                                System Overview
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-users text-white"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-300">Total Users</p>
+                                            <p class="text-lg font-bold"><?php echo $stats['total_users'] ?? 0; ?></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-table-tennis text-white"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-300">Snooker Tables</p>
-                                        <p class="text-lg font-bold"><?php echo $stats['total_tables'] ?? 0; ?></p>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-box text-white"></i>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-300">Products</p>
-                                        <p class="text-lg font-bold"><?php echo $stats['total_products'] ?? 0; ?></p>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-table-tennis text-white"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-300">Snooker Tables</p>
+                                            <p class="text-lg font-bold"><?php echo $stats['total_tables'] ?? 0; ?></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-calendar-day text-white"></i>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-box text-white"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-300">Products</p>
+                                            <p class="text-lg font-bold"><?php echo $stats['total_products'] ?? 0; ?></p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p class="text-sm text-gray-300">Today's Sessions</p>
-                                        <p class="text-lg font-bold"><?php echo $stats['today_sessions'] ?? 0; ?></p>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-calendar-day text-white"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-300">Today's Sessions</p>
+                                            <p class="text-lg font-bold"><?php echo $stats['today_sessions'] ?? 0; ?></p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -370,37 +380,39 @@ if (isset($_POST['update_settings'])) {
                                             Account Information
                                         </h3>
                                         
-                                        <!-- Name Field -->
-                                        <div class="input-group">
-                                            <div class="input-icon">
-                                                <i class="fas fa-user"></i>
-                                            </div>
-                                            <input 
-                                                type="text" 
-                                                class="form-input bg-gray-50"
-                                                value="<?php echo htmlspecialchars($admin['name']); ?>"
-                                                disabled
-                                            >
-                                            <span class="floating-label">Full Name</span>
-                                            <span class="text-xs text-gray-500 mt-1 block">Contact admin to change name</span>
-                                        </div>
+                                       <!-- Name Field - FIXED -->
+<div class="input-group">
+    <div class="input-icon">
+        <i class="fas fa-user"></i>
+    </div>
+    <input 
+        type="text" 
+        class="form-input bg-gray-50"
+        value="<?php echo htmlspecialchars($admin['name'] ?? ''); ?>"
+        disabled
+    >
+    <span class="floating-label">Full Name</span>
+    <span class="text-xs text-gray-500 mt-1 block">Contact admin to change name</span>
+</div>
+
+<!-- Email Field -->
+<div class="input-group">
+    <div class="input-icon">
+        <i class="fas fa-envelope"></i>
+    </div>
+    <input 
+        type="email" 
+        name="email" 
+        id="email"
+        class="form-input"
+        placeholder=" "
+        value="<?php echo htmlspecialchars($admin['email'] ?? ''); ?>"
+        required
+    >
+    <label for="email" class="floating-label">Email Address</label>
+</div>
+                                         
                                         
-                                        <!-- Email Field -->
-                                        <div class="input-group">
-                                            <div class="input-icon">
-                                                <i class="fas fa-envelope"></i>
-                                            </div>
-                                            <input 
-                                                type="email" 
-                                                name="email" 
-                                                id="email"
-                                                class="form-input"
-                                                placeholder=" "
-                                                value="<?php echo htmlspecialchars($admin['email']); ?>"
-                                                required
-                                            >
-                                            <label for="email" class="floating-label">Email Address</label>
-                                        </div>
                                     </div>
                                     
                                     <!-- Security Settings Section -->
@@ -453,33 +465,11 @@ if (isset($_POST['update_settings'])) {
                                                 <span class="text-xs text-gray-600" id="passwordStrength"></span>
                                             </div>
                                             <div class="progress-bar">
-                                                <div class="progress-fill bg-gray-200" id="passwordStrengthBar"></div>
+                                                <div class="progress-fill" id="passwordStrengthBar"></div>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    <!-- Preferences Section -->
-                                    <div class="pb-6">
-                                        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                                            <i class="fas fa-sliders-h text-purple-500"></i>
-                                            Preferences
-                                        </h3>
-                                        
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                                <input type="checkbox" id="email_notifications" class="h-4 w-4 text-blue-600 rounded">
-                                                <label for="email_notifications" class="ml-2 text-sm text-gray-700">
-                                                    Email Notifications
-                                                </label>
-                                            </div>
-                                            <div class="flex items-center p-3 bg-gray-50 rounded-lg">
-                                                <input type="checkbox" id="dark_mode" class="h-4 w-4 text-blue-600 rounded">
-                                                <label for="dark_mode" class="ml-2 text-sm text-gray-700">
-                                                    Dark Mode
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
                                     
                                     <!-- Form Actions -->
                                     <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t">
@@ -500,9 +490,6 @@ if (isset($_POST['update_settings'])) {
                                         </a>
                                     </div>
                                 </form>
-                                
-                            
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -520,26 +507,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirm_password');
     
-    togglePassword.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type', type);
-        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-    });
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+    }
     
-    toggleConfirmPassword.addEventListener('click', function() {
-        const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        confirmPasswordInput.setAttribute('type', type);
-        this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
-    });
+    if (toggleConfirmPassword && confirmPasswordInput) {
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+    }
     
     // Password strength checker
-    passwordInput.addEventListener('input', function() {
-        checkPasswordStrength(this.value);
-    });
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+    }
     
     function checkPasswordStrength(password) {
         const strengthBar = document.getElementById('passwordStrengthBar');
         const strengthText = document.getElementById('passwordStrength');
+        if (!strengthBar || !strengthText) return;
+        
         let strength = 0;
         
         if (password.length >= 8) strength += 25;
@@ -570,45 +565,56 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Form validation
     const form = document.getElementById('settingsForm');
-    form.addEventListener('submit', function(e) {
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-        
-        if (password && password.length < 6) {
-            e.preventDefault();
-            alert('Password must be at least 6 characters long.');
-            passwordInput.focus();
-            return;
-        }
-        
-        if (password !== confirmPassword) {
-            e.preventDefault();
-            alert('Passwords do not match!');
-            confirmPasswordInput.focus();
-            return;
-        }
-        
-        // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving Changes...';
-        submitBtn.disabled = true;
-        
-        // Re-enable after 3 seconds in case of error
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        }, 3000);
-    });
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const password = passwordInput ? passwordInput.value : '';
+            const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
+            
+            if (password && password.length < 6) {
+                e.preventDefault();
+                alert('Password must be at least 6 characters long.');
+                if (passwordInput) passwordInput.focus();
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match!');
+                if (confirmPasswordInput) confirmPasswordInput.focus();
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving Changes...';
+                submitBtn.disabled = true;
+                
+                // Re-enable after 3 seconds in case of error
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 3000);
+            }
+        });
+    }
     
     // Reset form function
     window.resetForm = function() {
         if (confirm('Are you sure you want to reset all changes?')) {
-            document.getElementById('email').value = '<?php echo htmlspecialchars($admin['email']); ?>';
-            passwordInput.value = '';
-            confirmPasswordInput.value = '';
-            document.getElementById('passwordStrengthBar').style.width = '0%';
-            document.getElementById('passwordStrength').textContent = '';
+            const emailField = document.getElementById('email');
+            if (emailField) {
+                emailField.value = '<?php echo htmlspecialchars($admin['email'] ?? ''); ?>';
+            }
+            
+            if (passwordInput) passwordInput.value = '';
+            if (confirmPasswordInput) confirmPasswordInput.value = '';
+            
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthText = document.getElementById('passwordStrength');
+            if (strengthBar) strengthBar.style.width = '0%';
+            if (strengthText) strengthText.textContent = '';
         }
     };
 });
