@@ -114,9 +114,16 @@ if ($check_expanses->num_rows > 0) {
         }
         $stmt_expenses->close();
     }
+    
 }
 
 $total_profit = $total_income - $total_expenses;
+
+
+
+
+
+
 
 // --- 3. Fetch Table Usage Summary ---
 $table_usage = [];
@@ -514,36 +521,113 @@ if (!$real_data_exists) {
     }
     
     // Sample peak hours (only if no peak data)
-    if (empty($peak_hours)) {
-        $sample_hours = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
-        $sample_peak_data = [3, 5, 8, 10, 12, 9, 4];
+   // Clear arrays first
+$peak_hours = [];
+$peak_hour_labels = [];
+$peak_hour_data = [];
+
+// Check if we have the snooker_sessions table
+$check_sessions = $conn->query("SHOW TABLES LIKE 'snooker_sessions'");
+
+if ($check_sessions->num_rows > 0) {
+    try {
+        // Simple query to get peak hours data
+        $query = "
+            SELECT 
+                CONCAT(LPAD(HOUR(start_time), 2, '0'), ':00') as hour_label,
+                HOUR(end_time) as hour_number,
+                COUNT(*) as session_count,
+                SUM(session_cost) as total_revenue
+            FROM snooker_sessions 
+            WHERE status = 'Completed'
+            GROUP BY HOUR(start_time)
+            ORDER BY session_count DESC
+            LIMIT 7
+        ";
         
-        // Clear arrays first
-        $peak_hours = [];
-        $peak_hour_labels = [];
-        $peak_hour_data = [];
+        $result = $conn->query($query);
         
-        foreach($sample_hours as $index => $hour) {
-            $peak_hours[] = [
-                'hour' => (int)str_replace(':00', '', $hour),
-                'session_count' => $sample_peak_data[$index],
-                'revenue' => $sample_peak_data[$index] * 250
-            ];
-            $peak_hour_labels[] = $hour;
-            $peak_hour_data[] = $sample_peak_data[$index];
+        if ($result && $result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $peak_hours[] = [
+                    'hour' => $row['hour_number'],
+                    'session_count' => $row['session_count'],
+                    'revenue' => $row['total_revenue']
+                ];
+                $peak_hour_labels[] = $row['hour_label'];
+                $peak_hour_data[] = $row['session_count'];
+            }
+            
+            // Sort by hour for better display
+            array_multisort(array_column($peak_hours, 'hour'), SORT_ASC, $peak_hours, $peak_hour_labels, $peak_hour_data);
+        } else {
+            // No data found, use sample
+            goto use_sample_data;
         }
+    } catch (Exception $e) {
+        error_log("Error fetching peak hours: " . $e->getMessage());
+        goto use_sample_data;
     }
+} else {
+    use_sample_data:
+    $sample_hours = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
+    $sample_peak_data = [3, 5, 8, 10, 12, 9, 4];
     
-    // Only add sample items if no products table AND no session_items
-    $check_products = $conn->query("SHOW TABLES LIKE 'products'");
-    $check_session_items = $conn->query("SHOW TABLES LIKE 'session_items'");
+    foreach($sample_hours as $index => $hour) {
+        $hour_int = (int)str_replace(':00', '', $hour);
+        $peak_hours[] = [
+            'hour' => $hour_int,
+            'session_count' => $sample_peak_data[$index],
+            'revenue' => $sample_peak_data[$index] * 250
+        ];
+        $peak_hour_labels[] = $hour;
+        $peak_hour_data[] = $sample_peak_data[$index];
+    }
+}
+    //top items
+   // Only add sample items if no products table AND no session_items
+$check_products = $conn->query("SHOW TABLES LIKE 'products'");
+$check_session_items = $conn->query("SHOW TABLES LIKE 'session_items'");
+
+if ($check_products->num_rows == 0 && $check_session_items->num_rows == 0 && empty($top_items)) {
+    // Clear arrays first
+    $top_items = [];
+    $top_item_labels = [];
+    $top_item_data = [];
     
-    if ($check_products->num_rows == 0 && $check_session_items->num_rows == 0 && empty($top_items)) {
-        // Clear arrays first
-        $top_items = [];
-        $top_item_labels = [];
-        $top_item_data = [];
-        
+} else {
+    // Clear arrays first
+    $top_items = [];
+    $top_item_labels = [];
+    $top_item_data = [];
+    
+    // SINGLE BEST QUERY - fetches top selling items from your database
+    $query = "
+        SELECT 
+            si.item_name,
+            SUM(si.quantity) as total_quantity,
+            SUM(si.price_per_unit * si.quantity) as total_revenue
+        FROM session_items si
+        GROUP BY si.item_name
+        ORDER BY total_revenue DESC
+        LIMIT 5
+    ";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        // Use real data from database
+        while($row = $result->fetch_assoc()) {
+            $top_items[] = [
+                'item_name' => $row['item_name'],
+                'total_quantity' => $row['total_quantity'],
+                'total_revenue' => $row['total_revenue']
+            ];
+            $top_item_labels[] = $row['item_name'];
+            $top_item_data[] = $row['total_revenue'];
+        }
+    } else {
+        // If no data in session_items, use sample data
         $sample_items = ['Coke', 'Water', 'Chips', 'Coffee', 'Snickers'];
         $sample_item_sales = [450, 300, 280, 200, 180];
         
@@ -557,6 +641,7 @@ if (!$real_data_exists) {
             $top_item_data[] = $sample_item_sales[$index];
         }
     }
+}
     
 // Only create sample expense categories if no real data exists
 if (!$real_data_exists && empty($real_expense_categories)) {
@@ -593,6 +678,62 @@ function format_minutes($minutes) {
     }
     return trim($output) ?: '0 min';
 }
+
+// Query to get total expenses
+$query = "SELECT SUM(amount) as total_expenses FROM expanses";
+$result = $conn->query($query);
+
+if ($result && $row = $result->fetch_assoc()) {
+    $total_expenses = $row['total_expenses'] ?: 0;
+  //  echo "Total Expenses: " . number_format($total_expenses, 2);
+} else {
+    $total_expenses = 0;
+    echo "No expenses found or error in query";
+}
+
+
+// Fetch Total Session Income
+$total_session_income = 0.00;
+
+// Check if snooker_sessions table exists
+$check_sessions = $conn->query("SHOW TABLES LIKE 'snooker_sessions'");
+if ($check_sessions->num_rows > 0) {
+    // Calculate total session income from completed sessions
+    $session_income_query = "SELECT SUM(session_cost) as total_session_income FROM snooker_sessions WHERE status = 'Completed'";
+    $session_result = $conn->query($session_income_query);
+    
+    if ($session_result && $row = $session_result->fetch_assoc()) {
+        $total_income = $row['total_session_income'] ? (float)$row['total_session_income'] : 0.00;
+    }
+}
+
+// For debugging, you can display it:
+// echo "Total Session Income: " . number_format($total_session_income, 2);
+
+// Fetch Total POS Sales and Transaction Count
+$total_pos_sales = 0.00;
+$total_transactions = 0;
+
+// Check if sales_transactions table exists
+$check_sales = $conn->query("SHOW TABLES LIKE 'sales_transactions'");
+if ($check_sales->num_rows > 0) {
+    // Calculate total POS sales and count transactions in one query
+    $pos_sales_query = "SELECT 
+        SUM(total_amount) as total_pos_sales,
+        COUNT(*) as total_transactions
+    FROM sales_transactions";
+    
+    $pos_result = $conn->query($pos_sales_query);
+    
+    if ($pos_result && $row = $pos_result->fetch_assoc()) {
+        $pos_sales = $row['total_pos_sales'] ? (float)$row['total_pos_sales'] : 0.00;
+        $total_transactions = $row['total_transactions'] ? (int)$row['total_transactions'] : 0;
+    }
+}
+
+// For debugging:
+// echo "Total POS Sales: " . number_format($pos_sales, 2) . "<br>";
+// echo "Total Transactions: " . $total_transactions;
 
 // Convert to JSON for JavaScript
 $json_labels = json_encode($chart_labels);
@@ -775,7 +916,7 @@ $json_item_data = json_encode($top_item_data);
                 </div>
                 
                 <!-- COMPREHENSIVE FINANCIAL SUMMARY CARDS -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
                     <!-- Income Card -->
                     <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-income-blue">
@@ -805,12 +946,12 @@ $json_item_data = json_encode($top_item_data);
                                 <i class="fas fa-cash-register text-pos-teal text-2xl"></i>
                             </div>
                             <span class="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
-                                <?php echo $pos_sales['total_transactions'] ?? 0; ?> transactions
+                                <?php echo $total_transactions ?? 0; ?> transactions
                             </span>
                         </div>
                         <h3 class="text-lg font-semibold text-gray-600">POS Sales</h3>
                         <p class="text-3xl font-bold text-pos-teal mt-2">
-                            PKR <?php echo number_format($pos_sales['pos_revenue'] ?? 0, 2); ?>
+                            PKR <?php echo number_format($pos_sales ?? 0, 2); ?>
                         </p>
                         <div class="mt-4">
                             <div class="progress-bar">
@@ -819,28 +960,7 @@ $json_item_data = json_encode($top_item_data);
                         </div>
                     </div>
                     
-                    <!-- Expenses Card -->
-                    <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-expense-red">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-red-50 rounded-lg">
-                                <i class="fas fa-receipt text-expense-red text-2xl"></i>
-                            </div>
-                            <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
-                                <?php echo count($expense_categories); ?> categories
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-600">Total Expenses</h3>
-                        <p class="text-3xl font-bold text-expense-red mt-2">
-                            PKR <?php echo number_format($total_expenses, 2); ?>
-                        </p>
-                        <div class="mt-4">
-                            <div class="progress-bar">
-                                <div class="progress-fill bg-expense-red" 
-                                     style="width: <?php echo $total_income > 0 ? min(100, ($total_expenses / $total_income) * 100) : 0; ?>%"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                   
                     <!-- Profit Card -->
                     <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-profit-green">
                         <div class="flex items-center justify-between mb-4">
@@ -871,7 +991,30 @@ $json_item_data = json_encode($top_item_data);
                 </div>
                 
                 <!-- ADDITIONAL METRICS ROW -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                 <!-- Expenses Card -->
+                    <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-expense-red">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-red-50 rounded-lg">
+                                <i class="fas fa-receipt text-expense-red text-2xl"></i>
+                            </div>
+                            <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
+                                <?php echo count($expense_categories); ?> categories
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-600">Total Expenses</h3>
+                        <p class="text-3xl font-bold text-expense-red mt-2">
+                            PKR <?php echo number_format($total_expenses, 2); ?>
+                        </p>
+                        <div class="mt-4">
+                            <div class="progress-bar">
+                                <div class="progress-fill bg-expense-red" 
+                                     style="width: <?php echo $total_income > 0 ? min(100, ($total_expenses / $total_income) * 100) : 0; ?>%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     
                     <!-- Booking Statistics -->
                     <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-booking-purple">
@@ -894,24 +1037,7 @@ $json_item_data = json_encode($top_item_data);
                     </div>
                     
                  <!-- Purchase Costs Card -->
-<div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-orange-500">
-    <div class="flex items-center justify-between mb-4">
-        <div class="p-3 bg-orange-50 rounded-lg">
-            <i class="fas fa-shopping-cart text-orange-500 text-2xl"></i>
-        </div>
-        <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
-            Purchases
-        </span>
-    </div>
-    <h3 class="text-lg font-semibold text-gray-600">Stock Purchases</h3>
-    <p class="text-2xl font-bold text-orange-600 mt-2">
-        PKR <?php echo number_format($purchase_costs['total_purchase_cost'] ?? 0, 2); ?>
-    </p>
-    <p class="text-sm text-gray-600 mt-1">
-        <?php echo $purchase_costs['total_purchases'] ?? 0; ?> orders • 
-        <?php echo $purchase_costs['total_items_purchased'] ?? 0; ?> items
-    </p>
-</div>
+
                     <!-- Inventory Alert -->
                     <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-inventory-orange">
                         <div class="flex items-center justify-between mb-4">
@@ -931,24 +1057,7 @@ $json_item_data = json_encode($top_item_data);
                         </p>
                     </div>
                     
-                    <!-- Average Transaction -->
-                    <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-cyan-500">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-cyan-50 rounded-lg">
-                                <i class="fas fa-chart-pie text-cyan-500 text-2xl"></i>
-                            </div>
-                            <span class="px-3 py-1 bg-cyan-100 text-cyan-800 rounded-full text-sm font-medium">
-                                Avg. Sale
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-600">Avg Transaction</h3>
-                        <p class="text-2xl font-bold text-cyan-600 mt-2">
-                            PKR <?php echo number_format($pos_sales['avg_transaction'] ?? 0, 2); ?>
-                        </p>
-                        <p class="text-sm text-gray-600 mt-1">
-                            Per POS transaction
-                        </p>
-                    </div>
+                  
                 </div>
                 
                 <!-- Charts Row -->
