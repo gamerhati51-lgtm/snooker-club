@@ -612,7 +612,7 @@ if ($check_users->num_rows > 0) {
     }
 }
 // --- 12. Add Sample Data if No Real Data Exists ---
-if (!$real_data_exists) {
+/*if (!$real_data_exists) {
     // Check if snooker_tables table has any active tables
     $check_tables = $conn->query("SELECT COUNT(*) as table_count FROM snooker_tables WHERE is_active = 1");
     $table_count_result = $check_tables->fetch_assoc();
@@ -638,45 +638,79 @@ if (!$real_data_exists) {
         $insert_stmt->close();
     }
 }
+    */
+  
+// Now check for table usage data again
+if (empty($table_usage)) {
+    // Fetch table usage data from database
+    $query = "
+        SELECT 
+            st.id,
+            st.table_name,
+            COUNT(ss.session_id) as total_sessions,
+            COALESCE(SUM(
+                CASE 
+                    WHEN ss.end_time IS NOT NULL AND ss.start_time IS NOT NULL 
+                    THEN TIMESTAMPDIFF(MINUTE, ss.start_time, ss.end_time)
+                    ELSE 0 
+                END
+            ), 0) as total_minutes,
+            COALESCE(SUM(ss.final_amount), 0) as table_income
+        FROM snooker_tables st
+        LEFT JOIN snooker_sessions ss ON st.id = ss.table_id 
+            AND ss.status = 'Completed'
+        WHERE st.is_active = 1
+        GROUP BY st.id, st.table_name
+        ORDER BY st.id
+    ";
     
-    // Now check for table usage data again
-    if (empty($table_usage)) {
-        // Fetch table names from database to use real table names
-        $tables_stmt = $conn->query("SELECT table_name FROM snooker_tables WHERE is_active = 1 ORDER BY id LIMIT 5");
+    $result = $conn->query($query);
+    
+    // Clear arrays first
+    $table_usage = [];
+    $chart_labels = [];
+    $chart_data = [];
+    $usage_chart_labels = [];
+    $usage_chart_data = [];
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $table_usage[] = [
+                'table_name' => $row['table_name'],
+                'total_minutes' => (int)$row['total_minutes'],
+                'total_sessions' => (int)$row['total_sessions'],
+                'table_income' => (float)$row['table_income']
+            ];
+            $chart_labels[] = $row['table_name'];
+            $chart_data[] = (float)$row['table_income'];
+            $usage_chart_labels[] = $row['table_name'];
+            $usage_chart_data[] = (int)$row['total_sessions'];
+        }
+        $result->close();
+    } else {
+        // If no data found, show empty state or fetch just table names
+        $tables_stmt = $conn->query("SELECT table_name FROM snooker_tables WHERE is_active = 1 ORDER BY id");
         $db_tables = [];
         while ($row = $tables_stmt->fetch_assoc()) {
             $db_tables[] = $row['table_name'];
         }
         $tables_stmt->close();
         
-        // Use database table names if available, otherwise use default names
-        $sample_tables = !empty($db_tables) ? $db_tables : ['Table 1', 'Table 2', 'Table 3', 'Table 4', 'Table 5'];
-        $sample_income = [2500, 1800, 3200, 1500, 2700];
-        $sample_sessions = [8, 6, 10, 5, 9];
-        
-        // Clear arrays first to avoid duplicates
-        $table_usage = [];
-        $chart_labels = [];
-        $chart_data = [];
-        $usage_chart_labels = [];
-        $usage_chart_data = [];
-        
-        foreach($sample_tables as $index => $table) {
-            $income = isset($sample_income[$index]) ? $sample_income[$index] : 1000;
-            $sessions = isset($sample_sessions[$index]) ? $sample_sessions[$index] : 5;
-            
+        // Initialize with zero values for tables without sessions
+        foreach($db_tables as $table_name) {
             $table_usage[] = [
-                'table_name' => $table,
-                'total_minutes' => $sessions * 60,
-                'total_sessions' => $sessions,
-                'table_income' => $income
+                'table_name' => $table_name,
+                'total_minutes' => 0,
+                'total_sessions' => 0,
+                'table_income' => 0.00
             ];
-            $chart_labels[] = $table;
-            $chart_data[] = $income;
-            $usage_chart_labels[] = $table;
-            $usage_chart_data[] = $sessions;
+            $chart_labels[] = $table_name;
+            $chart_data[] = 0;
+            $usage_chart_labels[] = $table_name;
+            $usage_chart_data[] = 0;
         }
     }
+}
     
     // Sample peak hours (only if no peak data)
    // Clear arrays first
@@ -841,10 +875,11 @@ $json_item_data = json_encode($top_item_data);
                                 <?php echo $report_type == 'monthly' ? 'bg-snooker-green text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>">
                             <i class="fas fa-calendar-alt mr-2"></i>Monthly Report
                         </button>
-                        
-                        <button class="px-6 py-3 rounded-lg font-semibold bg-snooker-accent text-snooker-green">
-                            <i class="fas fa-table-tennis mr-2"></i>Tables Usage
-                        </button>
+                      
+                        <button onclick="printReport()" class="px-6 py-3 rounded-lg font-semibold bg-snooker-accent text-snooker-green">
+     <i class="fas fa-table-tennis mr-2"></i>Tables Usage
+</button>
+
                         <button class="px-6 py-3 rounded-lg font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">
                             <i class="fas fa-history mr-2"></i>Historical Data
                         </button>
@@ -884,6 +919,9 @@ $json_item_data = json_encode($top_item_data);
                         </div>
                     </form>
                 </div>
+                
+
+
                 
                 <!-- COMPREHENSIVE FINANCIAL SUMMARY CARDS -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -1010,22 +1048,39 @@ $json_item_data = json_encode($top_item_data);
 
                     <!-- Inventory Alert -->
                     <div class="stat-card bg-white rounded-xl shadow-md p-6 border-t-4 border-inventory-orange">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-orange-50 rounded-lg">
-                                <i class="fas fa-boxes text-inventory-orange text-2xl"></i>
-                            </div>
-                            <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
-                                Low Stock
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-600">Inventory Alerts</h3>
-                        <p class="text-2xl font-bold text-inventory-orange mt-2">
-                        Items
-                        </p>
-                        <p class="text-sm text-gray-600 mt-1">
-                            Needs restocking
-                        </p>
-                    </div>
+    <div class="flex items-center justify-between mb-4">
+        <div class="p-3 bg-orange-50 rounded-lg">
+            <i class="fas fa-boxes text-inventory-orange text-2xl"></i>
+        </div>
+        <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
+            Low Stock
+        </span>
+    </div>
+    <h3 class="text-lg font-semibold text-gray-600">Inventory Alerts</h3>
+    
+    <?php if (count($low_stock_items) > 0): ?>
+        <p class="text-2xl font-bold text-inventory-orange mt-2">
+            <?php echo count($low_stock_items); ?> Items
+        </p>
+        <p class="text-sm text-gray-600 mt-1">
+            Needs restocking
+        </p>
+        
+       
+    <?php else: ?>
+        <!-- Show when no low stock items -->
+        <p class="text-xl font-bold text-green-600 mt-2">
+            0 Items 
+        </p>
+       
+       
+            <div class="flex items-center text-green-600 text-sm">
+                <i class="fas fa-check-circle mr-2"></i>
+                <span>No inventory alerts </span>
+           
+        </div>
+    <?php endif; ?>
+</div>
                     
                   
                 </div>
