@@ -64,13 +64,11 @@ $currency_symbol = 'PKR';
 
 $upcoming_bookings_count = 0;
 
-// SQL to count confirmed bookings starting now() and up to 24 hours from now
 $stmt_upcoming = $conn->prepare("
     SELECT COUNT(*) 
     FROM snooker_bookings
     WHERE status = 'Confirmed'
     AND CONCAT(booking_date, ' ', start_time) > NOW()
-    AND CONCAT(booking_date, ' ', start_time) <= DATE_ADD(NOW(), INTERVAL 24 HOUR)
 ");
 
 if ($stmt_upcoming) {
@@ -80,6 +78,7 @@ if ($stmt_upcoming) {
     $upcoming_bookings_count = $row[0];
     $stmt_upcoming->close();
 }
+
 // $upcoming_bookings_count now holds the dynamic data (e.g., 7)
 ?>
 <?php
@@ -195,7 +194,7 @@ if($result){
         <h2 class="text-2xl font-bold text-snooker-green">Tables Management</h2>
 <!-- Replace this button -->
 <button onclick="openAddTableModal()" 
-   class="px-4 py-2 bg-orange-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
+   class="px-4 py-2 bg-blue-800 text-white rounded-lg font-semibold hover:bg-green-700 transition">
     + Add Table
 </button>
     </div>
@@ -432,7 +431,7 @@ let toaster = createToaster({
     duration: 3
 });
 
-toaster("Software is under Amir development!");
+toaster("Software is under Team development!");
 
 
 </script>

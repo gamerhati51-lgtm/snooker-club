@@ -25,8 +25,8 @@ if (session_status() === PHP_SESSION_NONE) {
 <aside id="sidebar"
  class="fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
       flex flex-col transform -translate-x-full transition-transform duration-300 lg:translate-x-0">
-    <a href="./admin.php"><div class="p-4 bg-blue-900">
-        <h1 class="nav-link block px-4 py-3 rounded-lg text-lg font-medium 
+    <a href="./admin.php"><div class="p-1 bg-blue-600">
+        <h1 class="nav-link block px-4 py-4 rounded-lg text-lg font-medium 
                         text-white  bg-none ">
             <i class="fas fa-home mr-3"></i> SNOOKER CLUB </h1>
     </div></a>
@@ -71,6 +71,7 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
         </div>
         
+        <!-- First Dropdown - POS -->
         <div class="w-full">
             <button onclick="toggleDropdown('posMenu', 'posArrow')" 
                 class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200 transition">
@@ -91,21 +92,7 @@ if (session_status() === PHP_SESSION_NONE) {
             </button>
 
             <div id="posMenu" class="hidden pl-10 mt-1 space-y-2 text-black"> 
-                <a href="./add_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add Product
-                </a>
-
-                <a href="./list_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                    List Product
-                </a>
+               
 
                 <a href="./sales.php" class="flex items-center text-sm py-1 hover:text-blue-600">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,6 +108,47 @@ if (session_status() === PHP_SESSION_NONE) {
                             d="M12 8c-1.657 0-3 1.567-3 3.5S10.343 15 12 15s3-1.567 3-3.5S13.657 8 12 8zm-7 7a4 4 0 118 0m8 0a4 4 0 11-8 0" />
                     </svg>
                     Update Price
+                </a>
+            </div>
+        </div>
+     
+        <!-- Second Dropdown - Inventory (FIXED WITH UNIQUE IDs) -->
+        <div class="w-full">
+            <button onclick="toggleDropdown('inventoryMenu', 'inventoryArrow')" 
+                class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200 transition">
+                
+           <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4">
+    </path>
+</svg>
+                </svg>
+
+                Inventory
+
+                <svg id="inventoryArrow" class="w-4 h-4 ml-auto transform transition-transform" fill="none" 
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            <div id="inventoryMenu" class="hidden pl-10 mt-1 space-y-2 text-black"> 
+                <a href="./add_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M12 4v16m8-8H4m7 4h3m-3-3v3M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8">
+    </path>
+</svg>
+                    Add Product
+                </a>
+
+                <a href="./list_product.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    List Product
                 </a>
             </div>
         </div>
@@ -200,13 +228,15 @@ if (session_status() === PHP_SESSION_NONE) {
           class="w-full sidebar-link flex text-black items-center p-3 text-sm font-semibold 
                  border-l-4 border-transparent hover:bg-blue-200"> 
     <!-- User Icon -->
-    <svg class="w-5 h-5 mr-3 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M5.121 17.804A9 9 0 1112 21a9 9 0 01-6.879-3.196zM12 12a3 3 0 100-6 3 3 0 000 6z" />
-    </svg>
+ <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+    </path>
+</svg>
     User
     <!-- Arrow Icon -->
-    <svg id="expanseArrow2" class="w-4 h-4 ml-auto transform transition-transform text-gray-700" fill="none" 
+    <svg id="expanseArrow2" class="w-4 h-4 ml-auto 
+    transform transition-transform text-gray-700" fill="none" 
          stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M19 9l-7 7-7-7" />
@@ -216,21 +246,22 @@ if (session_status() === PHP_SESSION_NONE) {
   <div id="expanseMenu2" class="hidden pl-10 mt-1 space-y-2 text-black">
  <!-- List of Users -->
 <a href="./user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
-  <!-- User Icon -->
-  <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+ <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-          d="M5.121 17.804A9 9 0 1118.879 6.196 9 9 0 015.121 17.804z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-  </svg>
+        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-1.205a4 4 0 11-8 0 4 4 0 018 0z">
+    </path>
+</svg>
   Role Of Users
 </a>
 
 
 
     <a href="./add_user.php" class="py-1 flex items-center text-sm hover:text-blue-700 transition">
-      <svg class="w-4 h-4 mr-2 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M12 4v16m8-8H4"/>
-      </svg>
+    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+        d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
+    </path>
+</svg>
       Add New User
     </a>
   </div>
@@ -316,24 +347,19 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
 </div>
 
-<script>
-    function toggleDropdown(menuId, arrowId) {
-        document.getElementById(menuId).classList.toggle('hidden');
-        if (arrowId) document.getElementById(arrowId).classList.toggle('rotate-180');
-    }
-</script>
-
     </nav>
         
     <div class="p-4 border-t border-snooker-light flex-shrink-0">
         <p class="text-xs font-semibold text-black">ADMIN:</p>
-        <a href="logout.php" title="are you want to logout" class="block w-full text-center bg-red-600 text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg shadow-md hover:bg-red-700 transition transform hover:scale-[1.02]">
+        <a href="logout.php" title="are you want to logout" class="block w-full text-center bg-blue-800 
+        text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg shadow-md hover:bg-blue-700 transition transform hover:scale-[1.02]">
             <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none"
              stroke="currentColor" viewBox="0 0 24 24" 
              xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" 
             stroke-width="2" 
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3
+             3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
             </path></svg>
             Logout
         </a>

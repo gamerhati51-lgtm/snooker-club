@@ -22,7 +22,7 @@ if(isset($_POST['action']) && $_POST['action'] === 'add_expense'){
         $stmt->bind_param("sisd", $expanses_date, $category_id, $details, $amount);
         if($stmt->execute()){
             $_SESSION['message'] = "✅ Expense added successfully!";
-            header("Location: list_expance.php");
+            header("Location: list_expanse.php");
             exit();
         }
         $stmt->close();
