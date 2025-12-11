@@ -18,25 +18,12 @@ $stmt->execute();
 $result = $stmt->get_result();
 $admin = $result->fetch_assoc();
 
-// Get admin statistics - using proper null coalescing
-$stats_stmt = $conn->prepare("
-    SELECT 
-        (SELECT COUNT(*) FROM users) as total_users,
-        (SELECT COUNT(*) FROM products) as total_products,
-        (SELECT COUNT(*) FROM snooker_tables) as total_tables,
-        (SELECT COUNT(*) FROM snooker_sessions WHERE DATE(start_time) = CURDATE()) as today_sessions
-");
-$stats_stmt->execute();
-$stats_result = $stats_stmt->get_result();
-$stats = $stats_result->fetch_assoc();
+// Handle form submission
 if (isset($_POST['update_settings'])) {
-    // Debug what's being submitted
-    echo "<!-- DEBUG: Password value: " . htmlspecialchars($_POST['password']) . " -->";
-    echo "<!-- DEBUG: Confirm password: " . htmlspecialchars($_POST['confirm_password']) . " -->";
-    
+    // Get form values
     $new_email = trim($_POST['email']);
     $new_password = trim($_POST['password']);
-    // ... rest of your code
+    $confirm_password = trim($_POST['confirm_password']);
     
     // Validate email
     if (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
@@ -60,29 +47,44 @@ if (isset($_POST['update_settings'])) {
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
                 $update_stmt = $conn->prepare("UPDATE users SET email = ?, password = ?, updated_at = NOW() WHERE id = ?");
                 $update_stmt->bind_param("ssi", $new_email, $hashed_password, $admin['id']);
+                
+                if ($update_stmt->execute()) {
+                    $success_message = "Password and email updated successfully!";
+                    $_SESSION['admin_email'] = $new_email;
+                    
+                    // Refresh admin data
+                    $refresh_stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+                    $refresh_stmt->bind_param("i", $admin['id']);
+                    $refresh_stmt->execute();
+                    $refresh_result = $refresh_stmt->get_result();
+                    $admin = $refresh_result->fetch_assoc();
+                } else {
+                    $error_message = "Error updating settings: " . $update_stmt->error;
+                }
             } else {
                 // If no password change, only update email
                 $update_stmt = $conn->prepare("UPDATE users SET email = ?, updated_at = NOW() WHERE id = ?");
                 $update_stmt->bind_param("si", $new_email, $admin['id']);
-            }
-            
-            if ($update_stmt->execute()) {
-                $success_message = "Settings updated successfully!";
-                $_SESSION['admin_email'] = $new_email;
                 
-                // Refresh admin data
-                $refresh_stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
-                $refresh_stmt->bind_param("i", $admin['id']);
-                $refresh_stmt->execute();
-                $refresh_result = $refresh_stmt->get_result();
-                $admin = $refresh_result->fetch_assoc();
-            } else {
-                $error_message = "Error updating settings: " . $update_stmt->error;
+                if ($update_stmt->execute()) {
+                    $success_message = "Email updated successfully!";
+                    $_SESSION['admin_email'] = $new_email;
+                    
+                    // Refresh admin data
+                    $refresh_stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+                    $refresh_stmt->bind_param("i", $admin['id']);
+                    $refresh_stmt->execute();
+                    $refresh_result = $refresh_stmt->get_result();
+                    $admin = $refresh_result->fetch_assoc();
+                } else {
+                    $error_message = "Error updating settings: " . $update_stmt->error;
+                }
             }
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -178,7 +180,6 @@ if (isset($_POST['update_settings'])) {
             animation: successPulse 1.5s ease;
         }
         
-        /* Added missing progress bar styles */
         .progress-bar {
             width: 100%;
             height: 6px;
@@ -233,7 +234,7 @@ if (isset($_POST['update_settings'])) {
                 </div>
             </div>
             
-            <!-- Messages -->
+            <!-- Success Message -->
             <?php if ($success_message): ?>
                 <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg animate-success">
                     <div class="flex items-center gap-3">
@@ -241,11 +242,16 @@ if (isset($_POST['update_settings'])) {
                         <div>
                             <p class="text-green-800 font-medium">Success!</p>
                             <p class="text-green-700"><?php echo htmlspecialchars($success_message); ?></p>
+                            <p class="text-green-600 text-sm mt-1">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Your changes have been saved. You can now log in with your new credentials.
+                            </p>
                         </div>
                     </div>
                 </div>
             <?php endif; ?>
             
+            <!-- Error Message -->
             <?php if ($error_message): ?>
                 <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                     <div class="flex items-center gap-3">
@@ -277,62 +283,12 @@ if (isset($_POST['update_settings'])) {
                             </div>
                         </div>
                         
-                        <!-- System Statistics -->
-                        <div class="bg-gradient-to-br from-gray-800 to-gray-900 text-white rounded-xl shadow-md p-6">
-                            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                                <i class="fas fa-chart-bar text-blue-300"></i>
-                                System Overview
-                            </h3>
-                            
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-users text-white"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">Total Users</p>
-                                            <p class="text-lg font-bold"><?php echo $stats['total_users'] ?? 0; ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-table-tennis text-white"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">Snooker Tables</p>
-                                            <p class="text-lg font-bold"><?php echo $stats['total_tables'] ?? 0; ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-box text-white"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">Products</p>
-                                            <p class="text-lg font-bold"><?php echo $stats['total_products'] ?? 0; ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-calendar-day text-white"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-300">Today's Sessions</p>
-                                            <p class="text-lg font-bold"><?php echo $stats['today_sessions'] ?? 0; ?></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Last Update Info -->
+                        <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                            <p class="text-sm text-blue-700">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Last updated: <?php echo isset($admin['updated_at']) ? date('F j, Y g:i A', strtotime($admin['updated_at'])) : 'Never'; ?>
+                            </p>
                         </div>
                     </div>
                     
@@ -380,39 +336,37 @@ if (isset($_POST['update_settings'])) {
                                             Account Information
                                         </h3>
                                         
-                                       <!-- Name Field - FIXED -->
-<div class="input-group">
-    <div class="input-icon">
-        <i class="fas fa-user"></i>
-    </div>
-    <input 
-        type="text" 
-        class="form-input bg-gray-50"
-        value="<?php echo htmlspecialchars($admin['name'] ?? ''); ?>"
-        disabled
-    >
-    <span class="floating-label">Full Name</span>
-    <span class="text-xs text-gray-500 mt-1 block">Contact admin to change name</span>
-</div>
+                                        <!-- Name Field -->
+                                        <div class="input-group">
+                                            <div class="input-icon">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <input 
+                                                type="text" 
+                                                class="form-input bg-gray-50"
+                                                value="<?php echo htmlspecialchars($admin['name'] ?? ''); ?>"
+                                                disabled
+                                            >
+                                            <span class="floating-label">Full Name</span>
+                                            <span class="text-xs text-gray-500 mt-1 block">Contact admin to change name</span>
+                                        </div>
 
-<!-- Email Field -->
-<div class="input-group">
-    <div class="input-icon">
-        <i class="fas fa-envelope"></i>
-    </div>
-    <input 
-        type="email" 
-        name="email" 
-        id="email"
-        class="form-input"
-        placeholder=" "
-        value="<?php echo htmlspecialchars($admin['email'] ?? ''); ?>"
-        required
-    >
-    <label for="email" class="floating-label">Email Address</label>
-</div>
-                                         
-                                        
+                                        <!-- Email Field -->
+                                        <div class="input-group">
+                                            <div class="input-icon">
+                                                <i class="fas fa-envelope"></i>
+                                            </div>
+                                            <input 
+                                                type="email" 
+                                                name="email" 
+                                                id="email"
+                                                class="form-input"
+                                                placeholder=" "
+                                                value="<?php echo htmlspecialchars($admin['email'] ?? ''); ?>"
+                                                required
+                                            >
+                                            <label for="email" class="floating-label">Email Address</label>
+                                        </div>
                                     </div>
                                     
                                     <!-- Security Settings Section -->
@@ -468,8 +422,15 @@ if (isset($_POST['update_settings'])) {
                                                 <div class="progress-fill" id="passwordStrengthBar"></div>
                                             </div>
                                         </div>
+                                        
+                                        <!-- Password Tips -->
+                                        <div class="mt-4 p-3 bg-yellow-50 border border-yellow-100 rounded-lg">
+                                            <p class="text-sm text-yellow-700">
+                                                <i class="fas fa-lightbulb mr-2"></i>
+                                                <strong>Password Tips:</strong> Use at least 8 characters with a mix of letters, numbers, and symbols for better security.
+                                            </p>
+                                        </div>
                                     </div>
-                                    
                                     
                                     <!-- Form Actions -->
                                     <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t">
@@ -481,7 +442,7 @@ if (isset($_POST['update_settings'])) {
                                         <button type="button" onclick="resetForm()"
                                                 class="flex-1 bg-white border border-gray-300 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition">
                                             <i class="fas fa-redo mr-2"></i>
-                                            Reset
+                                            Reset Form
                                         </button>
                                         <a href="dashboard.php"
                                            class="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition text-center">
@@ -591,11 +552,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Saving Changes...';
                 submitBtn.disabled = true;
                 
-                // Re-enable after 3 seconds in case of error
-                setTimeout(() => {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }, 3000);
+                // Show confirmation message
+                if (password) {
+                    if (confirm('Are you sure you want to change your password? You will need to use the new password to log in next time.')) {
+                        // Continue with form submission
+                    } else {
+                        e.preventDefault();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        return;
+                    }
+                }
             }
         });
     }

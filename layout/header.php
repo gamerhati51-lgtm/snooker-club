@@ -1059,10 +1059,10 @@
 }
 </style>
    <!-- Header Navigation -->
-      <header class="fixed top-0 left-0 lg:left-64 right-0 bg-blue-900 text-white h-16 flex items-center justify-between px-4 shadow-lg z-50 mb-6">
+      <header class="fixed top-0 left-0 lg:left-64 right-0 bg-blue-600 text-white h-16 flex items-center justify-between px-4 shadow-lg z-50 mb-6">
   <div class="flex items-center space-x-3">
     <!-- Mobile Menu Button -->
-    <button id="mobileMenuButton" class="lg:hidden p-2 bg-blue-700 hover:bg-blue-800 text-white rounded-md shadow-lg">
+    <button id="mobileMenuButton" class="lg:hidden p-2 bg-blue-00 hover:bg-blue-800 text-white rounded-md shadow-lg">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
       </svg>

@@ -3,6 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 ?>
+
 <script>
     // Include the necessary Tailwind CSS CDN link if this is a standalone file for development
     // <script src="https://cdn.tailwindcss.com
@@ -25,8 +26,8 @@ if (session_status() === PHP_SESSION_NONE) {
 <aside id="sidebar"
  class="fixed top-0 left-0 w-64 h-screen bg-blue-100 text-black shadow-lg z-40 
       flex flex-col transform -translate-x-full transition-transform duration-300 lg:translate-x-0">
-    <a href="./admin.php"><div class="p-4 bg-blue-900">
-        <h1 class="nav-link block px-4 py-3 rounded-lg text-lg font-medium 
+    <a href="./admin.php"><div class="p-1 bg-blue-600">
+        <h1 class="nav-link block px-4 py-4 rounded-lg text-lg font-medium 
                         text-white  bg-none ">
             <i class="fas fa-home mr-3"></i> SNOOKER CLUB </h1>
     </div></a>
@@ -327,13 +328,15 @@ if (session_status() === PHP_SESSION_NONE) {
         
     <div class="p-4 border-t border-snooker-light flex-shrink-0">
         <p class="text-xs font-semibold text-black">ADMIN:</p>
-        <a href="logout.php" title="are you want to logout" class="block w-full text-center bg-red-600 text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg shadow-md hover:bg-red-700 transition transform hover:scale-[1.02]">
+        <a href="logout.php" title="are you want to logout" class="block w-full text-center bg-blue-800 
+        text-white px-4 py-2 text-sm font-bold mt-4 rounded-lg shadow-md hover:bg-blue-700 transition transform hover:scale-[1.02]">
             <svg class="w-4 h-4 inline mr-1 -mt-0.5" fill="none"
              stroke="currentColor" viewBox="0 0 24 24" 
              xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" 
             stroke-width="2" 
-            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3
+             3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
             </path></svg>
             Logout
         </a>
