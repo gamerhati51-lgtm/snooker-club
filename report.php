@@ -28,7 +28,7 @@ if ($report_type == 'monthly') {
     $sql_bind_param = $date_param;
     $expense_date_condition = "DATE_FORMAT(expanses_date, '%Y-%m') = ?";
     
-} else { 
+} elseif($report_type == 'daily') { 
     // For daily report (YYYY-MM-DD)
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date_param)) {
         $date_param = date('Y-m-d');
@@ -39,7 +39,7 @@ if ($report_type == 'monthly') {
     $sql_bind_param = $date_param;
     $expense_date_condition = "expanses_date = ?";
 }
-
+ 
 // --- 2. Fetch Core Financial Data ---
 $total_income = 0.00;
 $total_expenses = 0.00;
@@ -68,10 +68,18 @@ if ($stmt_income) {
 // B. Fetch Total Expenses with Category Names
 $total_expenses = 0.00;
 $expense_categories = [];
+$total_expenses_overall = 0.00; // NEW: For overall total
 
 // Check if expanses table exists
 $check_expanses = $conn->query("SHOW TABLES LIKE 'expanses'");
 if ($check_expanses->num_rows > 0) {
+    // NEW: First, get OVERALL total expenses (all time)
+    $overall_query = "SELECT SUM(amount) as total_overall FROM expanses";
+    $overall_result = $conn->query($overall_query);
+    if ($overall_result && $row = $overall_result->fetch_assoc()) {
+        $total_expenses_overall = $row['total_overall'] ? (float)$row['total_overall'] : 0.00;
+    }
+    
     // Check if expanses_categories table exists
     $check_cat = $conn->query("SHOW TABLES LIKE 'expanses_categories'");
     
@@ -179,10 +187,10 @@ if ($stmt_usage) {
     $stmt_usage->close();
 }
 
-// --- 4. Fetch Peak Hours Data ---
 $peak_hours = [];
 $peak_hour_labels = [];
 $peak_hour_data = [];
+$peak_hour_revenue = []; // If you also want revenue chart
 
 $stmt_peak = $conn->prepare("
     SELECT 
@@ -194,21 +202,43 @@ $stmt_peak = $conn->prepare("
     GROUP BY HOUR(start_time)
     ORDER BY hour
 ");
+
 if ($stmt_peak) {
     $stmt_peak->bind_param($sql_bind_type, $sql_bind_param);
     $stmt_peak->execute();
     $peak_result = $stmt_peak->get_result();
     
+    // Initialize all 24 hours
+    $all_hours = array_fill(0, 24, [
+        'hour' => null,
+        'session_count' => 0,
+        'revenue' => 0
+    ]);
+    
     while($row = $peak_result->fetch_assoc()) {
-        $peak_hours[] = $row;
-        $peak_hour_labels[] = $row['hour'] . ':00';
-        $peak_hour_data[] = (int)$row['session_count'];
+        $all_hours[$row['hour']] = $row;
     }
+    
+    // Format for output
+    foreach ($all_hours as $hour_num => $data) {
+        $all_hours[$hour_num]['hour'] = $hour_num;
+        
+        // Format hour for display (12-hour with AM/PM)
+        $hour_12h = ($hour_num % 12) ? $hour_num % 12 : 12;
+        $am_pm = ($hour_num < 12) ? 'AM' : 'PM';
+        $formatted_hour = sprintf("%d %s", $hour_12h, $am_pm);
+        
+        $peak_hours[] = $all_hours[$hour_num];
+        $peak_hour_labels[] = $formatted_hour;
+        $peak_hour_data[] = (int)$data['session_count'];
+        $peak_hour_revenue[] = (float)$data['revenue'];
+    }
+    
     $stmt_peak->close();
 }
 
 // --- 5. Fetch Top Selling Items ---
-$top_items = [];
+/*$top_items = [];
 $top_item_labels = [];
 $top_item_data = [];
 
@@ -244,7 +274,69 @@ if ($check_items->num_rows > 0) {
         }
         $stmt_items->close();
     }
+}*/
+
+
+
+//top items
+   // Only add sample items if no products table AND no session_items
+$check_products = $conn->query("SHOW TABLES LIKE 'products'");
+$check_session_items = $conn->query("SHOW TABLES LIKE 'session_items'");
+
+if ($check_products->num_rows == 0 && $check_session_items->num_rows == 0 && empty($top_items)) {
+    // Clear arrays first
+    $top_items = [];
+    $top_item_labels = [];
+    $top_item_data = [];
+    
+} else {
+    // Clear arrays first
+    $top_items = [];
+    $top_item_labels = [];
+    $top_item_data = [];
+    
+    // SINGLE BEST QUERY - fetches top selling items from your database
+    $query = "
+        SELECT 
+            si.item_name,
+            SUM(si.quantity) as total_quantity,
+            SUM(si.price_per_unit * si.quantity) as total_revenue
+        FROM session_items si
+        GROUP BY si.item_name
+        ORDER BY total_revenue DESC
+        LIMIT 5
+    ";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        // Use real data from database
+        while($row = $result->fetch_assoc()) {
+            $top_items[] = [
+                'item_name' => $row['item_name'],
+                'total_quantity' => $row['total_quantity'],
+                'total_revenue' => $row['total_revenue']
+            ];
+            $top_item_labels[] = $row['item_name'];
+            $top_item_data[] = $row['total_revenue'];
+        }
+    } else {
+        // If no data in session_items, use sample data
+        $sample_items = ['Coke', 'Water', 'Chips', 'Coffee', 'Snickers'];
+        $sample_item_sales = [450, 300, 280, 200, 180];
+        
+        foreach($sample_items as $index => $item) {
+            $top_items[] = [
+                'item_name' => $item,
+                'total_quantity' => ceil($sample_item_sales[$index] / 50),
+                'total_revenue' => $sample_item_sales[$index]
+            ];
+            $top_item_labels[] = $item;
+            $top_item_data[] = $sample_item_sales[$index];
+        }
+    }
 }
+
 // --- 6. Fetch Low Stock Items ---
 $low_stock_items = [];
 
@@ -322,51 +414,116 @@ if ($check_products->num_rows > 0) {
     }
 }
 
-// --- 8. Fetch Booking Statistics ---
-$booking_stats = [];
+// --- 8. Fetch Monthly Booking Statistics ---
+$booking_stats = [
+    'total_bookings' => 0,
+    'confirmed_bookings' => 0,
+    'cancelled_bookings' => 0
+];
+
 $check_bookings = $conn->query("SHOW TABLES LIKE 'snooker_bookings'");
 if ($check_bookings->num_rows > 0) {
-    $daily_param = ($report_type == 'monthly') ? $date_param . '-01' : $date_param;
     
-    $stmt_bookings = $conn->prepare("
-        SELECT 
-            COUNT(*) as total_bookings,
-            SUM(CASE WHEN status = 'Confirmed' THEN 1 ELSE 0 END) as confirmed_bookings,
-            SUM(CASE WHEN status = 'Cancelled' THEN 1 ELSE 0 END) as cancelled_bookings,
-            SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) as completed_bookings
-        FROM snooker_bookings 
-        WHERE DATE(booking_date) = ?
-    ");
-    
-    if ($stmt_bookings) {
-        $stmt_bookings->bind_param('s', $daily_param);
-        $stmt_bookings->execute();
-        $booking_stats_result = $stmt_bookings->get_result();
-        $booking_stats = $booking_stats_result->fetch_assoc() ?? [];
-        $stmt_bookings->close();
+    if ($report_type == 'monthly') {
+        // For monthly report: get stats for the entire month
+        $year_month = $date_param; // Format: YYYY-MM
+        $start_date = $year_month . '-01';
+        $end_date = date('Y-m-t', strtotime($start_date)); // Last day of month
+        
+        $stmt_bookings = $conn->prepare("
+            SELECT 
+                COUNT(*) as total_bookings,
+                SUM(CASE WHEN status = 'Confirmed' THEN 1 ELSE 0 END) as confirmed_bookings,
+                SUM(CASE WHEN status = 'Cancelled' OR status = 'Canceled' THEN 1 ELSE 0 END) as cancelled_bookings
+            FROM snooker_bookings 
+            WHERE booking_date BETWEEN ? AND ?
+        ");
+        
+        if ($stmt_bookings) {
+            $stmt_bookings->bind_param('ss', $start_date, $end_date);
+            $stmt_bookings->execute();
+            $booking_stats_result = $stmt_bookings->get_result();
+            $fetched_stats = $booking_stats_result->fetch_assoc();
+            
+            if ($fetched_stats) {
+                $booking_stats = array_merge($booking_stats, $fetched_stats);
+                
+                // Convert NULL values to 0
+                foreach ($booking_stats as $key => $value) {
+                    if ($value === null) {
+                        $booking_stats[$key] = 0;
+                    }
+                }
+            }
+            
+            $stmt_bookings->close();
+
+        }
     }
 }
-
+    
 // --- 9. Fetch POS Sales Data ---
-$pos_sales = [];
+$pos_sales = [
+    'total_transactions' => 0,
+    'pos_revenue' => 0.00,
+    'avg_transaction' => 0.00
+];
+
 $check_pos = $conn->query("SHOW TABLES LIKE 'sales_transactions'");
 if ($check_pos->num_rows > 0) {
-    $stmt_pos = $conn->prepare("
-        SELECT 
-            COUNT(*) as total_transactions,
-            SUM(total_amount) as pos_revenue,
-            AVG(total_amount) as avg_transaction
-        FROM sales_transactions 
-        WHERE DATE(transaction_date) = ?
-    ");
     
-    if ($stmt_pos) {
-        $daily_param = ($report_type == 'monthly') ? $date_param . '-01' : $date_param;
-        $stmt_pos->bind_param('s', $daily_param);
-        $stmt_pos->execute();
-        $pos_result = $stmt_pos->get_result();
-        $pos_sales = $pos_result->fetch_assoc() ?? [];
-        $stmt_pos->close();
+    if ($report_type == 'monthly') {
+        // For monthly report: get stats for the entire month
+        $year_month = $date_param; // Format: YYYY-MM
+        $start_date = $year_month . '-01';
+        $end_date = date('Y-m-t', strtotime($start_date)); // Last day of month
+        
+        $stmt_pos = $conn->prepare("
+            SELECT 
+                COUNT(*) as total_transactions,
+                COALESCE(SUM(total_amount), 0) as pos_revenue,
+                COALESCE(AVG(total_amount), 0) as avg_transaction
+            FROM sales_transactions 
+            WHERE DATE(transaction_date) BETWEEN ? AND ?
+        ");
+        
+        if ($stmt_pos) {
+            $stmt_pos->bind_param('ss', $start_date, $end_date);
+            $stmt_pos->execute();
+            $pos_result = $stmt_pos->get_result();
+            $fetched_data = $pos_result->fetch_assoc();
+            
+            if ($fetched_data) {
+                $pos_sales = array_merge($pos_sales, $fetched_data);
+            }
+            
+            $stmt_pos->close();
+        }
+    } else {
+        // For daily report
+        $daily_param = $date_param;
+        
+        $stmt_pos = $conn->prepare("
+            SELECT 
+                COUNT(*) as total_transactions,
+                COALESCE(SUM(total_amount), 0) as pos_revenue,
+                COALESCE(AVG(total_amount), 0) as avg_transaction
+            FROM sales_transactions 
+            WHERE DATE(transaction_date) = ?
+        ");
+        
+        if ($stmt_pos) {
+            $stmt_pos->bind_param('s', $daily_param);
+            $stmt_pos->execute();
+            $pos_result = $stmt_pos->get_result();
+            $fetched_data = $pos_result->fetch_assoc();
+            
+            if ($fetched_data) {
+                $pos_sales = array_merge($pos_sales, $fetched_data);
+            }
+            
+            $stmt_pos->close();
+        }
     }
 }
 
@@ -480,6 +637,7 @@ if (!$real_data_exists) {
         }
         $insert_stmt->close();
     }
+}
     
     // Now check for table usage data again
     if (empty($table_usage)) {
@@ -526,142 +684,8 @@ $peak_hours = [];
 $peak_hour_labels = [];
 $peak_hour_data = [];
 
-// Check if we have the snooker_sessions table
-$check_sessions = $conn->query("SHOW TABLES LIKE 'snooker_sessions'");
 
-if ($check_sessions->num_rows > 0) {
-    try {
-        // Simple query to get peak hours data
-        $query = "
-            SELECT 
-                CONCAT(LPAD(HOUR(start_time), 2, '0'), ':00') as hour_label,
-                HOUR(end_time) as hour_number,
-                COUNT(*) as session_count,
-                SUM(session_cost) as total_revenue
-            FROM snooker_sessions 
-            WHERE status = 'Completed'
-            GROUP BY HOUR(start_time)
-            ORDER BY session_count DESC
-            LIMIT 7
-        ";
-        
-        $result = $conn->query($query);
-        
-        if ($result && $result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $peak_hours[] = [
-                    'hour' => $row['hour_number'],
-                    'session_count' => $row['session_count'],
-                    'revenue' => $row['total_revenue']
-                ];
-                $peak_hour_labels[] = $row['hour_label'];
-                $peak_hour_data[] = $row['session_count'];
-            }
-            
-            // Sort by hour for better display
-            array_multisort(array_column($peak_hours, 'hour'), SORT_ASC, $peak_hours, $peak_hour_labels, $peak_hour_data);
-        } else {
-            // No data found, use sample
-            goto use_sample_data;
-        }
-    } catch (Exception $e) {
-        error_log("Error fetching peak hours: " . $e->getMessage());
-        goto use_sample_data;
-    }
-} else {
-    use_sample_data:
-    $sample_hours = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
-    $sample_peak_data = [3, 5, 8, 10, 12, 9, 4];
-    
-    foreach($sample_hours as $index => $hour) {
-        $hour_int = (int)str_replace(':00', '', $hour);
-        $peak_hours[] = [
-            'hour' => $hour_int,
-            'session_count' => $sample_peak_data[$index],
-            'revenue' => $sample_peak_data[$index] * 250
-        ];
-        $peak_hour_labels[] = $hour;
-        $peak_hour_data[] = $sample_peak_data[$index];
-    }
-}
-    //top items
-   // Only add sample items if no products table AND no session_items
-$check_products = $conn->query("SHOW TABLES LIKE 'products'");
-$check_session_items = $conn->query("SHOW TABLES LIKE 'session_items'");
-
-if ($check_products->num_rows == 0 && $check_session_items->num_rows == 0 && empty($top_items)) {
-    // Clear arrays first
-    $top_items = [];
-    $top_item_labels = [];
-    $top_item_data = [];
-    
-} else {
-    // Clear arrays first
-    $top_items = [];
-    $top_item_labels = [];
-    $top_item_data = [];
-    
-    // SINGLE BEST QUERY - fetches top selling items from your database
-    $query = "
-        SELECT 
-            si.item_name,
-            SUM(si.quantity) as total_quantity,
-            SUM(si.price_per_unit * si.quantity) as total_revenue
-        FROM session_items si
-        GROUP BY si.item_name
-        ORDER BY total_revenue DESC
-        LIMIT 5
-    ";
-    
-    $result = $conn->query($query);
-    
-    if ($result && $result->num_rows > 0) {
-        // Use real data from database
-        while($row = $result->fetch_assoc()) {
-            $top_items[] = [
-                'item_name' => $row['item_name'],
-                'total_quantity' => $row['total_quantity'],
-                'total_revenue' => $row['total_revenue']
-            ];
-            $top_item_labels[] = $row['item_name'];
-            $top_item_data[] = $row['total_revenue'];
-        }
-    } else {
-        // If no data in session_items, use sample data
-        $sample_items = ['Coke', 'Water', 'Chips', 'Coffee', 'Snickers'];
-        $sample_item_sales = [450, 300, 280, 200, 180];
-        
-        foreach($sample_items as $index => $item) {
-            $top_items[] = [
-                'item_name' => $item,
-                'total_quantity' => ceil($sample_item_sales[$index] / 50),
-                'total_revenue' => $sample_item_sales[$index]
-            ];
-            $top_item_labels[] = $item;
-            $top_item_data[] = $sample_item_sales[$index];
-        }
-    }
-}
-    
-// Only create sample expense categories if no real data exists
-if (!$real_data_exists && empty($real_expense_categories)) {
-    $expense_categories = [
-        ['category' => 'Electricity', 'total' => 1500],
-        ['category' => 'Staff', 'total' => 8000],
-        ['category' => 'Maintenance', 'total' => 2000],
-        ['category' => 'Supplies', 'total' => 1200]
-    ];
-    $total_expenses = 1500 + 8000 + 2000 + 1200;
-}
-    // Sample income if none exists
-    if ($total_income == 0) {
-        $total_income = 25000;
-        $total_sessions = 42;
-    }
-    
-    $total_profit = $total_income - $total_expenses;
-}
-
+  
 
 // Helper function to format minutes
 function format_minutes($minutes) {
@@ -679,61 +703,6 @@ function format_minutes($minutes) {
     return trim($output) ?: '0 min';
 }
 
-// Query to get total expenses
-$query = "SELECT SUM(amount) as total_expenses FROM expanses";
-$result = $conn->query($query);
-
-if ($result && $row = $result->fetch_assoc()) {
-    $total_expenses = $row['total_expenses'] ?: 0;
-  //  echo "Total Expenses: " . number_format($total_expenses, 2);
-} else {
-    $total_expenses = 0;
-    echo "No expenses found or error in query";
-}
-
-
-// Fetch Total Session Income
-$total_session_income = 0.00;
-
-// Check if snooker_sessions table exists
-$check_sessions = $conn->query("SHOW TABLES LIKE 'snooker_sessions'");
-if ($check_sessions->num_rows > 0) {
-    // Calculate total session income from completed sessions
-    $session_income_query = "SELECT SUM(session_cost) as total_session_income FROM snooker_sessions WHERE status = 'Completed'";
-    $session_result = $conn->query($session_income_query);
-    
-    if ($session_result && $row = $session_result->fetch_assoc()) {
-        $total_income = $row['total_session_income'] ? (float)$row['total_session_income'] : 0.00;
-    }
-}
-
-// For debugging, you can display it:
-// echo "Total Session Income: " . number_format($total_session_income, 2);
-
-// Fetch Total POS Sales and Transaction Count
-$total_pos_sales = 0.00;
-$total_transactions = 0;
-
-// Check if sales_transactions table exists
-$check_sales = $conn->query("SHOW TABLES LIKE 'sales_transactions'");
-if ($check_sales->num_rows > 0) {
-    // Calculate total POS sales and count transactions in one query
-    $pos_sales_query = "SELECT 
-        SUM(total_amount) as total_pos_sales,
-        COUNT(*) as total_transactions
-    FROM sales_transactions";
-    
-    $pos_result = $conn->query($pos_sales_query);
-    
-    if ($pos_result && $row = $pos_result->fetch_assoc()) {
-        $pos_sales = $row['total_pos_sales'] ? (float)$row['total_pos_sales'] : 0.00;
-        $total_transactions = $row['total_transactions'] ? (int)$row['total_transactions'] : 0;
-    }
-}
-
-// For debugging:
-// echo "Total POS Sales: " . number_format($pos_sales, 2) . "<br>";
-// echo "Total Transactions: " . $total_transactions;
 
 // Convert to JSON for JavaScript
 $json_labels = json_encode($chart_labels);
@@ -872,6 +841,7 @@ $json_item_data = json_encode($top_item_data);
                                 <?php echo $report_type == 'monthly' ? 'bg-snooker-green text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'; ?>">
                             <i class="fas fa-calendar-alt mr-2"></i>Monthly Report
                         </button>
+                        
                         <button class="px-6 py-3 rounded-lg font-semibold bg-snooker-accent text-snooker-green">
                             <i class="fas fa-table-tennis mr-2"></i>Tables Usage
                         </button>
@@ -946,12 +916,12 @@ $json_item_data = json_encode($top_item_data);
                                 <i class="fas fa-cash-register text-pos-teal text-2xl"></i>
                             </div>
                             <span class="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
-                                <?php echo $total_transactions ?? 0; ?> transactions
+                                <?php echo $pos_sales['total_transactions']  ?? 0; ?> transactions
                             </span>
                         </div>
                         <h3 class="text-lg font-semibold text-gray-600">POS Sales</h3>
                         <p class="text-3xl font-bold text-pos-teal mt-2">
-                            PKR <?php echo number_format($pos_sales ?? 0, 2); ?>
+                            PKR <?php echo number_format($pos_sales['pos_revenue'] ??  2); ?>
                         </p>
                         <div class="mt-4">
                             <div class="progress-bar">
@@ -1000,7 +970,7 @@ $json_item_data = json_encode($top_item_data);
                                 <i class="fas fa-receipt text-expense-red text-2xl"></i>
                             </div>
                             <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">
-                                <?php echo count($expense_categories); ?> categories
+                                <?php echo COUNT($expense_categories); ?> categories
                             </span>
                         </div>
                         <h3 class="text-lg font-semibold text-gray-600">Total Expenses</h3>
@@ -1031,7 +1001,7 @@ $json_item_data = json_encode($top_item_data);
                             <?php echo $booking_stats['confirmed_bookings'] ?? 0; ?> Confirmed
                         </p>
                         <p class="text-sm text-gray-600 mt-1">
-                            Total: <?php echo $booking_stats['total_bookings'] ?? 0; ?> | 
+                            Total: <?php echo  $booking_stats['total_bookings'] ?? 0; ?> | 
                             Cancelled: <?php echo $booking_stats['cancelled_bookings'] ?? 0; ?>
                         </p>
                     </div>
@@ -1107,34 +1077,35 @@ $json_item_data = json_encode($top_item_data);
                 
                 <!-- Additional Charts Row -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Peak Hours Chart -->
-                    <div class="bg-white rounded-xl shadow-md p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-xl font-bold text-gray-800">
-                                <i class="fas fa-clock text-snooker-accent mr-2"></i>
-                                Peak Hours Analysis
-                            </h3>
-                            <div class="flex space-x-2">
-                                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                                    Busiest: <?php 
-                                        if (!empty($peak_hour_data)) {
-                                            $busiest = max($peak_hour_data);
-                                            $busiest_index = array_search($busiest, $peak_hour_data);
-                                            echo $peak_hour_labels[$busiest_index] ?? 'N/A';
-                                        } else {
-                                            echo 'No data';
-                                        }
-                                    ?>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="peakHoursChart"></canvas>
-                        </div>
-                        <p class="text-sm text-gray-500 mt-4 text-center">
-                            Session distribution throughout the day
-                        </p>
-                    </div>
+                   <!-- Peak Hours Chart -->
+<div class="bg-white rounded-xl shadow-md p-6">
+    <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold text-gray-800">
+            <i class="fas fa-clock text-snooker-accent mr-2"></i>
+            Peak Hours Analysis
+        </h3>
+        <div class="flex space-x-2">
+            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                Busiest: 
+                <?php 
+                    if (!empty($peak_hour_data) && !empty($peak_hour_labels)) {
+                        $busiest = max($peak_hour_data);
+                        $busiest_index = array_search($busiest, $peak_hour_data);
+                        echo $peak_hour_labels[$busiest_index] ?? 'N/A';
+                    } else {
+                        echo 'No data';
+                    }
+                ?>
+            </span>
+        </div>
+    </div>
+    <div class="chart-container">
+        <canvas id="peakHoursChart"></canvas>
+    </div>
+    <p class="text-sm text-gray-500 mt-4 text-center">
+        Session distribution throughout the day
+    </p>
+</div>
                     
                     <!-- Top Selling Items -->
                     <div class="bg-white rounded-xl shadow-md p-6">
