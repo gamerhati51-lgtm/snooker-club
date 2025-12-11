@@ -431,7 +431,7 @@ let toaster = createToaster({
     duration: 3
 });
 
-toaster("Software is under Amir development!");
+toaster("Software is under Team development!");
 
 
 </script>
