@@ -219,7 +219,8 @@ if($result){
             </thead>
 
             <!-- Table Body -->
-            <tbody>
+           <!-- Table Body -->
+<tbody>
 <?php
 include 'db.php';
 
@@ -233,9 +234,17 @@ if ($result->num_rows > 0) {
 
         // --- 1. Determine Status Badge ---
         $status_badge = '';
+        $action_button = '';
+        
         if ($status == "Occupied") {
-            // Check for the active session ID needed for the link
-            $session_stmt = $conn->prepare("SELECT session_id FROM snooker_sessions WHERE id = ? AND status = 'Active'");
+            // Check for the active session ID
+            $session_stmt = $conn->prepare("
+                SELECT session_id 
+                FROM snooker_sessions 
+                WHERE table_id = ? 
+                AND status = 'Active'
+                LIMIT 1
+            ");
             $session_stmt->bind_param("i", $table_id);
             $session_stmt->execute();
             $session_result = $session_stmt->get_result();
@@ -245,59 +254,61 @@ if ($result->num_rows > 0) {
             
             $status_badge = '<span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded">Occupied</span>';
             
-            // --- 2. Action Button for OCCUPIED Table ---
-            $action_button = '
-                <a href="table_view.php?table_id=' . $table_id . '&session_id=' . $session_id . '" 
-                   class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition">
-                    Manage Session
-                </a>';
+            // Action button for OCCUPIED table
+            if ($session_id) {
+                $action_button = '
+                    <a href="table_view.php?table_id=' . $table_id . '&session_id=' . $session_id . '" 
+                       class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition">
+                        Manage Session
+                    </a>';
+            } else {
+                $action_button = '
+                    <button onclick="startSession(' . $table_id . ')" 
+                            class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition">
+                        Fix & Start
+                    </button>';
+            }
             
         } else {
             // Status is 'Free'
             $status_badge = '<span class="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded">Free</span>';
             
-            // --- 3. Action Button for FREE Table ---
+            // Action button for FREE table
             $action_button = '
-                <form action="start_session.php" method="POST">
-                    <input type="hidden" name="table_id" value="' . $table_id . '">
-                    <button type="submit" name="start_session"
-                            class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-900 transition">
-                        Start Session
-                    </button>
-                </form>';
+                <button onclick="startSession(' . $table_id . ')" 
+                        class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition">
+                    Start Session
+                </button>';
         }
         
-        // Use htmlspecialchars() for security when echoing user-input data
         ?>
         <tr>
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['table_name']); ?></td>
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['rate_per_hour']); ?> PKR</td>
             <td class="px-6 py-4 text-gray-700"><?php echo htmlspecialchars($row['century_rate']); ?> PKR</td>
-            <td class="px-6 py-4 text-gray-700 "><?php echo $status_badge; ?></td>
+            <td class="px-6 py-4"><?php echo $status_badge; ?></td>
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-        <a href="view_tables.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out" title="Edit">
-            ✏️ Edit
-        </a>
-    </td>
-            <td class="px-6 py-4 text-gray-700" title="start session">
+                <a href="view_tables.php?id=<?php echo $row['id']; ?>" class="text-indigo-600 hover:text-indigo-900 transition">
+                    ✏️ Edit
+                </a>
+            </td>
+            <td class="px-6 py-4">
                 <?php echo $action_button; ?>
             </td>
         </tr>
         <?php
     }
 } else {
-    // ... (No tables added yet code remains the same)
     ?>
     <tr>
-        <td colspan="5" class="text-center py-4 text-gray-500">
+        <td colspan="6" class="text-center py-4 text-gray-500">
             No Tables Added Yet
         </td>
     </tr>
     <?php
 }
 ?>
-
-            </tbody>    
+</tbody>
         </table>
     </div>
 
@@ -541,6 +552,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+// Function to start a new session
+async function startSession(tableId) {
+    if (!confirm('Start a new session on this table?')) {
+        return;
+    }
+    
+    // Show loading
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = `
+        <span class="flex items-center">
+            <svg class="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Starting...
+        </span>
+    `;
+    button.disabled = true;
+    
+    try {
+        // Send AJAX request to start session
+        const response = await fetch('api_start_session.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `table_id=${tableId}&user_id=1&rate_type=Normal&booking_duration=1`
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Success - redirect to table view
+            window.location.href = `table_view.php?table_id=${tableId}&session_id=${data.session_id}`;
+        } else {
+            alert('Error: ' + data.message);
+            // Restore button
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Network error. Please try again.');
+        // Restore button
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
 </script>
+
 </body>
 </html>

@@ -1127,8 +1127,9 @@
 
 <button id="darkModeToggle" 
     class="flex items-center justify-center w-auto px-3 h-10 bg-blue-600 hover:bg-gray-900
-    rounded transition text-white space-x-2" id="dmText" >
-
+    rounded transition text-white space-x-2" >
+    
+    <span id="dmText">Dark Mode</span>
 
     <svg id="dmIcon" xmlns="http://www.w3.org/2000/svg" 
          class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

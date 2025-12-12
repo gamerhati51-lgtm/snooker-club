@@ -61,6 +61,8 @@ if (session_status() === PHP_SESSION_NONE) {
                 </svg>
             </button>
 
+            
+
             <div id="tablesMenu" class="hidden pl-10 mt-1 space-y-2 text-black"> 
           
                    
@@ -70,8 +72,68 @@ if (session_status() === PHP_SESSION_NONE) {
                 </a>
             </div>
         </div>
+<div class="w-full">
+    <button onclick="toggleDropdown('tournamentMenu', 'tournamentArrow')" 
+        class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200 transition">
         
-        <!-- First Dropdown - POS -->
+        <!-- Tournament Icon -->
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+        </svg>
+
+        Tournament 
+        <svg id="tournamentArrow" class="w-4 h-4 ml-auto transform transition-transform" fill="none" 
+        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+    </button>
+
+    <!-- Collapsible Menu Items -->
+    <div id="tournamentMenu" class="hidden pl-10 mt-1 space-y-2 text-black"> 
+        <a href="tournament_dashboard.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            Dashboard
+        </a>
+        <a href="create_tournament.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Create Tournament
+        </a>
+        <a href="tournament_list.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            Tournament List
+        </a>
+        <a href="add_players.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+            Add Players
+        </a>
+        <a href="generate_brackets.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Generate Brackets
+        </a>
+        <a href="enter_scores.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Enter Scores
+        </a>
+        <a href="tournament_results.php" class="flex items-center text-sm py-1 hover:text-blue-600">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+            Tournament Results
+        </a>
+    </div>
+</div>
         <div class="w-full">
             <button onclick="toggleDropdown('posMenu', 'posArrow')" 
                 class="w-full flex items-center text-black p-3 text-sm font-semibold border-l-4 border-transparent hover:bg-blue-200 transition">
@@ -82,7 +144,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </path>
                 </svg>
 
-                Point Of Sale (POS)
+                POS
 
                 <svg id="posArrow" class="w-4 h-4 ml-auto transform transition-transform" fill="none" 
                 stroke="currentColor" viewBox="0 0 24 24">
@@ -140,6 +202,7 @@ if (session_status() === PHP_SESSION_NONE) {
         d="M12 4v16m8-8H4m7 4h3m-3-3v3M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8">
     </path>
 </svg>
+
                     Add Product
                 </a>
 
@@ -409,4 +472,11 @@ if (session_status() === PHP_SESSION_NONE) {
             }
         });
     });
+    function toggleDropdown(menuId, arrowId) {
+    const menu = document.getElementById(menuId);
+    const arrow = document.getElementById(arrowId);
+    
+    menu.classList.toggle('hidden');
+    arrow.classList.toggle('rotate-180');
+}
 </script>

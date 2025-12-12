@@ -213,9 +213,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include 'layout/header.php'; ?>
 
 <!-- Main Content -->
-<div class="flex-1 p-4 ml-64 mt-8"> <!-- Reduced padding -->
+<div class="flex-1 p-4 ml-64 mt-4 mb-4"> <!-- Reduced padding -->
   <!-- Page Header -->
-  <div class="mb-3"> <!-- Reduced margin -->
+  <div class="mb-1"> <!-- Reduced margin -->
     <div class="flex items-center">
       <!-- Title centered in remaining space -->
       <div class="flex-1 text-center">
@@ -406,9 +406,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
     </div>
-    <marquee behavior="" direction="">
     <!-- Information Cards -->
-    <div class="mt-2 grid grid-cols-1 md:grid-cols-3 gap-3 text-left"> <!-- Reduced margin and gap -->
+    <div class="mt-9 grid grid-cols-1 md:grid-cols-3 gap-3 text-left"> <!-- Reduced margin and gap -->
       <div class="bg-white p-3 rounded-lg border border-gray-200"> <!-- Reduced padding -->
         <div class="flex items-center gap-2"> <!-- Reduced gap -->
           <div class="p-1.5 bg-blue-50 rounded"> <!-- Smaller padding -->
@@ -447,7 +446,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 </div>
-</marquee>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   // Password toggle

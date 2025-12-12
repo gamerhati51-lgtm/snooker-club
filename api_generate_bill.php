@@ -1,142 +1,156 @@
 <?php
-// api_generate_bill.php
 session_start();
 include 'db.php';
 
-// Get POST data
-$session_id = $_POST['session_id'] ?? null;
-$table_id = $_POST['table_id'] ?? null;
-$end_time = date('Y-m-d H:i:s');
+$session_id = $_POST['session_id'] ?? 0;
+$table_id = $_POST['table_id'] ?? 0;
 
 if (!$session_id || !$table_id) {
-    echo json_encode(['success' => false, 'message' => 'Session or Table ID missing']);
+    echo json_encode(['success' => false, 'message' => 'Invalid parameters']);
     exit;
 }
 
-// --- Calculation function ---
-function calculate_table_charge($start_time, $rate_type, $rate_per_hour, $century_rate, $end_time) {
+// Start transaction
+$conn->begin_transaction();
+
+try {
+    // 1. Get session and table data with century mode minutes
+    $stmt = $conn->prepare("
+        SELECT 
+            s.*, 
+            st.table_name, 
+            st.rate_per_hour, 
+            st.century_rate,
+            COALESCE(s.century_mode_minutes, 0) as century_minutes
+        FROM snooker_sessions s
+        JOIN snooker_tables st ON s.table_id = st.id
+        WHERE s.session_id = ? AND s.status = 'Active'
+    ");
+    $stmt->bind_param("i", $session_id);
+    $stmt->execute();
+    $session = $stmt->get_result()->fetch_assoc();
+    
+    if (!$session) {
+        throw new Exception('Active session not found');
+    }
+    
+    // 2. Calculate end time and duration
+    $end_time = date('Y-m-d H:i:s');
+    $start_time = $session['start_time'];
+    
     $start = new DateTime($start_time);
     $end = new DateTime($end_time);
     $interval = $start->diff($end);
-
-    $duration_seconds = (
-        $interval->y * 365 * 24 * 60 * 60 +
-        $interval->m * 30 * 24 * 60 * 60 +
-        $interval->d * 24 * 60 * 60 +
-        $interval->h * 60 * 60 +
-        $interval->i * 60 +
-        $interval->s
-    );
-
-    if ($rate_type == 'Normal') {
-        $duration_hours = $duration_seconds / 3600;
-        $table_charge = $duration_hours * $rate_per_hour;
-    } else {
-        $duration_minutes = $duration_seconds / 60;
-        $table_charge = $duration_minutes * $century_rate;
-    }
-
-    return round($table_charge, 2);
-}
-
-// --- Fetch session data ---
-$stmt = $conn->prepare("
-    SELECT s.start_time, s.rate_type, st.table_name, st.rate_per_hour, st.century_rate
-    FROM snooker_sessions s
-    JOIN snooker_tables st ON s.id = st.id
-    WHERE s.session_id = ?
-");
-$stmt->bind_param("i", $session_id);
-$stmt->execute();
-$session_data = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
-if (!$session_data) {
-    echo json_encode(['success' => false, 'message' => 'Session not found']);
-    exit;
-}
-
-// Calculate table charge
-$table_charge = calculate_table_charge(
-    $session_data['start_time'], 
-    $session_data['rate_type'], 
-    (float)$session_data['rate_per_hour'],
-    (float)$session_data['century_rate'], 
-    $end_time
-);
-
-// --- Fetch items ---
-$stmt_items = $conn->prepare("
-    SELECT item_name, quantity, price_per_unit, (quantity * price_per_unit) AS total_item_price
-    FROM session_items
-    WHERE session_id = ?
-");
-$stmt_items->bind_param("i", $session_id);
-$stmt_items->execute();
-$items_result = $stmt_items->get_result();
-
-$items_total = 0;
-$items_list = [];
-while ($item = $items_result->fetch_assoc()) {
-    $items_list[] = $item;
-    $items_total += (float)$item['total_item_price'];
-}
-$stmt_items->close();
-
-$final_total = $table_charge + $items_total;
-
-// --- Update database ---
-$update_success = false;
-try {
-    $conn->begin_transaction();
+    $total_minutes = ($interval->days * 24 * 60) + ($interval->h * 60) + $interval->i;
     
-    // Update session
-    $stmt_session = $conn->prepare("
-        UPDATE snooker_sessions 
-        SET end_time = ?, session_cost = ?, status = 'Completed' 
+    // 3. Calculate table charge based on rate type
+    $booking_duration = $session['booking_duration'] ?? 1;
+    $rate_type = $session['rate_type'];
+    $century_minutes = $session['century_minutes'] ?? 0;
+    
+    if ($rate_type == 'Normal') {
+        // Normal rate: charge per hour (round up)
+        $hours_played = ceil($total_minutes / 60);
+        $table_charge = $hours_played * $session['rate_per_hour'];
+    } else {
+        // Century rate: base hours + per-minute charge
+        $base_hours = $booking_duration;
+        $base_charge = $base_hours * $session['rate_per_hour'];
+        
+        // Calculate additional minutes beyond base hours
+        $minutes_played = max(0, $total_minutes - ($base_hours * 60));
+        $additional_minutes = max($century_minutes, $minutes_played);
+        $additional_charge = $additional_minutes * $session['century_rate'];
+        
+        $table_charge = $base_charge + $additional_charge;
+    }
+    
+    // 4. Get items total
+    $items_stmt = $conn->prepare("
+        SELECT 
+            item_name, 
+            quantity, 
+            price_per_unit, 
+            (quantity * price_per_unit) AS total_item_price
+        FROM session_items 
         WHERE session_id = ?
     ");
-    $stmt_session->bind_param("sdi", $end_time, $final_total, $session_id);
-    $stmt_session->execute();
-    $stmt_session->close();
+    $items_stmt->bind_param("i", $session_id);
+    $items_stmt->execute();
+    $items_result = $items_stmt->get_result();
     
-    // Update table status
-    $stmt_table = $conn->prepare("
-        UPDATE snooker_tables 
-        SET status = 'Free' 
-        WHERE id = ?
+    $items_list = [];
+    $items_total = 0.00;
+    while ($item = $items_result->fetch_assoc()) {
+        $items_list[] = $item;
+        $items_total += (float)$item['total_item_price'];
+    }
+    $items_stmt->close();
+    
+    // 5. Calculate final total
+    $final_total = $table_charge + $items_total;
+    
+    // 6. Update session as completed
+    $update_stmt = $conn->prepare("
+        UPDATE snooker_sessions 
+        SET 
+            end_time = ?, 
+            total_time_minutes = ?,
+            session_cost = ?,
+            final_amount = ?,
+            status = 'Completed'
+        WHERE session_id = ?
     ");
-    $stmt_table->bind_param("i", $table_id);
-    $stmt_table->execute();
-    $stmt_table->close();
+    $update_stmt->bind_param("siddi", 
+        $end_time, 
+        $total_minutes, 
+        $items_total, 
+        $final_total, 
+        $session_id
+    );
     
+    if (!$update_stmt->execute()) {
+        throw new Exception('Failed to update session: ' . $conn->error);
+    }
+    $update_stmt->close();
+    
+    // 7. Free up the table
+    $table_stmt = $conn->prepare("UPDATE snooker_tables SET status = 'Free' WHERE id = ?");
+    $table_stmt->bind_param("i", $table_id);
+    
+    if (!$table_stmt->execute()) {
+        throw new Exception('Failed to free table: ' . $conn->error);
+    }
+    $table_stmt->close();
+    
+    // Commit transaction
     $conn->commit();
-    $update_success = true;
+    
+    // 8. Return bill data
+    echo json_encode([
+        'success' => true,
+        'message' => 'Bill generated successfully!',
+        'bill_data' => [
+            'session_id' => $session_id,
+            'table_name' => $session['table_name'],
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'total_minutes' => $total_minutes,
+            'rate_type' => $rate_type,
+            'table_charge' => $table_charge,
+            'items_total' => $items_total,
+            'final_total' => $final_total,
+            'items_list' => $items_list,
+            'century_minutes' => $century_minutes
+        ],
+        'redirect' => true
+    ]);
+    
 } catch (Exception $e) {
+    // Rollback on error
     $conn->rollback();
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
-    exit;
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
 
-// Prepare response
-$response = [
-    'success' => $update_success,
-    'message' => $update_success ? 'Bill generated successfully!' : 'Error generating bill',
-    'bill_data' => [
-        'session_id' => $session_id,
-        'table_name' => $session_data['table_name'],
-        'start_time' => $session_data['start_time'],
-        'end_time' => $end_time,
-        'rate_type' => $session_data['rate_type'],
-        'rate_per_hour' => $session_data['rate_per_hour'],
-        'century_rate' => $session_data['century_rate'],
-        'table_charge' => $table_charge,
-        'items_total' => $items_total,
-        'final_total' => $final_total,
-        'items_list' => $items_list
-    ]
-];
-
-header('Content-Type: application/json');
-echo json_encode($response);
+$conn->close();
 ?>
